@@ -1,0 +1,17 @@
+// If you want to override variables do it here
+@import "variables";
+
+// Import CoreUI styles
+@import "~@coreui/coreui/scss/coreui.scss";
+
+// If you want to add something do it here
+@import "custom";
+
+@import "~font-awesome/css/font-awesome.min.css";
+
+// import the TreeView dependency styles 
+
+@import "~@syncfusion/ej2-base/styles/material.css";
+@import "~@syncfusion/ej2-react-navigations/styles/material.css";
+@import "~@syncfusion/ej2-inputs/styles/material.css";
+@import "~@syncfusion/ej2-buttons/styles/material.css";
