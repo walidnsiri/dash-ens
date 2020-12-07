@@ -1,5 +1,8 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useRef } from "react";
+import { useSpring, animated } from "react-spring";
+import CIcon from "@coreui/icons-react";
+import logo from "../../../assets/img/brand/logo-esprit.svg";
+
 import {
   CButton,
   CCard,
@@ -12,63 +15,158 @@ import {
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
-  CRow
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+  CRow,
+} from "@coreui/react";
 
-const Login = () => {
+function Login() {
   return (
-    <div className="c-app c-default-layout flex-row align-items-center">
+    <div className="c-app c-default-layout flex-row align-items-center hero">
       <CContainer>
+        <Logo />
         <CRow className="justify-content-center">
-          <CCol md="8">
-            <CCardGroup>
-              <CCard className="p-4">
-                <CCardBody>
-                  <CForm>
-                    <h1>Login</h1>
-                    <p className="text-muted">Sign In to your account</p>
-                    <CInputGroup className="mb-3">
-                      <CInputGroupPrepend>
-                        <CInputGroupText>
-                          <CIcon name="cil-user" />
-                        </CInputGroupText>
-                      </CInputGroupPrepend>
-                      <CInput type="text" placeholder="Username" autoComplete="username" />
-                    </CInputGroup>
-                    <CInputGroup className="mb-4">
-                      <CInputGroupPrepend>
-                        <CInputGroupText>
-                          <CIcon name="cil-lock-locked" />
-                        </CInputGroupText>
-                      </CInputGroupPrepend>
-                      <CInput type="password" placeholder="Password" autoComplete="current-password" />
-                    </CInputGroup>
-                    <CRow>
-                      <CCol xs="6">
-                        <CButton color="primary" className="px-4">Login</CButton>
-                      </CCol>
-                      <CCol xs="6" className="text-right">
-                        <CButton color="link" className="px-0">Forgot password?</CButton>
-                      </CCol>
-                    </CRow>
-                  </CForm>
-                </CCardBody>
-              </CCard>
-              <CCard className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
-                <CCardBody className="text-center">
-                  <div>
-                    <h2>Sign up</h2>
-                    <p>Welcome To Esprit Admin Space , Please Sign up to access this area!</p>
-                  </div>
-                </CCardBody>
-              </CCard>
-            </CCardGroup>
+          <CCol>
+          <CCardGroup>
+            <Card />
+            <CCard
+              className="text-white py-5 d-md-down-none cardbg"
+              style={{ width: "44%" }}
+            >
+              <CCardBody className="text-center">
+                <div>
+                  <h2>Sign up</h2>
+                  <p>
+                    Welcome To Esprit Admin Space , Please Sign up to access
+                    this area!
+                  </p>
+                </div>
+              </CCardBody>
+            </CCard>
+          </CCardGroup>
           </CCol>
         </CRow>
       </CContainer>
     </div>
-  )
+  );
 }
 
-export default Login
+function Logo() {
+  return (
+    <div className="info">
+      <CIcon src={logo} name="logo" height="70" alt="Logo" />
+    </div>
+  );
+}
+
+function Card() {
+  const [flipped, set] = useState(false);
+  const { transform, opacity } = useSpring({
+    opacity: flipped ? 1 : 0,
+    transform: `perspective(600px) rotateX(${flipped ? 180 : 0}deg)`,
+    config: { mass: 5, tension: 500, friction: 80 },
+  });
+  return (
+    <>
+      {!flipped && <animated.div
+      className="p-4"
+        class="cardlogin"
+        style={{ opacity: opacity.interpolate((o) => 1 - o), transform }}
+      >
+          <CCardBody>
+            <CForm>
+              <h1>Login</h1>
+              <p className="text-muted">Sign In to your account</p>
+              <CInputGroup className="mb-3">
+                <CInputGroupPrepend>
+                  <CInputGroupText>
+                    <CIcon name="cil-user" />
+                  </CInputGroupText>
+                </CInputGroupPrepend>
+                <CInput
+                  type="text"
+                  placeholder="Username"
+                  autoComplete="username"
+                />
+              </CInputGroup>
+              <CInputGroup className="mb-4">
+                <CInputGroupPrepend>
+                  <CInputGroupText>
+                    <CIcon name="cil-lock-locked" />
+                  </CInputGroupText>
+                </CInputGroupPrepend>
+                <CInput
+                  type="password"
+                  placeholder="Password"
+                  autoComplete="current-password"
+                />
+              </CInputGroup>
+              <CRow>
+                <CCol xs="6">
+                  <CButton color="primary" className="px-4">
+                    Login
+                  </CButton>
+                </CCol>
+                <CCol xs="6" className="text-right">
+                  <CButton
+                    color="link"
+                    className="px-0"
+                    onClick={() => set((state) => !state)}
+                  >
+                    Forgot password?
+                  </CButton>
+                </CCol>
+              </CRow>
+            </CForm>
+          </CCardBody>
+      </animated.div>}
+      {flipped &&
+      <animated.div
+        className="card p-4"
+        class="cardlogin"
+        style={{
+          opacity,
+          transform: transform.interpolate((t) => `${t} rotateX(180deg)`),
+        }}
+      >
+          <CCardBody>
+            <CForm>
+              <h1>Password Reset</h1>
+              <p className="text-muted">Please enter your email</p>
+              <br/>
+              <CInputGroup className="mb-3">
+                <CInputGroupPrepend>
+                  <CInputGroupText>
+                    <CIcon name="cil-envelope-closed" />
+                  </CInputGroupText>
+                </CInputGroupPrepend>
+                <CInput
+                  type="email"
+                  placeholder="Email"
+                  autoComplete="email"
+                />
+              </CInputGroup>
+              <br/>
+              <br/>
+              <CRow>
+                <CCol xs="6">
+                  <CButton color="primary" className="px-4">
+                    Reset
+                  </CButton>
+                </CCol>
+                <CCol xs="6" className="text-right">
+                  <CButton
+                    color="link"
+                    className="px-0"
+                    onClick={() => set((state) => !state)}
+                  >
+                    Cancel
+                  </CButton>
+                </CCol>
+              </CRow>
+            </CForm>
+          </CCardBody>
+      </animated.div> }
+    </>
+  );
+}
+
+export default Login;
