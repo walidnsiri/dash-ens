@@ -1,66 +1,96 @@
 const items = [
   {
-      _tag: 'CSidebarNavItem',
-      name: 'Dashboard',
-      to: '/dashboard',
-      icon: 'cil-speedometer',
-      badge: {
-        color: 'info',
-        text: 'NEW',
-      }
+    _tag: "CSidebarNavItem",
+    name: "Dashboard",
+    to: "/dashboard",
+    icon: "cil-speedometer",
+    badge: {
+      color: "info",
+      text: "NEW",
+    },
   },
   {
-    _tag: 'CSidebarNavTitle',
-    _children: ['Gestion des utilisateurs']
+    _tag: "CSidebarNavTitle",
+    _children: ["Gestion des utilisateurs"],
   },
   {
-    _tag: 'CSidebarNavDropdown',
-    name: 'Users',
-    to: '/user',
-    icon: 'cil-drop',
+    _tag: "CSidebarNavDropdown",
+    name: "Users",
+    to: "/user",
+    icon: "cil-drop",
     _children: [
       {
-        _tag: 'CSidebarNavItem',
-        name: 'Ajouter',
-        to: '/user/add',
+        _tag: "CSidebarNavItem",
+        name: "Ajouter",
+        to: "/user/add",
       },
       {
-        _tag: 'CSidebarNavItem',
-        name: 'Afficher',
-        to: '/user',
+        _tag: "CSidebarNavItem",
+        name: "Afficher",
+        to: "/user",
       },
     ],
   },
   {
-    _tag: 'CSidebarNavTitle',
-    _children: ['Gestions']
+    _tag: "CSidebarNavTitle",
+    _children: ["Gestions"],
   },
   {
-    _tag: 'CSidebarNavDropdown',
-    name: 'Events',
-    to: '/events',
-    icon: 'cil-drop',
+    _tag: "CSidebarNavDropdown",
+    name: "Events",
+    to: "/events",
+    icon: "cil-drop",
     _children: [
       {
-        _tag: 'CSidebarNavItem',
-        name: 'Ajouter',
-        to: '/event/add',
+        _tag: "CSidebarNavItem",
+        name: "Ajouter",
+        to: "/event/add",
       },
       {
-        _tag: 'CSidebarNavItem',
-        name: 'Afficher',
-        to: '/events',
+        _tag: "CSidebarNavItem",
+        name: "Afficher",
+        to: "/events",
       },
     ],
   },
 
   {
-    _tag: 'CSidebarNavItem',
-    name: 'Absence',
-    to: '/absence',
-    icon: 'cil-speedometer',
-},
-]
+    _tag: "CSidebarNavItem",
+    name: "Absence",
+    to: "/absence",
+    icon: "cil-speedometer",
+  },
+
+  {
+    _tag: "CSidebarNavDropdown",
+    name: "Résultat",
+    to: "/result",
+    icon: "cil-drop",
+    _children: [
+      {
+        _tag: "CSidebarNavItem",
+        name: "Notes",
+        to: "/resultat/notes",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Notes Session rattrapage",
+        to: "/resultat/notesSR",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Resultat Session principale",
+        to: "/resultat/ResultatSP",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Resultat Session rattrapage",
+        to: "/resultat/ResultatSR",
+      },
+    ],
+  },
+  
+];
 export default items;
 /*export default [
   {

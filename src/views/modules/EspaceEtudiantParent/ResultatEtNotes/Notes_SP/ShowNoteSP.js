@@ -5,27 +5,21 @@ import {
   CBadge,
   CDataTable,
 } from "@coreui/react";
-import Filters from "../../../../components/custom/FIlters";
-//import CIcon from '@coreui/icons-react'
-import AbsenceSearch from "./AbsenceSearch";
-import AbsenceFilters from "./AbsenceFilters";
-import AbsenceData from "./AbsenceData";
+import Filters from "../../../../../components/custom/FIlters"
+import NoteSPSearch from "./NoteSPSearch";
+import NoteSPFilters from "./NoteSPFilters";
+import NoteSPData from "./NoteSPData";
 
-const getBadge = (justification) => {
-  switch (justification) {
-    case "Absence injustifiée":
-      return "danger";
-    case "Absence justifiée":
-      return "success";
-    default:
-      return "danger";
-  }
+const getBadge = (Note_Exam) => {
+  if (Note_Exam < 8) return "danger";
+  if ( Note_Exam < 10  && Note_Exam >= 8 ) return "warning";
+  if (Note_Exam >= 10 ) return "success";
 };
-const fields = ["Module", "Date", "NSéance", "Justification"];
+const fields = ["Designation", "Coef", "NomEnseignant", "Note_CC", "Note_TP", "Note_Exam"];
 
-const ShowAbsence = () => {
+const ShowNoteSP = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [filterData, setFilterData] = useState({Module : "", NSéance : "",Justification: ""})
+  const [filterData, setFilterData] = useState({Designation : "", Coef : "", NomEnseignant: ""})
 
   function handlefiltercallback(data) {
     
@@ -37,8 +31,8 @@ const ShowAbsence = () => {
   return (
     <>
       <Filters
-        Filters={AbsenceFilters}
-        Search={AbsenceSearch}
+        Filters={NoteSPFilters}
+        Search={NoteSPSearch}
         filtercallback={handlefiltercallback}
       >
         <CRow>
@@ -51,13 +45,13 @@ const ShowAbsence = () => {
               tableFilterValue={filterData.searchInput}
               striped
               sorter={true}
-              items={AbsenceData}
+              items={NoteSPData}
               fields={fields}
               itemsPerPage={13}
               scopedSlots={{
-                Justification: (item) => (
+                Note_Exam: (item) => (
                   <td>
-                    <CBadge color={getBadge(item.Justification)} className='p-2'>{item.Justification}</CBadge>
+                    <CBadge color={getBadge(item.Note_Exam)} className='p-2'>{item.Note_Exam}</CBadge>
                   </td>
                 ),
               }}
@@ -69,4 +63,4 @@ const ShowAbsence = () => {
   );
 };
 
-export default ShowAbsence;
+export default ShowNoteSP;

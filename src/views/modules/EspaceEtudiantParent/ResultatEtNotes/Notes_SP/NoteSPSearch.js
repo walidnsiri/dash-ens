@@ -13,8 +13,13 @@ const AbsenceSearch = (props) => {
   const [searchInput, setSearchInput] = useState("");
   const { filterscallback } = props;
 
-  useEffect(() => {
+  const sendData = () => {
     filterscallback({searchInput});
+  }
+
+  useEffect(() => {
+      console.log(searchInput)
+    sendData();
   }, [searchInput]);
 
   function handleInputChange(e) {
