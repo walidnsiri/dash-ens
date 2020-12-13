@@ -3,6 +3,7 @@ import { useSpring, animated } from "react-spring";
 import CIcon from "@coreui/icons-react";
 import logo from "../../../assets/img/brand/logo-esprit.svg";
 
+
 import {
   CButton,
   CCard,
@@ -17,8 +18,10 @@ import {
   CInputGroupText,
   CRow,
 } from "@coreui/react";
+import { useHistory } from "react-router-dom";
 
 function Login() {
+  
   return (
     <div className="c-app c-default-layout flex-row align-items-center hero">
       <CContainer>
@@ -58,6 +61,7 @@ function Logo() {
 }
 
 function Card() {
+  const history = useHistory();
   const [flipped, set] = useState(false);
   const { transform, opacity } = useSpring({
     opacity: flipped ? 1 : 0,
@@ -67,8 +71,7 @@ function Card() {
   return (
     <>
       {!flipped && <animated.div
-      className="p-4"
-        class="cardlogin"
+      className="p-4 cardlogin"
         style={{ opacity: opacity.interpolate((o) => 1 - o), transform }}
       >
           <CCardBody>
@@ -101,7 +104,7 @@ function Card() {
               </CInputGroup>
               <CRow>
                 <CCol xs="6">
-                  <CButton color="primary" className="px-4">
+                  <CButton color="primary" className="px-4" onClick={ (e) => {history.replace('/dashboard')} }>
                     Login
                   </CButton>
                 </CCol>

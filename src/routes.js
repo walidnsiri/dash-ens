@@ -12,13 +12,18 @@ const addUsers = React.lazy(() => import('./views/modules/users/addUser'));
 const UserDetails = React.lazy(() => import('./views/modules/users/userDetails'));
 const updateUser = React.lazy(() => import('./views/modules/users/updateDetails'));
 
+//Absence
+
+const Absence = React.lazy(() => import('./views/modules/EspaceEtudiantParent/Absences/ShowAbsence'));
+
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/user', exact: true,  name: 'Utilisateurs', component: showUsers },
   { path: '/users/:id', exact: true, name: 'Détails de l\'utilisateur', component: UserDetails },
   { path: '/user/add', exact: true, name: 'Ajouter utilisateur', component: addUsers },
-  { path: '/user/update/:id', exact: true, name: 'Modifier utilisateur', component: updateUser }
+  { path: '/user/update/:id', exact: true, name: 'Modifier utilisateur', component: updateUser },
+  { path: '/absence', name: 'Absence', component: Absence },
 ];
 
 export default routes;

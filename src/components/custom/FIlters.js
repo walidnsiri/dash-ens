@@ -3,21 +3,9 @@ import PropTypes from "prop-types";
 import {
   CCard,
   CCardBody,
-  CCardHeader,
   CCol,
   CRow,
-  CInputGroup,
-  CInputGroupPrepend,
-  CInput,
-  CButton,
-  CLink,
-  CCollapse,
-  CFormGroup,
-  CInputCheckbox,
-  CLabel,
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import { Link } from "react-router-dom";
 import  Child  from "./child";
 
 

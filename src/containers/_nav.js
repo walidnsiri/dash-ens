@@ -53,6 +53,13 @@ const items = [
       },
     ],
   },
+
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Absence',
+    to: '/absence',
+    icon: 'cil-speedometer',
+},
 ]
 export default items;
 /*export default [

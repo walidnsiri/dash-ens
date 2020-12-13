@@ -37,7 +37,11 @@ export default function App() {
             )}
             {!user && (
               <>
-              
+               <Route
+                path="/"
+                name="Home"
+                render={(props) => <TheLayout {...props} />}
+              />
                 <Route
                   path="/login"
                   name="Login Page"
