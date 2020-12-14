@@ -9,8 +9,8 @@ import {
   CPagination
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import CustomUserCard from "../../../components/custom/customUserCard";
-import Filters from "../../../components/custom/FIlters";
+import CustomUserCard from "../../components/custom/customUserCard";
+import Filters from "../../components/custom/FIlters";
 //import CIcon from '@coreui/icons-react'
 import UserSearch from "./UserSearch";
 import UserFilters from "./Userfilters";

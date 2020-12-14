@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 //import noimage from "../../assets/img/noimage.png";
-import hoss from "../../assets/img/hoss.jpg";
+import hoss from "../../../assets/img/hoss.jpg";
 
 const CUserCard = (props) => {
   const { className } = props;

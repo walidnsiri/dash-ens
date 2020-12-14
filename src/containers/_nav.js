@@ -70,7 +70,7 @@ const items = [
       {
         _tag: "CSidebarNavItem",
         name: "Notes",
-        to: "/resultat/notes",
+        to: "/resultat/notesSP",
       },
       {
         _tag: "CSidebarNavItem",

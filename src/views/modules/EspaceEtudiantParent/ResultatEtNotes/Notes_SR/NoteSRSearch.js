@@ -8,7 +8,7 @@ import {
   CButton,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-const NoteSPSearch = (props) => {
+const NoteSRSearch = (props) => {
 
   const [searchInput, setSearchInput] = useState("");
   const { filterscallback } = props;
@@ -30,7 +30,7 @@ const NoteSPSearch = (props) => {
     <>
       <CRow>
         <CCol className="mt-3">
-          <h5>Notes de la Session Principale</h5>
+          <h5>Notes de la Session Rattrapage</h5>
         </CCol>
         <CCol lg="6" sm="6" md="6" xs="6">
           <CInputGroup>
@@ -53,4 +53,4 @@ const NoteSPSearch = (props) => {
   );
 };
 
-export default NoteSPSearch;
+export default NoteSRSearch;

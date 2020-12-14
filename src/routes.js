@@ -16,6 +16,7 @@ const updateUser = React.lazy(() => import('./views/modules/users/updateDetails'
 const Absence = React.lazy(() => import('./views/modules/EspaceEtudiantParent/Absences/ShowAbsence'));
 // Resultat
 const NoteSP = React.lazy(() => import('./views/modules/EspaceEtudiantParent/ResultatEtNotes/Notes_SP/ShowNoteSP'));
+const NoteSR = React.lazy(() => import('./views/modules/EspaceEtudiantParent/ResultatEtNotes/Notes_SR/ShowNoteSR'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -25,7 +26,8 @@ const routes = [
   { path: '/user/add', exact: true, name: 'Ajouter utilisateur', component: addUsers },
   { path: '/user/update/:id', exact: true, name: 'Modifier utilisateur', component: updateUser },
   { path: '/absence', name: 'Absence', component: Absence },
-  { path: '/resultat/notes', name: 'Notes Des Modules', component: NoteSP },
+  { path: '/resultat/notesSP', name: 'Notes Des Modules', component: NoteSP },
+  { path: '/resultat/notesSR', name: 'Notes Des Modules', component: NoteSR },
 ];
 
 export default routes;

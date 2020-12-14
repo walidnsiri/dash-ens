@@ -5,7 +5,7 @@ import {
   CBadge,
   CDataTable,
 } from "@coreui/react";
-import Filters from "../../../../../components/custom/FIlters"
+import Filters from "../../../../components/custom/FIlters"
 import NoteSPSearch from "./NoteSPSearch";
 import NoteSPFilters from "./NoteSPFilters";
 import NoteSPData from "./NoteSPData";
