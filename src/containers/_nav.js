@@ -89,6 +89,13 @@ const items = [
       },
     ],
   },
+
+  {
+    _tag: "CSidebarNavItem",
+    name: "Emploi",
+    to: "/emploi",
+    icon: "cil-speedometer",
+  },
   
 ];
 export default items;
