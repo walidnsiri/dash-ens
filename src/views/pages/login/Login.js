@@ -1,7 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useSpring, animated } from "react-spring";
 import CIcon from "@coreui/icons-react";
 import logo from "../../../assets/img/brand/logo-esprit.svg";
+import { UserContext } from "utils/UserContext";
 
 
 import {
@@ -21,6 +22,16 @@ import {
 import { useHistory } from "react-router-dom";
 
 function Login() {
+  const history = useHistory();
+  const [user, setUser] = useContext(UserContext);
+
+  const setUsr = function(user) {
+    setUser(user);
+  }
+
+  useEffect(() => {
+   if(user) history.replace("dashboard")
+  }, [user,history])
   
   return (
     <div className="c-app c-default-layout flex-row align-items-center hero">
@@ -29,7 +40,7 @@ function Login() {
         <CRow className="justify-content-center">
           <CCol>
           <CCardGroup>
-            <Card />
+            <Card setUser={setUsr}/>
             <CCard
               className="text-white py-5 d-md-down-none cardbg"
               style={{ width: "44%" }}
@@ -60,7 +71,21 @@ function Logo() {
   );
 }
 
-function Card() {
+function Card(setUser) {
+
+  const handleLogin = function(e) {
+      fetch(`/api/v1/public/login`,{
+        method: 'post',
+        body: JSON.stringify({
+          "username": "dennis.ritchi@nix.io",
+          "password" : "walid"
+        }),
+        headers: {
+          "Content-Type" : "application/json"
+        }
+      }).then(response => response.text().then(user => setUser.setUser(user)));
+      history.replace("dashboard");
+    }
   const history = useHistory();
   const [flipped, set] = useState(false);
   const { transform, opacity } = useSpring({
@@ -104,7 +129,7 @@ function Card() {
               </CInputGroup>
               <CRow>
                 <CCol xs="6">
-                  <CButton color="primary" className="px-4" onClick={ (e) => {history.replace('/dashboard')} }>
+                  <CButton color="primary" className="px-4" onClick={ (e) => {handleLogin(e)} }>
                     Login
                   </CButton>
                 </CCol>
@@ -123,8 +148,7 @@ function Card() {
       </animated.div>}
       {flipped &&
       <animated.div
-        className="card p-4"
-        class="cardlogin"
+        className="p-4 cardlogin"
         style={{
           opacity,
           transform: transform.interpolate((t) => `${t} rotateX(180deg)`),

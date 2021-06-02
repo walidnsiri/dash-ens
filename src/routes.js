@@ -19,11 +19,11 @@ const NoteSP = React.lazy(() => import('./views/modules/EspaceEtudiantParent/Res
 const NoteSR = React.lazy(() => import('./views/modules/EspaceEtudiantParent/ResultatEtNotes/Notes_SR/ShowNoteSR'));
 const showResultatSP = React.lazy(() => import('./views/modules/EspaceEtudiantParent/ResultatEtNotes/Resultat_SP/showResultatSP'));
 const showResultatSR = React.lazy(() => import('./views/modules/EspaceEtudiantParent/ResultatEtNotes/Resultat_SR/showResultatSR'));
-//Orientation
-const showOrientation = React.lazy(() => import('./views/modules/EspaceEtudiantParent/Orientation/showOrientation'));
-const saisirOrientation = React.lazy(() => import('./views/modules/EspaceEtudiantParent/Orientation/saisirOrientation'));
 // Emploi
 const emploi = React.lazy(() => import('./views/modules/EspaceEtudiantParent/EmploiDuTemps/Emploi'));
+// RDI
+const productionRdi = React.lazy(() => import('./views/modules/rdi/production/showProduction'));
+const reunionRdi = React.lazy(() => import('./views/modules/rdi/reunion/showReunion'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -37,9 +37,9 @@ const routes = [
   { path: '/resultat/notesSR', name: 'Notes Des Modules', component: NoteSR },
   { path: '/resultat/resultatSP', name: 'Résultat de la session principale', component: showResultatSP },
   { path: '/resultat/resultatSR', name: 'Résultat de la session rattrapage', component: showResultatSR },
-  { path: '/orientation/show', name: 'Afficher le résultat de l\'Orientation', component: showOrientation },
-  { path: '/orientation/edit', name: 'Choisir l\'orientation', component: saisirOrientation },
   { path: '/emploi', name: 'Emploi du temps', component: emploi },
+  { path: '/rdi/production', name: 'Production Rdi', component: productionRdi },
+  { path: '/rdi/reunion', name: 'Réunion Rdi', component: reunionRdi },
 ];
 
 export default routes;

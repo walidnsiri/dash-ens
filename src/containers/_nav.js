@@ -37,19 +37,19 @@ const items = [
   },
   {
     _tag: "CSidebarNavDropdown",
-    name: "Events",
-    to: "/events",
+    name: "Activités RDI",
+    to: "/rdi",
     icon: "cil-drop",
     _children: [
       {
         _tag: "CSidebarNavItem",
-        name: "Ajouter",
-        to: "/event/add",
+        name: "Production",
+        to: "/rdi/production",
       },
       {
         _tag: "CSidebarNavItem",
-        name: "Afficher",
-        to: "/events",
+        name: "Réunion",
+        to: "/rdi/reunion",
       },
     ],
   },
@@ -95,6 +95,26 @@ const items = [
     name: "Emploi",
     to: "/emploi",
     icon: "cil-speedometer",
+  },
+
+  {
+    _tag: "CSidebarNavDropdown",
+    name: "Orientation",
+    to: "/orientation",
+    icon: "cil-drop",
+    _children: [
+      
+      {
+        _tag: "CSidebarNavItem",
+        name: "Choisir",
+        to: "/orientation/edit",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Resultat Orientation",
+        to: "/orientation/show",
+      },
+    ],
   },
   
 ];

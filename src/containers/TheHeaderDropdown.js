@@ -1,15 +1,29 @@
-import React from 'react'
+import React, { useContext} from 'react'
 import {
   CBadge,
   CDropdown,
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
-  CImg
+  CImg,
+  CLink
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+import CIcon from '@coreui/icons-react';
+import {UserContext} from "utils/UserContext";
+import { useHistory } from "react-router-dom";
 
 const TheHeaderDropdown = () => {
+  const history = useHistory()
+  const [user, setUser] = useContext(UserContext)
+
+  const handleLogout = function() {
+    fetch(`/api/v1/public/logout`,{
+      method: 'post',
+    }).then(response => response.text().then(console.log("logged out")));
+    setUser(null);
+    history.replace("/")
+  }
+
   return (
     <CDropdown
       inNav
@@ -80,7 +94,7 @@ const TheHeaderDropdown = () => {
           <CBadge color="primary" className="mfs-auto">42</CBadge>
         </CDropdownItem>
         <CDropdownItem divider />
-        <CDropdownItem>
+        <CDropdownItem onClick={ (e) => {handleLogout(e)} }>
           <CIcon name="cil-lock-locked" className="mfe-2" /> 
           Lock Account
         </CDropdownItem>

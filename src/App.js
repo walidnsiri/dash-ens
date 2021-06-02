@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-// import { UserContext } from "./utils/UserContext";
-import { getUserFromToken } from "./utils/getUserFromToken";
+import { UserContext } from "./utils/UserContext";
 import "./scss/style.scss";
+import { queryApi } from "./utils/queryApi";
 
 const loading = (
   <div className="pt-3 text-center">
@@ -20,13 +20,21 @@ const Register = React.lazy(() => import("./views/pages/register/Register"));
 //const Page500 = React.lazy(() => import("./views/pages/page500/Page500"));
 
 export default function App() {
-  const [user] = useState(getUserFromToken());
+  const [user,setUser] = useState(null);
 
+  useEffect(() => {
+    fetch(`/api/v1/public/logged`,{
+      method: 'post',
+    }).then(response => response.text().then(user => setUser(user)));
+    console.log(user);
+    },[user]);
+    
   return (
     <BrowserRouter>
       <React.Suspense fallback={loading}>
         <Switch>
-            {user &
+        <UserContext.Provider value={[user, setUser]}>
+            {user &&
             (<>
               <Route
                 path="/"
@@ -37,11 +45,6 @@ export default function App() {
             )}
             {!user && (
               <>
-               <Route
-                path="/"
-                name="Home"
-                render={(props) => <TheLayout {...props} />}
-              />
                 <Route
                   path="/login"
                   name="Login Page"
@@ -50,6 +53,7 @@ export default function App() {
                 <Redirect to="/login" />
               </>
             )}
+            </UserContext.Provider>
         </Switch>
       </React.Suspense>
     </BrowserRouter>

@@ -9,6 +9,7 @@ import {
   CHeaderNavLink,
   CBreadcrumbRouter,
   CRow,
+  CCol,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import logo from "../assets/img/brand/logo-esprit.svg"
@@ -110,18 +111,18 @@ const TheHeader = () => {
 
 
         <CRow>
-          <div className="ml-5 mt-4 capitalize">
+          <CCol className="ml-5 mt-4 capitalize">
             <h5>
               <b>{lastRouteName}</b>
             </h5>
-          </div>
+          </CCol>
 
-          <div className="ml-auto mr-5 mt-2">
+          <CCol lg="3" xs="3" md="3" sm="3" className="ml-auto mr-5 mt-2">
             <CBreadcrumbRouter
-              className=""
+              className="float-right"
               routes={routes}
             />
-          </div>
+          </CCol>
         </CRow>
     </>
   );

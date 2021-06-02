@@ -15,3 +15,13 @@
 @import "~@syncfusion/ej2-react-navigations/styles/material.css";
 @import "~@syncfusion/ej2-inputs/styles/material.css";
 @import "~@syncfusion/ej2-buttons/styles/material.css";
+
+//import bootstrap
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+//date picker
+@import 'react-date-range/dist/styles.css'; // main style file
+@import 'react-date-range/dist/theme/default.css'; // theme css file
+
+//custom scss
+@import 'customcard.scss';
