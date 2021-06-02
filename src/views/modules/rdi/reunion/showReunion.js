@@ -15,7 +15,8 @@ import {
   CPagination
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import { DateRangePicker } from "react-date-range";
+import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+
 import CustomCard from "../../../components/custom/CustomCard";
 
 const ShowReunion = () => {
@@ -24,15 +25,7 @@ const ShowReunion = () => {
   function handleInputChange(e) {
     setSearchInput(e.target.value);
   }
-  const [selectionRange,setSelectionRange] = useState( {
-    startDate: new Date(),
-    endDate: new Date(),
-    key: 'selection',
-  });
-  const [calendar, setCalendar] = useState(false);
-  useEffect(() => {
-    console.log(calendar);
-  }, [calendar])
+  const [date, setdate] = useState([new Date(), new Date()]);
 
   function handleCheckbox(e) {}
   function handleSelect(changes) {
@@ -176,8 +169,13 @@ const ShowReunion = () => {
               <CLabel variant="checkbox" className="mt-1" htmlFor="range2">
                 Date réunion
               </CLabel>
-              <CInput className="mt-1" type="text" value="From 2021-12-01 To 2021-12-01" onClick={e => setCalendar(!calendar)}/>
-              {calendar && <DateRangePicker style={{"z-index": "1000"}} ranges={[selectionRange]} onChange={(selection) => handleSelect(selection)}/>}
+              <div>
+             <DateRangePicker
+             className="datepicker border-0"
+             onChange={setdate}
+             value={date}
+             />
+             </div>
             </div>
           </CCardBody>
         </CCard>
