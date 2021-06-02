@@ -4,15 +4,15 @@
   "description": "Esprit Dashboard Enseignant",
   "contributors": [
     {
-      "name": "Esprit DSI",
-      "url": "https://github.com/DSIPFE"
+      "name": "SAFAWA",
+      "url": "https://github.com/SAFAWA"
     }
   ],
   "homepage": ".",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git@github.com:DSIPFE/FrontEnd.git"
+    "url": "git@github.com:SAFAWA/ReactJS-Front.git"
   },
   "proxy": "http://localhost:8770",
   "dependencies": {
@@ -64,9 +64,6 @@
     "test:cov": "npm test -- --coverage --watchAll=false",
     "test:debug": "react-scripts --inspect-brk test --runInBand",
     "eject": "react-scripts eject"
-  },
-  "bugs": {
-    "url": "https://github.com/DSIPFE/FrontEnd/issues"
   },
   "eslintConfig": {
     "extends": "react-app"
