@@ -19,7 +19,7 @@ import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 
 import CustomCard from "../../../components/custom/CustomCard";
 
-const ShowReunion = () => {
+const ShowProduction = () => {
   const [currentPage, setCurrentPage] = useState(5);
   const [searchInput, setSearchInput] = useState("");
   function handleInputChange(e) {
@@ -45,12 +45,12 @@ const ShowReunion = () => {
               Filter
             </CCardTitle>
             <div className="mt-4 pt-4">
-              <h5 className="font-size-14 mb-3">Title</h5>
+              <h5 className="font-size-14 mb-3">Production</h5>
               <CFormGroup variant="checkbox" className="checkbox">
                 <CInputCheckbox
                   id="checkbox1"
-                  name="title"
-                  value="Equipe RDI"
+                  name="production"
+                  value="Article de recherche"
                   onChange={(e) => handleCheckbox(e)}
                 />
                 <CLabel
@@ -58,14 +58,14 @@ const ShowReunion = () => {
                   className="form-check-label mt-1"
                   htmlFor="checkbox1"
                 >
-                  Equipe RDI
+                  Article de recherche
                 </CLabel>
               </CFormGroup>
               <CFormGroup variant="checkbox" className="checkbox">
                 <CInputCheckbox
                   id="checkbox2"
-                  name="title"
-                  value="Partenaire"
+                  name="production"
+                  value="Papier scientifique"
                   onChange={(e) => handleCheckbox(e)}
                 />
                 <CLabel
@@ -73,14 +73,14 @@ const ShowReunion = () => {
                   className="form-check-label mt-1"
                   htmlFor="checkbox2"
                 >
-                  Partenaire
+                  Papier scientifique
                 </CLabel>
               </CFormGroup>
               <CFormGroup variant="checkbox" className="checkbox">
                 <CInputCheckbox
                   id="checkbox3"
-                  name="title"
-                  value="DRDI"
+                  name="production<"
+                  value="These de recherche"
                   onChange={(e) => handleCheckbox(e)}
                 />
                 <CLabel
@@ -88,63 +88,14 @@ const ShowReunion = () => {
                   className="form-check-label mt-1"
                   htmlFor="checkbox3"
                 >
-                  DRDI
-                </CLabel>
-              </CFormGroup>
-            </div>
-
-            <div className="mt-4 pt-4">
-              <h5 className="font-size-14 mb-3">Description</h5>
-              <CFormGroup variant="checkbox" className="checkbox">
-                <CInputCheckbox
-                  id="checkbox1"
-                  name="description"
-                  value="Lancement Projet"
-                  onChange={(e) => handleCheckbox(e)}
-                />
-                <CLabel
-                  variant="checkbox"
-                  className="form-check-label mt-1"
-                  htmlFor="checkbox1"
-                >
-                  Lancement Projet
-                </CLabel>
-              </CFormGroup>
-              <CFormGroup variant="checkbox" className="checkbox">
-                <CInputCheckbox
-                  id="checkbox2"
-                  name="title"
-                  value="Signature"
-                  onChange={(e) => handleCheckbox(e)}
-                />
-                <CLabel
-                  variant="checkbox"
-                  className="form-check-label mt-1"
-                  htmlFor="checkbox2"
-                >
-                  Signature
-                </CLabel>
-              </CFormGroup>
-              <CFormGroup variant="checkbox" className="checkbox">
-                <CInputCheckbox
-                  id="checkbox3"
-                  name="title"
-                  value="Suivie"
-                  onChange={(e) => handleCheckbox(e)}
-                />
-                <CLabel
-                  variant="checkbox"
-                  className="form-check-label mt-1"
-                  htmlFor="checkbox3"
-                >
-                  Suivie
+                  These de recherche
                 </CLabel>
               </CFormGroup>
               <CFormGroup variant="checkbox" className="checkbox">
                 <CInputCheckbox
                   id="checkbox4"
-                  name="title"
-                  value="Autre"
+                  name="production<"
+                  value="Developpement projet innovant"
                   onChange={(e) => handleCheckbox(e)}
                 />
                 <CLabel
@@ -152,22 +103,77 @@ const ShowReunion = () => {
                   className="form-check-label mt-1"
                   htmlFor="checkbox4"
                 >
-                  Autre
+                  Developpement projet innovant
+                </CLabel>
+              </CFormGroup>
+            </div>
+
+            <div className="mt-4 pt-4">
+              <h5 className="font-size-14 mb-3">Réf Production</h5>
+              <CFormGroup variant="checkbox" className="checkbox">
+                <CInputCheckbox
+                  id="checkbox1"
+                  name="refproduction"
+                  value="Classement 1"
+                  onChange={(e) => handleCheckbox(e)}
+                />
+                <CLabel
+                  variant="checkbox"
+                  className="form-check-label mt-1"
+                  htmlFor="checkbox1"
+                >
+                  Classement 1
+                </CLabel>
+              </CFormGroup>
+              <CFormGroup variant="checkbox" className="checkbox">
+                <CInputCheckbox
+                  id="checkbox2"
+                  name="refproduction"
+                  value="Classement 2"
+                  onChange={(e) => handleCheckbox(e)}
+                />
+                <CLabel
+                  variant="checkbox"
+                  className="form-check-label mt-1"
+                  htmlFor="checkbox2"
+                >
+                  Classement 2
+                </CLabel>
+              </CFormGroup>
+              <CFormGroup variant="checkbox" className="checkbox">
+                <CInputCheckbox
+                  id="checkbox3"
+                  name="refproduction"
+                  value="Classement 3"
+                  onChange={(e) => handleCheckbox(e)}
+                />
+                <CLabel
+                  variant="checkbox"
+                  className="form-check-label mt-1"
+                  htmlFor="checkbox3"
+                >
+                  Classement 3
+                </CLabel>
+              </CFormGroup>
+              <CFormGroup variant="checkbox" className="checkbox">
+                <CInputCheckbox
+                  id="checkbox4"
+                  name="refproduction"
+                  value="PI-DEV"
+                  onChange={(e) => handleCheckbox(e)}
+                />
+                <CLabel
+                  variant="checkbox"
+                  className="form-check-label mt-1"
+                  htmlFor="checkbox4"
+                >
+                 PI-DEV
                 </CLabel>
               </CFormGroup>
             </div>
             <div className="mt-4 pt-4">
-              <h5 className="font-size-14 mb-3">Date</h5>
-              <CLabel variant="checkbox" className="mt-1" htmlFor="range1">
-                Heure début
-              </CLabel>
-              <input type="range" className="form-range" id="range1" />
               <CLabel variant="checkbox" className="mt-1" htmlFor="range2">
-                Heure fin
-              </CLabel>
-              <input type="range" className="form-range" id="range2" />
-              <CLabel variant="checkbox" className="mt-1" htmlFor="range2">
-                Date réunion
+                Date Production
               </CLabel>
               <div>
              <DateRangePicker
@@ -184,7 +190,7 @@ const ShowReunion = () => {
       <CCol xs="12" sm="12" md="12" lg="9" className="mt-2 mb-4">
       <CRow>
         <CCol className="mt-3">
-          <h5>Réunions</h5>
+          <h5>Productions </h5>
         </CCol>
         <CCol lg="6" sm="6" md="6" xs="6" className="mr-4">
           <CInputGroup >
@@ -207,23 +213,23 @@ const ShowReunion = () => {
       </CRow>
       
       <CRow className="d-flex justify-content-center">
-      <CCol sm="12" xl="4" xs="12" md="6" >
-              <CustomCard className="profile-card" type="reunion"></CustomCard>
+              <CCol sm="12" xl="4" xs="12" md="6" >
+              <CustomCard className="profile-card"></CustomCard>
               </CCol>
               <CCol sm="12" xl="4" xs="12" md="6" >
-              <CustomCard className="profile-card" type="reunion"></CustomCard>
+              <CustomCard className="profile-card"></CustomCard>
               </CCol> 
               <CCol sm="12" xl="4" xs="12" md="6" >
-              <CustomCard className="profile-card" type="reunion"></CustomCard>
+              <CustomCard className="profile-card"></CustomCard>
               </CCol>
               <CCol sm="12" xl="4" xs="12" md="6" >
-              <CustomCard className="profile-card" type="reunion"></CustomCard>
+              <CustomCard className="profile-card"></CustomCard>
               </CCol>
               <CCol sm="12" xl="4" xs="12" md="6">
-              <CustomCard className="profile-card" type="reunion"></CustomCard>
+              <CustomCard className="profile-card"></CustomCard>
               </CCol>
               <CCol sm="12" xl="4" xs="12" md="6">
-              <CustomCard className="profile-card" type="reunion"></CustomCard>
+              <CustomCard className="profile-card"></CustomCard>
               </CCol>
        </CRow>
        <CRow>
@@ -243,4 +249,4 @@ const ShowReunion = () => {
   );
 };
 
-export default ShowReunion;
+export default ShowProduction;

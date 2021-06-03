@@ -8,7 +8,7 @@ import equipe from "../../../assets/img/partenaire.jpg";
 import { CImg } from "@coreui/react";
 import avatar from "../../../assets/img/avatars/6.jpg";
 const CustomCard = (props) => {
-  const { className, type } = props;
+  const { className } = props;
 
   // render
   return (
@@ -31,80 +31,39 @@ const CustomCard = (props) => {
               <img src={equipe} alt="card img" className="product-image" />
             </figure>
           </div>
-          {type === "reunion" && (
-            <>
-              <div className="product-description">
-                <div className="info">
-                  <h1>Equipe RDI</h1>
-                  <p>
-                    <b>Description:</b> <br />
-                    Lancement Projet
-                  </p>
-                  <p>
-                    <p>
-                      <b>Crée par:</b> <br />
-                      <div className="c-avatar">
-                        <CImg
-                          src={avatar}
-                          className="c-avatar-img"
-                          alt="admin@bootstrapmaster.com"
-                        />
-                      </div>
-                    </p>
-                  </p>
+          <div className="product-description">
+            <div className="info">
+              <h1>Equipe RDI</h1>
+              <br />
+              <p>
+                <b>Description:</b> <br />
+                Lancement Projet
+              </p>
+              <p>
+                <b>Crée par:</b> <br />
+                <div className="c-avatar">
+                  <CImg
+                    src={avatar}
+                    className="c-avatar-img"
+                    alt="admin@bootstrapmaster.com"
+                  />
                 </div>
-                <div className="reunion-right-card">
-                  <p>
-                    <b>Date:</b>
-                    <div className="date">12-12-2021</div>
-                  </p>
-                  <p>
-                    <b>Heure:</b>
-                    <br />
-                    <div className="heure">
-                      <span>10</span>
-                      <span>11</span>
-                    </div>
-                  </p>
-                </div>
+              </p>
+            </div>
+            <div className="dates">
+              <p><b>Heure:</b>
+              <br />
+              <div className="heure">
+                <span>10</span>
+                <span>11</span>
               </div>
-            </>
-          )}
-          {type === "production" && (
-            <>
-              <div className="product-description">
-                <div className="info">
-                  <h1>Article scientifique</h1>
-                  <p>
-                    <b>Description:</b> <br />
-                    description production
-                  </p>
-                  <p>
-                    <p>
-                      <b>Ref Production:</b> <br />
-                      Classement 1
-                    </p>
-                  </p>
-                </div>
-                <div className="production-right-card" >
-                  <p>
-                    <b>Date:</b>
-                    <div className="date">12-12-2021</div>
-                  </p>
-                  <p>
-                    <b>Crée par:</b> <br />
-                    <div className="c-avatar">
-                      <CImg
-                        src={avatar}
-                        className="c-avatar-img"
-                        alt="admin@bootstrapmaster.com"
-                      />
-                    </div>
-                  </p>
-                </div>
-              </div>
-            </>
-          )}
+              </p>
+              <p>
+              <b>Date:</b>
+              <div className="date">12-12-2021</div>
+              </p>
+            </div>
+          </div>
         </div>
       </main>
     </>

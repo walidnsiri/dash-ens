@@ -12,8 +12,8 @@ const addUsers = React.lazy(() => import('./views/modules/users/addUser'));
 const UserDetails = React.lazy(() => import('./views/modules/users/userDetails'));
 const updateUser = React.lazy(() => import('./views/modules/users/updateDetails'));
 
-//Suivi
-const Suivi = React.lazy(() => import('./views/modules/suivi/ShowSuivi'));
+//Absence
+const Absence = React.lazy(() => import('./views/modules/EspaceEtudiantParent/Absences/ShowAbsence'));
 // Resultat
 const NoteSP = React.lazy(() => import('./views/modules/EspaceEtudiantParent/ResultatEtNotes/Notes_SP/ShowNoteSP'));
 const NoteSR = React.lazy(() => import('./views/modules/EspaceEtudiantParent/ResultatEtNotes/Notes_SR/ShowNoteSR'));
@@ -32,7 +32,7 @@ const routes = [
   { path: '/users/:id', exact: true, name: 'Détails de l\'utilisateur', component: UserDetails },
   { path: '/user/add', exact: true, name: 'Ajouter utilisateur', component: addUsers },
   { path: '/user/update/:id', exact: true, name: 'Modifier utilisateur', component: updateUser },
-  { path: '/suivi', name: 'Suivi', component: Suivi },
+  { path: '/absence', name: 'Absence', component: Absence },
   { path: '/resultat/notesSP', name: 'Notes Des Modules', component: NoteSP },
   { path: '/resultat/notesSR', name: 'Notes Des Modules', component: NoteSR },
   { path: '/resultat/resultatSP', name: 'Résultat de la session principale', component: showResultatSP },

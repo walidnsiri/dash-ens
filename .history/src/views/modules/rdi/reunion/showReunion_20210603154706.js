@@ -225,6 +225,7 @@ const ShowReunion = () => {
               <CCol sm="12" xl="4" xs="12" md="6">
               <CustomCard className="profile-card" type="reunion"></CustomCard>
               </CCol>
+
        </CRow>
        <CRow>
          <CCol className="mr-4">

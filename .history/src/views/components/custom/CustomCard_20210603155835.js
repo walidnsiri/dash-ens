@@ -53,7 +53,7 @@ const CustomCard = (props) => {
                     </p>
                   </p>
                 </div>
-                <div className="reunion-right-card">
+                <div className="dates">
                   <p>
                     <b>Date:</b>
                     <div className="date">12-12-2021</div>
@@ -86,7 +86,7 @@ const CustomCard = (props) => {
                     </p>
                   </p>
                 </div>
-                <div className="production-right-card" >
+                <div className="dates[production]" >
                   <p>
                     <b>Date:</b>
                     <div className="date">12-12-2021</div>

@@ -95,13 +95,13 @@ main[role="main"] {
         color : #495057 !important;
       }
     }
-    .production-right-card {
+    .dates {
       width: 30%;
       float: left;
       position: relative;
       top: 0%;
       margin-left: -25px;
-      @include prefix(transform, translateY(34%));
+      @include prefix(transform, translateY(37%));
       p {
         margin-bottom: 15px;
         line-height: 2.3em;
@@ -133,44 +133,6 @@ main[role="main"] {
       }
     }
   }
-  .reunion-right-card {
-    width: 30%;
-    float: left;
-    position: relative;
-    top: 0%;
-    margin-left: -25px;
-    @include prefix(transform, translateY(37%));
-    p {
-      margin-bottom: 15px;
-      line-height: 2.3em;
-      font-size: small;
-      color : #495057 !important;
-    }
-
-    .date {
-      color: $primary;
-      font-size: 1.5em;
-    }
-
-    .heure {
-    color: $primary;
-    font-size: 1.7em;
-    display: inline;
-
-    span:nth-child(1)::after {
-      content: "h-";
-      top: 0;
-      left: -10px;
-      font-size: 0.6em;
-    }
-    span:nth-child(2)::after {
-      content: "h";
-      top: 0;
-      left: -10px;
-      font-size: 0.6em;
-    }
-  }
-}
   }
 
   .product-sidebar {

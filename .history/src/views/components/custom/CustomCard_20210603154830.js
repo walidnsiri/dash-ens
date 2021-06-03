@@ -31,80 +31,80 @@ const CustomCard = (props) => {
               <img src={equipe} alt="card img" className="product-image" />
             </figure>
           </div>
-          {type === "reunion" && (
+          { type === "reunion" &&
             <>
-              <div className="product-description">
-                <div className="info">
-                  <h1>Equipe RDI</h1>
-                  <p>
-                    <b>Description:</b> <br />
-                    Lancement Projet
-                  </p>
-                  <p>
-                    <p>
-                      <b>Crée par:</b> <br />
-                      <div className="c-avatar">
-                        <CImg
-                          src={avatar}
-                          className="c-avatar-img"
-                          alt="admin@bootstrapmaster.com"
-                        />
-                      </div>
-                    </p>
-                  </p>
+          <div className="product-description">
+            <div className="info"> 
+            <h1>Equipe RDI</h1>
+              <p>
+                <b>Description:</b> <br />
+                Lancement Projet
+              </p>
+              <p>
+                <p>
+                <b>Crée par:</b> <br />
+                <div className="c-avatar">
+                  <CImg
+                    src={avatar}
+                    className="c-avatar-img"
+                    alt="admin@bootstrapmaster.com"
+                  />
                 </div>
-                <div className="reunion-right-card">
-                  <p>
-                    <b>Date:</b>
-                    <div className="date">12-12-2021</div>
-                  </p>
-                  <p>
-                    <b>Heure:</b>
-                    <br />
-                    <div className="heure">
-                      <span>10</span>
-                      <span>11</span>
-                    </div>
-                  </p>
-                </div>
+                </p>
+              </p>
+            </div>
+            <div className="dates">
+            <p>
+              <b>Date:</b>
+              <div className="date">12-12-2021</div>
+              </p>
+              <p>
+                <b>Heure:</b><br/>
+                <div className="heure">
+                <span>10</span>
+                <span>11</span>
               </div>
+              </p>
+            </div>
+
+          </div>
             </>
-          )}
-          {type === "production" && (
+          }
+          { type === "production" &&
             <>
-              <div className="product-description">
-                <div className="info">
-                  <h1>Article scientifique</h1>
-                  <p>
-                    <b>Description:</b> <br />
-                    description production
-                  </p>
-                  <p>
-                    <p>
-                      <b>Ref Production:</b> <br />
-                      Classement 1
-                    </p>
-                  </p>
+            <div className="product-description">
+            <div className="info"> 
+            <h1>Article scientifique</h1>
+              <p>
+                <b>Description:</b> <br />
+                description production
+              </p>
+              <p>
+              <p>
+                <b>Ref Production:</b> <br />
+                Classement 1
+              </p>
+              </p>
+            </div>
+            <div className="dates">
+              <p>
+              <b>Date:</b>
+              <div className="date">12-12-2021</div>
+              </p>
+              <p>
+              <b>Crée par:</b> <br />
+                <div className="c-avatar">
+                  <CImg
+                    src={avatar}
+                    className="c-avatar-img"
+                    alt="admin@bootstrapmaster.com"
+                  />
                 </div>
-                <div className="production-right-card" >
-                  <p>
-                    <b>Date:</b>
-                    <div className="date">12-12-2021</div>
-                  </p>
-                  <p>
-                    <b>Crée par:</b> <br />
-                    <div className="c-avatar">
-                      <CImg
-                        src={avatar}
-                        className="c-avatar-img"
-                        alt="admin@bootstrapmaster.com"
-                      />
-                    </div>
-                  </p>
-                </div>
-              </div>
+                </p>
+            </div>
+          </div>
             </>
-          )}
+          }
         </div>
       </main>
     </>

@@ -36,13 +36,6 @@ const items = [
     _children: ["Gestions"],
   },
   {
-    _tag: "CSidebarNavItem",
-    name: "Suivi",
-    to: "/suivi",
-    icon: "cil-speedometer",
-  },
-
-  {
     _tag: "CSidebarNavDropdown",
     name: "Activités RDI",
     to: "/rdi",
@@ -59,6 +52,13 @@ const items = [
         to: "/rdi/reunion",
       },
     ],
+  },
+
+  {
+    _tag: "CSidebarNavItem",
+    name: "Absence",
+    to: "/absence",
+    icon: "cil-speedometer",
   },
 
   {

@@ -19,7 +19,7 @@ import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 
 import CustomCard from "../../../components/custom/CustomCard";
 
-const ShowReunion = () => {
+const ShowProduction = () => {
   const [currentPage, setCurrentPage] = useState(5);
   const [searchInput, setSearchInput] = useState("");
   function handleInputChange(e) {
@@ -207,23 +207,23 @@ const ShowReunion = () => {
       </CRow>
       
       <CRow className="d-flex justify-content-center">
-      <CCol sm="12" xl="4" xs="12" md="6" >
-              <CustomCard className="profile-card" type="reunion"></CustomCard>
+              <CCol sm="12" xl="4" xs="12" md="6" >
+              <CustomCard className="profile-card"></CustomCard>
               </CCol>
               <CCol sm="12" xl="4" xs="12" md="6" >
-              <CustomCard className="profile-card" type="reunion"></CustomCard>
+              <CustomCard className="profile-card"></CustomCard>
               </CCol> 
               <CCol sm="12" xl="4" xs="12" md="6" >
-              <CustomCard className="profile-card" type="reunion"></CustomCard>
+              <CustomCard className="profile-card"></CustomCard>
               </CCol>
               <CCol sm="12" xl="4" xs="12" md="6" >
-              <CustomCard className="profile-card" type="reunion"></CustomCard>
+              <CustomCard className="profile-card"></CustomCard>
               </CCol>
               <CCol sm="12" xl="4" xs="12" md="6">
-              <CustomCard className="profile-card" type="reunion"></CustomCard>
+              <CustomCard className="profile-card"></CustomCard>
               </CCol>
               <CCol sm="12" xl="4" xs="12" md="6">
-              <CustomCard className="profile-card" type="reunion"></CustomCard>
+              <CustomCard className="profile-card"></CustomCard>
               </CCol>
        </CRow>
        <CRow>
@@ -243,4 +243,4 @@ const ShowReunion = () => {
   );
 };
 
-export default ShowReunion;
+export default ShowProduction;

@@ -207,23 +207,23 @@ const ShowReunion = () => {
       </CRow>
       
       <CRow className="d-flex justify-content-center">
-      <CCol sm="12" xl="4" xs="12" md="6" >
-              <CustomCard className="profile-card" type="reunion"></CustomCard>
+              <CCol sm="12" xl="4" xs="12" md="6" >
+              <CustomCard className="profile-card"></CustomCard>
               </CCol>
               <CCol sm="12" xl="4" xs="12" md="6" >
-              <CustomCard className="profile-card" type="reunion"></CustomCard>
+              <CustomCard className="profile-card"></CustomCard>
               </CCol> 
               <CCol sm="12" xl="4" xs="12" md="6" >
-              <CustomCard className="profile-card" type="reunion"></CustomCard>
+              <CustomCard className="profile-card"></CustomCard>
               </CCol>
               <CCol sm="12" xl="4" xs="12" md="6" >
-              <CustomCard className="profile-card" type="reunion"></CustomCard>
+              <CustomCard className="profile-card"></CustomCard>
               </CCol>
               <CCol sm="12" xl="4" xs="12" md="6">
-              <CustomCard className="profile-card" type="reunion"></CustomCard>
+              <CustomCard className="profile-card"></CustomCard>
               </CCol>
               <CCol sm="12" xl="4" xs="12" md="6">
-              <CustomCard className="profile-card" type="reunion"></CustomCard>
+              <CustomCard className="profile-card"></CustomCard>
               </CCol>
        </CRow>
        <CRow>
