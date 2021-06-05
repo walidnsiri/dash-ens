@@ -160,10 +160,8 @@ const ShowSuivi = () => {
           </CCard>
         </CCol>
       </CRow>
-      <CRow>
-      <div className="mr-5 ml-5 heigher-row">
-        <div className="col-content">
-          
+      <CRow className="mr-5 ml-5 heigher-row">
+        <CCol xs="2" sm="2" md="2" lg="2" xl="2">
           <CCard
             className="mb-5 shadow-sm border-0 small-card-as-button"
             onClick={() => setchar("rdi")}
@@ -176,8 +174,8 @@ const ShowSuivi = () => {
               <div className="float-right">img</div>
             </CCardBody>
           </CCard>
-        </div>
-        <div className="col-content">
+        </CCol>
+        <CCol xs="2" sm="2" md="2" lg="2" xl="2">
           <CCard className="mb-5 shadow-sm border-primary small-card-as-button">
             <CCardBody>
               <CCallout color="danger d-inline-block mt-0">
@@ -187,8 +185,8 @@ const ShowSuivi = () => {
               <div className="float-right">img</div>
             </CCardBody>
           </CCard>
-        </div>
-        <div className="col-content">
+        </CCol>
+        <CCol xs="2" sm="2" md="2" lg="2" xl="2">
           <CCard className="mb-5 shadow-sm border-0 small-card-as-button">
             <CCardBody>
               <CCallout color="danger d-inline-block mt-0">
@@ -198,8 +196,8 @@ const ShowSuivi = () => {
               <div className="float-right">img</div>
             </CCardBody>
           </CCard>
-        </div>
-        <div className="col-content">
+        </CCol>
+        <CCol xs="2" sm="2" md="2" lg="2" xl="2">
           <CCard className="mb-5 shadow-sm border-0 small-card-as-button">
             <CCardBody>
               <CCallout color="danger d-inline-block mt-0">
@@ -209,8 +207,8 @@ const ShowSuivi = () => {
               <div className="float-right">img</div>
             </CCardBody>
           </CCard>
-        </div>
-        <div className="col-content">
+        </CCol>
+        <CCol xs="2" sm="2" md="2" lg="2" xl="2">
           <CCard className="mb-5 shadow-sm border-0 small-card-as-button">
             <CCardBody>
               <CCallout color="danger d-inline-block mt-0">
@@ -220,8 +218,8 @@ const ShowSuivi = () => {
               <div className="float-right">img</div>
             </CCardBody>
           </CCard>
-        </div>
-        <div className="col-content">
+        </CCol>
+        <CCol xs="2" sm="2" md="2" lg="2" xl="2">
           <CCard
             className="mb-5 shadow-sm border-0 small-card-as-button"
             onClick={() => setchar("interventions")}
@@ -234,8 +232,7 @@ const ShowSuivi = () => {
               <div className="float-right">img</div>
             </CCardBody>
           </CCard>
-        </div>
-      </div>
+        </CCol>
       </CRow>
       <CRow>
         <CCol xs="12" sm="12" md="12" lg="12" xl="12">

@@ -1,0 +1,29 @@
+.suivi-card-info{
+    display: flex;
+    align-items: flex-start;
+
+    .left-button {
+        float: right;
+        position: absolute;
+        right:0;
+    }
+
+    .avatar-lg {
+        width: 6rem !important;
+        height: 6rem !important;
+    }
+    
+    h2 {
+        font-size: 20px !important;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+    .card-body {
+        flex:1;
+
+        .user-info {
+
+        }    
+    }
+
+}

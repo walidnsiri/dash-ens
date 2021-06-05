@@ -16,7 +16,7 @@ import {
   CCallout,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import { CChart, CChartDoughnut, CChartPolarArea, CChartLine, CChartBar } from "@coreui/react-chartjs";
+import { CChart, CChartDoughnut, CChartPolarArea } from "@coreui/react-chartjs";
 import { CImg } from "@coreui/react";
 import avatar from "../../../assets/img/avatars/6.jpg";
 const options = {
@@ -160,10 +160,8 @@ const ShowSuivi = () => {
           </CCard>
         </CCol>
       </CRow>
-      <CRow>
-      <div className="mr-5 ml-5 heigher-row">
-        <div className="col-content">
-          
+      <CRow className="mr-5 ml-5 heigher-row">
+        <CCol xs="2" sm="2" md="2" lg="2" xl="2">
           <CCard
             className="mb-5 shadow-sm border-0 small-card-as-button"
             onClick={() => setchar("rdi")}
@@ -176,8 +174,8 @@ const ShowSuivi = () => {
               <div className="float-right">img</div>
             </CCardBody>
           </CCard>
-        </div>
-        <div className="col-content">
+        </CCol>
+        <CCol xs="2" sm="2" md="2" lg="2" xl="2">
           <CCard className="mb-5 shadow-sm border-primary small-card-as-button">
             <CCardBody>
               <CCallout color="danger d-inline-block mt-0">
@@ -187,8 +185,8 @@ const ShowSuivi = () => {
               <div className="float-right">img</div>
             </CCardBody>
           </CCard>
-        </div>
-        <div className="col-content">
+        </CCol>
+        <CCol xs="2" sm="2" md="2" lg="2" xl="2">
           <CCard className="mb-5 shadow-sm border-0 small-card-as-button">
             <CCardBody>
               <CCallout color="danger d-inline-block mt-0">
@@ -198,8 +196,8 @@ const ShowSuivi = () => {
               <div className="float-right">img</div>
             </CCardBody>
           </CCard>
-        </div>
-        <div className="col-content">
+        </CCol>
+        <CCol xs="2" sm="2" md="2" lg="2" xl="2">
           <CCard className="mb-5 shadow-sm border-0 small-card-as-button">
             <CCardBody>
               <CCallout color="danger d-inline-block mt-0">
@@ -209,8 +207,8 @@ const ShowSuivi = () => {
               <div className="float-right">img</div>
             </CCardBody>
           </CCard>
-        </div>
-        <div className="col-content">
+        </CCol>
+        <CCol xs="2" sm="2" md="2" lg="2" xl="2">
           <CCard className="mb-5 shadow-sm border-0 small-card-as-button">
             <CCardBody>
               <CCallout color="danger d-inline-block mt-0">
@@ -220,8 +218,8 @@ const ShowSuivi = () => {
               <div className="float-right">img</div>
             </CCardBody>
           </CCard>
-        </div>
-        <div className="col-content">
+        </CCol>
+        <CCol xs="2" sm="2" md="2" lg="2" xl="2">
           <CCard
             className="mb-5 shadow-sm border-0 small-card-as-button"
             onClick={() => setchar("interventions")}
@@ -234,8 +232,7 @@ const ShowSuivi = () => {
               <div className="float-right">img</div>
             </CCardBody>
           </CCard>
-        </div>
-      </div>
+        </CCol>
       </CRow>
       <CRow>
         <CCol xs="12" sm="12" md="12" lg="12" xl="12">
@@ -244,20 +241,19 @@ const ShowSuivi = () => {
               <CRow>
                 {chart === "interventions" ? (
                   <>
-                    <CCol md="12" xs="12" lg="6" xl="6">
-                      <h4 className="mb-5">Doughnut</h4>
-                      <div className="chart-wrapper chart-card">
+                    <CCol md="6">
+                      <h4>Doughnut</h4>
+                      <div className="chart-wrapper">
                         <CChartDoughnut
                           datasets={doughnut.datasets}
                           labels={doughnut.labels}
-                          className="chart-card"
                         />
                       </div>
                       <hr />
                     </CCol>
-                    <CCol md="12" xs="12" lg="6" xl="6">
-                      <h4 className="mb-5">Polar</h4>
-                      <div className="chart-wrapper chart-card">
+                    <CCol md="6" xs="12">
+                      <h4>Polar</h4>
+                      <div className="chart-wrapper">
                         <CChartPolarArea
                           datasets={polar.datasets}
                           options={{
@@ -267,7 +263,6 @@ const ShowSuivi = () => {
                             },
                           }}
                           labels={polar.labels}
-                          className=""
                         />
                       </div>
                       <hr />
@@ -275,10 +270,11 @@ const ShowSuivi = () => {
                   </>
                 ) : (
                   <>
-                    <CCol md="12" xs="12" lg="6" xl="6">
-                      <h4 className="mb-5">Line</h4>
+                    <CCol md="6">
+                      <h4>Line</h4>
                       <div className="chart-wrapper">
-                        <CChartLine
+                        <CChart
+                          type="line"
                           datasets={line.datasets}
                           options={options}
                           className="chart-card"
@@ -286,10 +282,11 @@ const ShowSuivi = () => {
                       </div>
                       <hr />
                     </CCol>
-                    <CCol md="12" xs="12" lg="6" xl="6">
-                      <h4 className="mb-5">Bar</h4>
+                    <CCol md="6" xs="12">
+                      <h4>Bar</h4>
                       <div className="chart-wrapper">
-                        <CChartBar
+                        <CChart
+                          type="bar"
                           datasets={bar.datasets}
                           options={options}
                           labels="months"

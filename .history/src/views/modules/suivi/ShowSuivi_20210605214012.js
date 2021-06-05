@@ -235,6 +235,7 @@ const ShowSuivi = () => {
             </CCardBody>
           </CCard>
         </div>
+        
       </div>
       </CRow>
       <CRow>
