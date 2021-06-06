@@ -1,0 +1,65 @@
+.suivi-card-info{
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 80px;
+
+    .left-button {
+        float: right;
+        position: absolute;
+        right: 10px;
+        font-size: 15px;
+        
+        .buttonstyle {
+            border-top-right-radius: 20px;
+            border-bottom-left-radius: 20px;
+            box-sizing: border-box;
+            box-shadow: 0 3px 5px 1px rgba(105, 41, 41, 0.2);
+        }
+    }
+
+    .avatar-lg {
+        width: 6rem !important;
+        height: 6rem !important;
+        
+    }
+    
+    h2 {
+        font-size: 20px !important;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+    .card-body {
+        flex:1;
+
+        .user-info {
+
+        }    
+    }
+
+}
+
+
+
+.small-card-as-button {
+   /* 
+    color: white;
+    
+    h5 {
+        color: white;
+    }*/
+}
+
+
+.chart-card {
+    height: 470px;
+    
+}
+
+.li-suivi {
+    padding-bottom: 0!important;
+    padding-top:0.8rem!important;
+    //background: #556ee6;
+    h4,h6 {
+        color:white;
+    }
+}

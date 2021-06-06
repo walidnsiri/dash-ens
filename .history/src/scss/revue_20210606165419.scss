@@ -1,0 +1,40 @@
+.performance-wrapper {
+    padding-left:10.37%;
+}
+
+.performance-title {
+    display: block;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .4em;
+    line-height: 1.2em;
+    margin-bottom: 1.5em;
+}
+
+.performance-top {
+    display: flex;
+    flex-flow: row;
+    align-items: flex-start;
+    @include prefix(box-align, start);
+    
+    .performance-thumbnail {
+        width: 66.582%;
+        position: relative;
+        margin-bottom: -155px;
+        z-index: 1;
+    }
+    .performance-side {
+        padding-left: 6.9%;
+        width: 33.418%;
+        padding-bottom: 30px;
+    }
+}
+
+.performance-card {
+    display: block;
+    box-shadow: 10px 15px 35px -5px rgba(0,0,0,.25);
+    transition: box-shadow .2s ease-in-out;
+    height: 447px;
+    width: 740px
+}
+
