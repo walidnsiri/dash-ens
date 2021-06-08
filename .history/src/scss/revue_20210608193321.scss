@@ -962,16 +962,7 @@ body.dark-mode {
 
     
 }
-.cust-btn.prev {
-  &:hover {
-    @include prefix(animation, nac-scale-animation 2s ease-in);
-  }
-}
-.cust-btn.next {
-  &:hover {
-    @include prefix(animation, nac-scale-animation 2s ease-in);
-  }
-}
+
 .cust-btn.prev::before {
     content: '';
     display: block;
@@ -983,6 +974,9 @@ body.dark-mode {
     z-index: -1;
     background-color: #d4c6e6;
     //transition: all .3s ease;
+    &:hover {
+      @include prefix(animation, nac-scale-animation 2s ease-in);
+    }
 }
 
 .cust-btn.next::before {
@@ -996,8 +990,11 @@ body.dark-mode {
   z-index: -1;
   background-color: #d4c6e6;
   transition: all .3s ease;
+  &:hover {
+    @include prefix(animation, nac-scale-animation 2s ease-in);
+  }
 }
 
 @keyframes nac-scale-animation {
-  from {height: 62px;} to {height: 40px;} 
+  from {width:70px;} to {width: 20px;} 
 }

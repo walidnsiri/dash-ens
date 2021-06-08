@@ -929,18 +929,18 @@ body.dark-mode {
 
   .thumbnail-nav__link.prev {
     left:0;
-   /* &:hover {
+    &:hover {
       transform: translate3d(30px,0,0);
       transition: transform .3s ease-in-out;
-    }*/
+    }
   }
   .thumbnail-nav__link.next {
     right:0;
     text-align: right;
-   /* &:hover {
+    &:hover {
       transform: translate3d(-30px,0,0);
       transition: transform .3s ease-in-out;
-    }*/
+    }
   }
 }
 
@@ -959,45 +959,6 @@ body.dark-mode {
     color: #282828;
     z-index: 0;
     padding: 5px 24px 5px 0;
-
+    margin-left: 2.7em;
     
-}
-.cust-btn.prev {
-  &:hover {
-    @include prefix(animation, nac-scale-animation 2s ease-in);
-  }
-}
-.cust-btn.next {
-  &:hover {
-    @include prefix(animation, nac-scale-animation 2s ease-in);
-  }
-}
-.cust-btn.prev::before {
-    content: '';
-    display: block;
-    width: 70px;
-    height: 70%;
-    position: absolute;
-    bottom: -5px;
-    left: -14px;
-    z-index: -1;
-    background-color: #d4c6e6;
-    //transition: all .3s ease;
-}
-
-.cust-btn.next::before {
-  content: '';
-  display: block;
-  width: 70px;
-  height: 70%;
-  position: absolute;
-  bottom: -5px;
-  right: 0;
-  z-index: -1;
-  background-color: #d4c6e6;
-  transition: all .3s ease;
-}
-
-@keyframes nac-scale-animation {
-  from {height: 62px;} to {height: 40px;} 
 }

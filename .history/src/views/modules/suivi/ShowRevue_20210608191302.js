@@ -23,10 +23,10 @@ const ShowRevue = () => {
     <>
     <nav className="thmbnail-nav">
       <CLink to="" className="thumbnail-nav__link prev cust-btn">
-        <span className="thumbnail-nav__label prev">Préc</span>
+        <span className="thumbnail-nav__label">Préc</span>
       </CLink>
       <CLink to="" className="thumbnail-nav__link next cust-btn">
-        <span className="thumbnail-nav__label next">Suiv</span>
+        <span className="thumbnail-nav__label">Suiv</span>
       </CLink>
     </nav>
     <div className="performance-section">
