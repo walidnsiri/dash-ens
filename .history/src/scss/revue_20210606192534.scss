@@ -1,0 +1,266 @@
+.performance-section {
+  padding-top: 60px;
+  margin-bottom: 60px;
+}
+
+@media (max-width: 1279px) {
+  .performance-section {
+    margin-bottom: 73px;
+  }
+}
+
+.performance-container {
+  padding: 0 20px;
+  margin: 0 auto;
+  width: 1280px;
+
+  .title {
+    display: block;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.4em;
+    line-height: 1.2em;
+    margin-bottom: 1.5em;
+  }
+}
+@media (max-width: 1399px) {
+  .performance-container {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1279px) {
+.performance-wrapper {
+  padding-left: 10.37%;
+} 
+}
+
+
+
+.performance-top {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  @include prefix(box-align, start);
+  @include prefix(box-orient, horizontal);
+  @include prefix(box-direction, normal);
+
+  @media (min-width: 1280px) {
+    .performance-thumbnail {
+      width: 66.582%;
+      position: relative;
+      margin-bottom: -155px;
+      z-index: 1;
+    }
+  }
+  @media (max-width: 1279px) {
+    .performance-thumbnail {
+      margin-bottom: 50px !important;
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  .performance-side {
+    padding-left: 6.9%;
+    width: 33.418%;
+    padding-top: 3.8%;
+    padding-left: 5.4%;
+  }
+
+  @media (max-width: 1279px) {
+    .performance-side {
+      float: left;
+      width: 50%;
+      padding-bottom: 37px;
+    }
+  }
+  @media (max-width: 1399px) {
+    .performance-side {
+      padding-left: 4.2%;
+    }
+  }
+}
+
+.performance-card {
+  display: block;
+  box-shadow: 10px 15px 35px -5px rgba(0, 0, 0, 0.25);
+  transition: box-shadow 0.2s ease-in-out;
+  height: 447px;
+  width: 100%;
+}
+
+@media (max-width: 1279px) {
+  .performance-avatar {
+    float: left;
+    margin: 0 0 0 20px;
+  }
+}
+
+.performance-avatar {
+  width: 120px;
+  max-width: 100%;
+  margin-bottom: 25px;
+  display: block;
+  margin-left: 14px;
+}
+@media (max-width: 1279px) {
+  .performance-title {
+    position: relative;
+    left: 22px;
+    margin-top: 0.95em;
+  }
+}
+
+.performance-title {
+   margin-bottom: .15em;
+   overflow: hidden;
+   white-space: nowrap;
+   color: #282828;
+  }
+
+@media (max-width: 1279px) {
+  .performance-subtitle {
+    position: relative;
+    left: 22px;
+  }
+}
+
+.performance-subtitle {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.2em;
+  letter-spacing: .075em;
+}
+
+
+.performance-scores {
+    width: 77.379%;
+    margin-right:0;
+    margin-left: auto;
+    background-color: #E2DED1;
+    margin-right: 10%;
+}
+
+@media (max-width: 1279px) {
+    .performance-scores {
+        width: calc(100% + 70px);
+        margin-top: 0;
+        margin-left: -35px;
+        margin-bottom: 0;
+        margin-right: 0px;
+    }
+}
+
+@media (max-width: 1399px) {
+    .performance-scores {
+        margin-right: 10%;
+    }
+}
+
+.performance-scores-top {
+    padding-top: 34px;
+}
+
+@media (max-width : 1279px) {
+    .performance-scores-top {
+        padding-top: 47px;
+    }
+}
+
+@media (max-width : 1279px) {
+    .performance-desc {
+        display: none;
+        padding: 17px 7% 17px 14.3%;
+
+    }
+}
+
+@media(max-width: 1279px) {
+    .performance-desc.mobile {
+        display: block;
+        float: left;
+        width: 50%;
+    }
+}
+
+.performance-desc, .performance-enseignant{
+    width: 43.188%;
+    margin-right: 0;
+    margin-left: auto;
+    padding-left: 8.918%;
+    padding-right: 8%;
+}
+
+.performance-desc.mobile {
+    display: none;
+}
+
+.performance-enseignant {
+    padding-right: 0;
+    display: flex;
+    flex-flow: row wrap;
+    box-pack: left;
+    -ms-flex-pack: left;
+    justify-content: left;
+}
+
+@media(max-width : 1279px) {
+    .performance-enseignant {
+        back-pack: center;
+        justify-content: center;
+        width: auto;
+        margin : 0 auto;
+        padding: 0;
+    }
+}
+
+single-enseignant {
+    position: relative;
+    display: block;
+}
+
+.performance-scores-bottom {
+    padding: 53px 70px 10px;
+}
+
+
+@media (max-width: 1279px){
+    .performance-scores-bottom {
+        padding: 37px 13px 48px;
+    }
+}
+
+
+
+.score_list {
+    display: flex;
+}
+
+.score-item {
+    display: block;
+    text-align: center;
+    position: relative;
+    box-flex: 0;
+    flex: 0 0 15%;
+}
+
+.score-caption {
+    font-weight: 700;
+    .score-title, .score-score {
+        line-height:16px;
+        letter-spacing: .35em;
+    }
+    
+    .score-title {
+        font-size: 11px;
+        text-transform: uppercase;
+    }
+    .score-score {
+        font-size: 14px;
+        color: #8d8c8c;
+    }
+}
