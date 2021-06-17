@@ -1,0 +1,88 @@
+{
+  "name": "@esprit/front-client",
+  "version": "0.2.0",
+  "description": "Esprit Dashboard Enseignant",
+  "contributors": [
+    {
+      "name": "SAFAWA",
+      "url": "https://github.com/SAFAWA"
+    }
+  ],
+  "homepage": ".",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:SAFAWA/ReactJS-Front.git"
+  },
+  "dependencies": {
+    "@coreui/chartjs": "^2.0.0",
+    "@coreui/coreui": "^3.4.0",
+    "@coreui/icons": "2.0.0-beta.4",
+    "@coreui/icons-react": "^1.0.2",
+    "@coreui/react": "^3.4.5",
+    "@coreui/react-chartjs": "^1.0.1",
+    "@coreui/utils": "^1.3.1",
+    "@reduxjs/toolkit": "^1.5.0",
+    "@syncfusion/ej2-react-navigations": "^18.4.42",
+    "@wojtekmaj/react-daterange-picker": "^3.2.0",
+    "axios": "^0.21.1",
+    "bootstrap": "^5.0.1",
+    "classnames": "^2.2.6",
+    "core-js": "^3.9.0",
+    "date-fns": "^2.21.3",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
+    "font-awesome": "^4.7.0",
+    "formik": "^2.2.6",
+    "jwt-decode": "^3.1.2",
+    "lodash-es": "^4.17.21",
+    "lodash-move": "^1.1.1",
+    "prop-types": "^15.7.2",
+    "react": "^16.14.0",
+    "react-app-polyfill": "^1.0.6",
+    "react-date-range": "^1.1.3",
+    "react-dom": "^16.14.0",
+    "react-dropzone": "^11.3.1",
+    "react-particles-js": "^3.4.1",
+    "react-redux": "7.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "^4.0.3",
+    "react-spring": "^8.0.27",
+    "react-use-gesture": "^8.0.1",
+    "redux": "4.0.5",
+    "sass": "^1.32.12",
+    "yup": "^0.29.3"
+  },
+  "devDependencies": {
+    "redux-devtools": "^3.7.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "test:cov": "npm test -- --coverage --watchAll=false",
+    "test:debug": "react-scripts --inspect-brk test --runInBand",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 10",
+    "not op_mini all"
+  ],
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!**/*index.js",
+      "!src/serviceWorker.js",
+      "!src/polyfill.js"
+    ]
+  },
+  "engines": {
+    "node": ">=10",
+    "npm": ">=6"
+  }
+}
