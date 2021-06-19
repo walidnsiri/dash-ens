@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import ClearIcon from '@material-ui/icons/Clear';
-import DoneIcon from '@material-ui/icons/Done';
+import Icon from '@material-ui/core/Icon';
 
 const SuccessErrorModal = (props) => {
 
@@ -24,7 +23,7 @@ const SuccessErrorModal = (props) => {
         <div className="modal-content">
           <div className="modal-header" onClick={e => e.stopPropagation()}>
             <div className="icon-box">
-            {type === "success" ?  <DoneIcon style={{ fontSize: 60 }}/> : <ClearIcon style={{ fontSize: 60 }}/> }
+              <Icon color={type === "success" ? 'success;': 'danger;' }>{type === "success" ? '&#xE876;': 'error_outline;' }</Icon>
             </div>
             <h4 className="modal-title w-100">{type === "success" ? 'Succès!': 'Pardon!' }</h4>
           </div>
