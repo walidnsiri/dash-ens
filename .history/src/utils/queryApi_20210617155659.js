@@ -28,8 +28,10 @@ export async function queryApi(endpoint, body = null, method = "GET", transformB
           // transform body object to form data entries
           let bodyFormData = new FormData()
           for (let [key, value] of Object.entries(body)) {
+            console.log(key);
             if (value) {
               if (value instanceof File){
+                console.log(value);
                 bodyFormData.append(key, new Blob([value], {type:"application/json"}));
                 
               }
@@ -63,15 +65,16 @@ export async function queryApi(endpoint, body = null, method = "GET", transformB
                   numberOfItems++
                 })
               } else {
-                bodyFormData.append(key, JSON.stringify(value));
+                console.log("not array");
+                bodyFormData.append(key, value);
               }
             }
           }
 
 
-          /*for (let pair of bodyFormData.entries()) {
+          for (let pair of bodyFormData.entries()) {
             console.log(pair[0]+","+pair[1]);
-          }*/
+          }
           
           config = {
             ...config,

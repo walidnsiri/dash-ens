@@ -33,7 +33,7 @@ const baseStyle = {
 
 function Accept(props) {
     const onDrop = useCallback((acceptedFiles) => {
-      setFieldValue("files", acceptedFiles[0]);
+      setFieldValue("files", acceptedFiles);
     }, []);
     const {
       acceptedFiles,

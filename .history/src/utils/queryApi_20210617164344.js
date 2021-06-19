@@ -69,9 +69,9 @@ export async function queryApi(endpoint, body = null, method = "GET", transformB
           }
 
 
-          /*for (let pair of bodyFormData.entries()) {
+          for (let pair of bodyFormData.entries()) {
             console.log(pair[0]+","+pair[1]);
-          }*/
+          }
           
           config = {
             ...config,

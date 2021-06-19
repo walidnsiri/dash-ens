@@ -69,13 +69,13 @@ export async function queryApi(endpoint, body = null, method = "GET", transformB
           }
 
 
-          /*for (let pair of bodyFormData.entries()) {
+          for (let pair of bodyFormData.entries()) {
             console.log(pair[0]+","+pair[1]);
-          }*/
+          }
           
           config = {
             ...config,
-            headers: { "Content-Type": "multipart/form-data" },
+            headers: { "Content-Type": undefined },
             data: bodyFormData,
           }
           

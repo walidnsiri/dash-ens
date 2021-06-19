@@ -28,10 +28,10 @@ export async function queryApi(endpoint, body = null, method = "GET", transformB
           // transform body object to form data entries
           let bodyFormData = new FormData()
           for (let [key, value] of Object.entries(body)) {
+            console.log(key);
             if (value) {
               if (value instanceof File){
-                bodyFormData.append(key, new Blob([value], {type:"application/json"}));
-                
+                bodyFormData.append(key, value);
               }
               else if (Array.isArray(value)) {
                 let numberOfItems = 0
@@ -55,24 +55,29 @@ export async function queryApi(endpoint, body = null, method = "GET", transformB
                       }
                     }
                   } else {
-
                     bodyFormData.append(`${key}[${numberOfItems}]`, v);
                     //bodyFormData.append(`${key}[${numberOfItems}]`, new Blob([JSON.stringify(v)],{type : "application/json"}));
                   } 
 
                   numberOfItems++
                 })
-              } else {
-                bodyFormData.append(key, JSON.stringify(value));
-              }
+              } else bodyFormData.append(key, new Blob([value], {type:"application/json"}));
             }
           }
-
-
-          /*for (let pair of bodyFormData.entries()) {
-            console.log(pair[0]+","+pair[1]);
+          /*for (var keys of bodyFormData.keys()) {
+           for ( var val of bodyFormData.get(keys)){
+             console.log(val);
+           }
+            if(typeof value === 'object') {
+              for(var requestvalue of value.values) {
+                console.log({requestvalue})
+              }
+            }
+            else {
+              console.log(value)
+            }
           }*/
-          
+          console.log(bodyFormData);
           config = {
             ...config,
             headers: { "Content-Type": "multipart/form-data" },

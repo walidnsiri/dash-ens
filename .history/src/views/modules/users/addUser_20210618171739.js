@@ -92,7 +92,9 @@ const AddUsers = (props) => {
 
   return (
     <>
-    <SuccessErrorModal  onClose={() => setModal({...modal,show: false})} show={modal.show} type={modal.type} message={modal.message}/>
+    {modal.show && 
+    <SuccessErrorModal  onClose={() => setModal({show: false, message: ""})} show={modal.show} type={modal.type} message={modal.message}/>
+    }
       <CForm className="form-horizontal" onSubmit={formik.handleSubmit}>
         <CFade timeout={300}>
           <CCard>

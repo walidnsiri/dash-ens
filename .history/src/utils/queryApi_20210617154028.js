@@ -28,10 +28,11 @@ export async function queryApi(endpoint, body = null, method = "GET", transformB
           // transform body object to form data entries
           let bodyFormData = new FormData()
           for (let [key, value] of Object.entries(body)) {
+            console.log(key);
             if (value) {
               if (value instanceof File){
-                bodyFormData.append(key, new Blob([value], {type:"application/json"}));
-                
+                console.log("file");
+                bodyFormData.append(key, value);
               }
               else if (Array.isArray(value)) {
                 let numberOfItems = 0
@@ -63,15 +64,16 @@ export async function queryApi(endpoint, body = null, method = "GET", transformB
                   numberOfItems++
                 })
               } else {
-                bodyFormData.append(key, JSON.stringify(value));
+                console.log("not array");
+                bodyFormData.append(key, new Blob([value], {type:"application/json"}));
               }
             }
           }
 
 
-          /*for (let pair of bodyFormData.entries()) {
-            console.log(pair[0]+","+pair[1]);
-          }*/
+          for (let value of bodyFormData.entries {
+            console.log(value)
+          }
           
           config = {
             ...config,

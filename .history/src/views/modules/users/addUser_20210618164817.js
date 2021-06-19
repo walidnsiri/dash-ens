@@ -21,7 +21,7 @@ import {userRoles} from '../../../enums/roles.enum';
 import { useHistory } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import SuccessErrorModal from "../../components/custom/SuccessErrorModal";
+import {SuccessErrorModal} from "../../components/custom/SuccessErrorModal";
 
 
 const AddUserSchema = Yup.object().shape({
@@ -39,18 +39,15 @@ const AddUserSchema = Yup.object().shape({
     .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
     "Le mot de passe doit contenir au minimum: 8 caractères, une lettre majuscule, une lettre minuscule, un nombre et un Caractère spécial!"),
   role: Yup.string()
-  .required("Le role est obligatoire"),
+  .required("Role is required"),
 });
 
 const AddUsers = (props) => {
-  const [modal, setModal] = useState({show: false, message: "", type:"success"});
+  const [modal, setModal] = useState({show: false, message: ""});
   const history = useHistory();
-  const [collapsed, setCollapsed] = useState(true);
-  const [collapsed2, setCollapsed2] = useState(false);
-  useEffect(() => {
-    console.log(modal);
-   
-  }, [modal])
+  const [collapsed, setCollapsed] = React.useState(true);
+  const [collapsed2, setCollapsed2] = React.useState(false);
+  
   const handleCancel = () => {
     history.push("/user");
   };
@@ -77,14 +74,15 @@ const AddUsers = (props) => {
       file : values.files
     }
     const [user,error]= await queryApi("user/register",body, 'POST',true);
-    if(user) setModal({show: true, message: "L'utilisateur a été ajouté avec succès", type:'success'});
-    if(error) setModal({show: true, message: "3awed nayyek", type:'error'});;
+    if(user) setModal({show: true, message: "L'utilisateur a été ajouté avec succès"});
+    if(error) setModal({show: true, message: "3awed nayyek"});;
   }
 
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: AddUserSchema,
     onSubmit: values => {
+      alert(JSON.stringify(values, null, 2));
       addUser(values);
 
     },
@@ -92,7 +90,9 @@ const AddUsers = (props) => {
 
   return (
     <>
-    <SuccessErrorModal  onClose={() => setModal({...modal,show: false})} show={modal.show} type={modal.type} message={modal.message}/>
+    {modal.show && 
+    <SuccessErrorModal  onClose={() => setModal({show: false, message: ""})} show={modal.show}/>
+    }
       <CForm className="form-horizontal" onSubmit={formik.handleSubmit}>
         <CFade timeout={300}>
           <CCard>

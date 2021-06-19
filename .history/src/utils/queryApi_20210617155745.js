@@ -63,15 +63,16 @@ export async function queryApi(endpoint, body = null, method = "GET", transformB
                   numberOfItems++
                 })
               } else {
-                bodyFormData.append(key, JSON.stringify(value));
+                console.log("not array");
+                bodyFormData.append(key, value);
               }
             }
           }
 
 
-          /*for (let pair of bodyFormData.entries()) {
+          for (let pair of bodyFormData.entries()) {
             console.log(pair[0]+","+pair[1]);
-          }*/
+          }
           
           config = {
             ...config,

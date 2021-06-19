@@ -47,10 +47,7 @@ const AddUsers = (props) => {
   const history = useHistory();
   const [collapsed, setCollapsed] = useState(true);
   const [collapsed2, setCollapsed2] = useState(false);
-  useEffect(() => {
-    console.log(modal);
-   
-  }, [modal])
+  
   const handleCancel = () => {
     history.push("/user");
   };
@@ -77,14 +74,15 @@ const AddUsers = (props) => {
       file : values.files
     }
     const [user,error]= await queryApi("user/register",body, 'POST',true);
-    if(user) setModal({show: true, message: "L'utilisateur a été ajouté avec succès", type:'success'});
-    if(error) setModal({show: true, message: "3awed nayyek", type:'error'});;
+    if(user) setModal({show: true, message: "L'utilisateur a été ajouté avec succès", type:"success"});
+    if(error) setModal({show: true, message: "3awed nayyek", type:"error"});;
   }
 
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: AddUserSchema,
     onSubmit: values => {
+      alert(JSON.stringify(values, null, 2));
       addUser(values);
 
     },
@@ -92,7 +90,9 @@ const AddUsers = (props) => {
 
   return (
     <>
-    <SuccessErrorModal  onClose={() => setModal({...modal,show: false})} show={modal.show} type={modal.type} message={modal.message}/>
+    {modal.show && 
+    <SuccessErrorModal  onClose={() => setModal({show: false, message: ""})} show={modal.show} type={modal.type} message={modal.message}/>
+    }
       <CForm className="form-horizontal" onSubmit={formik.handleSubmit}>
         <CFade timeout={300}>
           <CCard>
