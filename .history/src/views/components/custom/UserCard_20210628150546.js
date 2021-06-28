@@ -25,11 +25,15 @@ import { queryApi } from "../../../utils/queryApi";
 import { fetchImageFromService } from "../../../utils/getImage";
 import { LoaderLarge } from "../../components/custom/Loaders";
 import DeleteModal from "../../components/custom/DeleteModal";
-
+import SuccessErrorModal from "../../components/custom/SuccessErrorModal";
 
 const UserCard = (props) => {
-  const { user,setModal } = props;
-  
+  const { user } = props;
+  const [modal, setModal] = useState({
+    show: false,
+    message: "",
+    type: "success",
+  });
   const [deleteModal, setdeleteModal] = useState({ show: false, message: "" });
   const [img, setImg] = useState(noimage);
   const[roles,setRoles] = useState([]);
@@ -60,30 +64,26 @@ const UserCard = (props) => {
   }, [user.image]);
 
   async function handleDelete() {
-    const onClose = () => {
-      setdeleteModal({...deleteModal, show: false});
-    };
     const onConfirm = async () => {
       const [res, error] = await queryApi("user/" + user.id, null, "DELETE");
       if (res)
-        onClose();
         setModal({
           show: true,
           message: "L'utilisateur a été supprimé avec succès",
           type: "success",
         });
-      if (error) {
-        onClose();
+      if (error)
         setModal({ show: true, message: error.details, type: "error" });
-      }
     };
-   
+    const OnClose = () => {
+      setModal({ ...modal, show: false });
+    };
 
     setdeleteModal({
       show: true,
       message:
         "Voulez-vous vraiment supprimer cet utilisateur? Ce processus est irréversible!",
-      onClose,
+      OnClose,
       onConfirm,
     });
   }

@@ -1,4 +1,4 @@
-export const userRolesObject = [
+export const userRoles = [
   { role: "USER_ADMIN", name: "Administrateur" },
   { role: "ENS_UP", name: "Enseignant CUP" },
   { role: "ENS_CHEF", name: "Chef de département" },

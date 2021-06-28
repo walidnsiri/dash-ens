@@ -23,9 +23,9 @@ function getImageFromLocalStorage(image = null) {
  */
 export async function fetchImageFromService(img = null) {
     if(img === null) return img;
-    const [result, error]  =  await queryApi("file/display/" + img);
-    if (result) {
-      return `data:${result.type};base64,` + result.value;
+    const [image,error] =  queryApi("file/display/" + img);
+    if (image) {
+      return `data:${image[0].type};base64,` + image[0].value;
     }
     /*trackPromise(
       queryApi("file/display/" + img).then((image,error) => {

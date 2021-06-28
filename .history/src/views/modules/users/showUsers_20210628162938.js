@@ -14,7 +14,6 @@ import {
   CButton,
   CPagination,
   CAlert,
-  CSwitch
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { userRoles } from "../../../enums/roles.enum";
@@ -36,7 +35,6 @@ const ShowUsers = () => {
   const [searchInput, setSearchInput] = useState("");
   const [roles, setRoles] = useState([]);
   const [users, setUsers] = useState([]);
-  const [enabledSwitch, setenabledSwitch] = useState(true);
   const [modal, setModal] = useState({
     show: false,
     message: "",
@@ -72,7 +70,7 @@ const ShowUsers = () => {
           limit: "6",
         },
         query: {
-          enabled : enabledSwitch
+          enabled : true
         },
       };
 
@@ -98,7 +96,7 @@ const ShowUsers = () => {
       if (error) console.error(error);
     };
     fetchUsers();
-  }, [currentPage, searchInput, roles, date,enabledSwitch]);
+  }, [currentPage, searchInput, roles, date]);
 
   return (
     <>
@@ -181,23 +179,6 @@ const ShowUsers = () => {
                   </CLabel>
                 </CFormGroup>
               </div>
-
-
-              <div className="mt-4 pt-4">
-                <h5 className="font-size-14 mb-3">Etat</h5>
-                <CSwitch 
-                variant="3d"
-                size="sm"
-                color="danger"
-                checked={enabledSwitch}
-                value={enabledSwitch}
-                onChange={e => setenabledSwitch(!enabledSwitch)}
-                />
-
-              </div>
-
-
-
 
               <div className="mt-4 pt-4">
                 <CLabel variant="checkbox" className="mt-1" htmlFor="range2">

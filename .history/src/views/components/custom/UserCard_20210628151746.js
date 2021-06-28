@@ -60,24 +60,20 @@ const UserCard = (props) => {
   }, [user.image]);
 
   async function handleDelete() {
-    const onClose = () => {
-      setdeleteModal({...deleteModal, show: false});
-    };
     const onConfirm = async () => {
       const [res, error] = await queryApi("user/" + user.id, null, "DELETE");
       if (res)
-        onClose();
         setModal({
           show: true,
           message: "L'utilisateur a été supprimé avec succès",
           type: "success",
         });
-      if (error) {
-        onClose();
+      if (error)
         setModal({ show: true, message: error.details, type: "error" });
-      }
     };
-   
+    const onClose = () => {
+      setdeleteModal({...deleteModal, show: false});
+    };
 
     setdeleteModal({
       show: true,

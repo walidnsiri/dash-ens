@@ -98,7 +98,7 @@ const ShowUsers = () => {
       if (error) console.error(error);
     };
     fetchUsers();
-  }, [currentPage, searchInput, roles, date,enabledSwitch]);
+  }, [currentPage, searchInput, roles, date]);
 
   return (
     <>
@@ -189,7 +189,6 @@ const ShowUsers = () => {
                 variant="3d"
                 size="sm"
                 color="danger"
-                checked={enabledSwitch}
                 value={enabledSwitch}
                 onChange={e => setenabledSwitch(!enabledSwitch)}
                 />

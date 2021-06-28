@@ -25,26 +25,19 @@ import { queryApi } from "../../../utils/queryApi";
 import { fetchImageFromService } from "../../../utils/getImage";
 import { LoaderLarge } from "../../components/custom/Loaders";
 import DeleteModal from "../../components/custom/DeleteModal";
-
+import SuccessErrorModal from "../../components/custom/SuccessErrorModal";
 
 const UserCard = (props) => {
-  const { user,setModal } = props;
-  
+  const { user } = props;
+  const [modal, setModal] = useState({
+    show: false,
+    message: "",
+    type: "success",
+  });
   const [deleteModal, setdeleteModal] = useState({ show: false, message: "" });
   const [img, setImg] = useState(noimage);
-  const[roles,setRoles] = useState([]);
+  const[roles,setRoles] = useState(["xD","xD1"]);
 
-  const assignRoles = () => {
-    let roles = [];
-    user.authorities.forEach((role) => {
-      userRolesObject.forEach((roleobj) => {
-      if (role.authority === roleobj.role) {
-        roles.push(roleobj.name)
-      }
-    })
-  })
-  setRoles(roles);
-  }
   
 
 
@@ -54,42 +47,51 @@ const UserCard = (props) => {
       setImg(img);
     };
     fetchimg();
-    assignRoles();
+   
+    user.authorities.map((role) => {
+      userRolesObject.map((roleobj) => {
+      if (role.authority === roleobj.role) {
+        return <div key = {roleobj.role}>{roleobj.name}</div>;
+      }
+    })
+  })
 
     return () => setImg(noimage);
   }, [user.image]);
 
   async function handleDelete() {
-    const onClose = () => {
-      setdeleteModal({...deleteModal, show: false});
-    };
     const onConfirm = async () => {
       const [res, error] = await queryApi("user/" + user.id, null, "DELETE");
       if (res)
-        onClose();
         setModal({
           show: true,
           message: "L'utilisateur a été supprimé avec succès",
           type: "success",
         });
-      if (error) {
-        onClose();
+      if (error)
         setModal({ show: true, message: error.details, type: "error" });
-      }
     };
-   
+    const OnClose = () => {
+      setModal({ ...modal, show: false });
+    };
 
     setdeleteModal({
       show: true,
       message:
         "Voulez-vous vraiment supprimer cet utilisateur? Ce processus est irréversible!",
-      onClose,
+      OnClose,
       onConfirm,
     });
   }
 
   return (
     <>
+      <SuccessErrorModal
+        onClose={() => setModal({ ...modal, show: false })}
+        show={modal.show}
+        type={modal.type}
+        message={modal.message}
+      />
       <DeleteModal {...deleteModal} />
       <div className="post-module">
         <div className="thumbnail">
@@ -108,11 +110,11 @@ const UserCard = (props) => {
         <div className="post-content">
           <div className="category">Info</div>
           <h1 className="title">{user.fullName}</h1>
-          <div className="sub_title">
+          <h2 className="sub_title">
            {roles.map( role => {
-             return <h5 key={role}>{role}</h5>
+             return {role}
            })}
-          </div>
+          </h2>
           <div
             className="description"
             style={{ height: "100px", display: "none", opacity: "1" }}

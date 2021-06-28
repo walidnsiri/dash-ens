@@ -189,7 +189,6 @@ const ShowUsers = () => {
                 variant="3d"
                 size="sm"
                 color="danger"
-                checked={enabledSwitch}
                 value={enabledSwitch}
                 onChange={e => setenabledSwitch(!enabledSwitch)}
                 />

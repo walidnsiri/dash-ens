@@ -25,7 +25,8 @@ export async function fetchImageFromService(img = null) {
     if(img === null) return img;
     const [result, error]  =  await queryApi("file/display/" + img);
     if (result) {
-      return `data:${result.type};base64,` + result.value;
+      console.log(result)
+      //return `data:${result[0].type};base64,` + result[0].value;
     }
     /*trackPromise(
       queryApi("file/display/" + img).then((image,error) => {

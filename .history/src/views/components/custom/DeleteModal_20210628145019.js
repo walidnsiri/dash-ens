@@ -23,7 +23,7 @@ const DeleteModal = (props) => {
         <div className="modal-content">
           <div className="modal-header flex-column" onClick={e => e.stopPropagation()}>
             <div className="icon-box">
-            <CloseIcon style={{ fontSize: 60, color:"#f15e5e", marginTop : "8%" }}/>
+            <CloseIcon style={{ fontSize: 60, color:"#f15e5e;", marginTop : "6%" }}/>
             </div>
             <h4 className="modal-title w-100">êtes-vous sure?</h4>
             <button type="button" className="close" aria-hidden="true" onClick={onClose}>&times;</button>

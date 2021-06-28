@@ -23,21 +23,16 @@ function getImageFromLocalStorage(image = null) {
  */
 export async function fetchImageFromService(img = null) {
     if(img === null) return img;
-    const [result, error]  =  await queryApi("file/display/" + img);
-    if (result) {
-      return `data:${result.type};base64,` + result.value;
-    }
-    /*trackPromise(
+    trackPromise(
       queryApi("file/display/" + img).then((image,error) => {
         if (image) {
-          console.log(image);
          return `data:${image[0].type};base64,` + image[0].value;
         }
         if (error) {
           return img;
         } 
       })
-    );*/
+    );
   
 }
 

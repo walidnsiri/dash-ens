@@ -31,7 +31,7 @@ const DeleteModal = (props) => {
           <div className="modal-body">
             <p className="text-center">
                 {message}
-            </p>
+            </p>col-12 col-sm-12 col-md-6 col-xl-4
           </div>
           <div className="modal-footer justify-content-center"> 
             <button type="button" className="btn btn-secondary"  onClick={onClose}>Cancel</button>

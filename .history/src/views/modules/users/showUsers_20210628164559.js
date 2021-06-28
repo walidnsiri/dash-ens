@@ -36,7 +36,6 @@ const ShowUsers = () => {
   const [searchInput, setSearchInput] = useState("");
   const [roles, setRoles] = useState([]);
   const [users, setUsers] = useState([]);
-  const [enabledSwitch, setenabledSwitch] = useState(true);
   const [modal, setModal] = useState({
     show: false,
     message: "",
@@ -72,7 +71,7 @@ const ShowUsers = () => {
           limit: "6",
         },
         query: {
-          enabled : enabledSwitch
+          enabled : true
         },
       };
 
@@ -98,7 +97,7 @@ const ShowUsers = () => {
       if (error) console.error(error);
     };
     fetchUsers();
-  }, [currentPage, searchInput, roles, date,enabledSwitch]);
+  }, [currentPage, searchInput, roles, date]);
 
   return (
     <>
@@ -189,9 +188,8 @@ const ShowUsers = () => {
                 variant="3d"
                 size="sm"
                 color="danger"
-                checked={enabledSwitch}
-                value={enabledSwitch}
-                onChange={e => setenabledSwitch(!enabledSwitch)}
+                checked
+                onClick={e => console.log(e.target.value)}
                 />
 
               </div>
