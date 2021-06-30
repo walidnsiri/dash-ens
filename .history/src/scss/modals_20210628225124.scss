@@ -8,7 +8,7 @@
     display: flex;
     align-content: center;
     align-items: center;
-    z-index: -1;
+    
     opacity: 0;
     pointer-events: none;
     transition: opacity 250ms 700ms ease;
@@ -200,7 +200,6 @@
     align-content: center;
     align-items: center;
     opacity: 0;
-    z-index: -1;
     pointer-events: none;
     transition: opacity 250ms 700ms ease;
 

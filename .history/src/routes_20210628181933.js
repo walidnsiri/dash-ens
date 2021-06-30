@@ -30,7 +30,7 @@ const routes = [
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/user', exact: true,  name: 'Utilisateurs', component: showUsers },
   { path: '/user/add', exact: true, name: 'Ajouter utilisateur', component: addUsers },
-  { path: '/user/update', exact: true, name: 'Modifier utilisateur', component: updateUsers },
+  { path: '/user/update/', exact: true, name: 'Modifier utilisateur', component: updateUsers },
   { path: '/suivi', name: 'Suivi', component: Suivi },
   { path: '/revue', name: 'revue', component: revue },
   { path: '/rdi/production', name: 'Production Rdi', component: productionRdi },

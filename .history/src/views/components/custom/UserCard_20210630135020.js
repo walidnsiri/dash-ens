@@ -1,4 +1,21 @@
 import React, { useState, useEffect } from "react";
+import {
+  CCard,
+  CCardBody,
+  CCardTitle,
+  CCol,
+  CRow,
+  CFormGroup,
+  CInputCheckbox,
+  CLabel,
+  CInput,
+  CInputGroup,
+  CInputGroupPrepend,
+  CButton,
+  CPagination,
+  CLink,
+} from "@coreui/react";
+import CIcon from "@coreui/icons-react";
 import { CImg } from "@coreui/react";
 import { Link } from "react-router-dom";
 import noimage from "../../../assets/img/noimage.png";

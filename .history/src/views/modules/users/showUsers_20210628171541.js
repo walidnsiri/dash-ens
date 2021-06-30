@@ -33,7 +33,6 @@ function removeItem(arr, value) {
 
 const ShowUsers = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalpages, setTotalPages] = useState(1);
   const [searchInput, setSearchInput] = useState("");
   const [roles, setRoles] = useState([]);
   const [users, setUsers] = useState([]);
@@ -68,7 +67,7 @@ const ShowUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       const body = {
-        pageRequest: {
+        page: {
           number: "" + currentPage,
           limit: "6",
         },
@@ -93,9 +92,8 @@ const ShowUsers = () => {
 
       const [res, error] = await queryApi("user/search", body, "POST");
       if (res) {
-        //console.log(res.totalPages);
-        setUsers(res.users);
-        setTotalPages(res.totalPages);
+        //console.log(res.items);
+        setUsers(res.items);
       }
       if (error) console.error(error);
     };
@@ -193,7 +191,7 @@ const ShowUsers = () => {
                 color="danger"
                 checked={enabledSwitch}
                 value={enabledSwitch}
-                onChange={() => setenabledSwitch(!enabledSwitch)}
+                onChange={e => setenabledSwitch(!enabledSwitch)}
                 />
 
               </div>
@@ -269,7 +267,7 @@ const ShowUsers = () => {
                   className="mt-4"
                   align="end"
                   activePage={currentPage}
-                  pages={totalpages}
+                  pages={10}
                   onActivePageChange={setCurrentPage}
                 />
               </CCol>

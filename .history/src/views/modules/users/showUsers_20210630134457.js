@@ -93,9 +93,9 @@ const ShowUsers = () => {
 
       const [res, error] = await queryApi("user/search", body, "POST");
       if (res) {
-        //console.log(res.totalPages);
+        //console.log(res.items);
         setUsers(res.users);
-        setTotalPages(res.totalPages);
+        setTotalPages(res.totalpages);
       }
       if (error) console.error(error);
     };
