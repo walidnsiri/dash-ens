@@ -1,0 +1,269 @@
+// Product Preview
+// Pallete
+$dark-blue: #31353d;
+$green: #9bb6aa;
+
+// Body Color
+$body-color: #f9f9f9;
+
+// Header
+$header-color: $dark-blue;
+
+// Typography
+$base-font-family: "MavenProRegular", arial, tahoma, trebuchet ms, verdana;
+$base-font-size: 14px;
+
+// Mixins
+
+@mixin prefix($prop, $val) {
+  @each $prefix in -webkit-, -moz-, -o-, "" {
+    #{$prefix}#{$prop}: $val;
+  }
+}
+
+@mixin transparency($opacity) {
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=($opacity * 100))";
+  filter: alpha(opacity=($opacity * 100));
+  -moz-opacity: $opacity;
+  -khtml-opacity: $opacity;
+  opacity: $opacity;
+}
+
+%clearfix {
+  *zoom: 1;
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+*,
+*::after,
+*::before {
+  @include prefix(box-sizing, border-box);
+}
+
+figure {
+  margin: 0;
+  line-height: 0;
+}
+
+main[role="main"] {
+  max-width: 400px;
+  position: relative;
+  @extend %clearfix;
+  margin: 20px auto !important;
+}
+
+// Product Box
+//----------------------------------------
+.product {
+  background: #fff;
+  max-width: 401px;
+  width: 351px;
+  position: relative;
+  @include prefix(box-shadow, 0 3px 5px rgba(105, 41, 41, 0.2));
+
+  .product-image {
+   //margin-left: -1px;
+    img {
+      height: 351px;
+      width: 300px;
+    }
+  }
+
+  .product-description {
+    position: relative;
+    background: #fff;
+    @extend %clearfix;
+
+    .info {
+      padding: 15px;
+      color: #aaa;
+      font-size: 0.85em;
+      width: 70%;
+      float: left;
+      margin: 0;
+      text-align: justify !important;
+
+      h1 {
+        font-size: 20px !important;
+        margin: 0 0 15px !important;
+        color: #343a40!important;
+        
+      }
+      p {
+        margin-bottom: 15px;
+        line-height: 2.3em;
+        font-size: small;
+        color : #495057 !important;
+      }
+    }
+    .production-right-card {
+      width: 30%;
+      float: left;
+      position: relative;
+      top: 0%;
+      margin-left: -25px;
+      @include prefix(transform, translateY(34%));
+      p {
+        margin-bottom: 15px;
+        line-height: 2.3em;
+        font-size: small;
+        color : #495057 !important;
+      }
+
+      .date {
+        color: $primary;
+        font-size: 1.5em;
+      }
+
+      .heure {
+      color: $primary;
+      font-size: 1.7em;
+      display: inline;
+
+      span:nth-child(1)::after {
+        content: "h-";
+        top: 0;
+        left: -10px;
+        font-size: 0.6em;
+      }
+      span:nth-child(2)::after {
+        content: "h";
+        top: 0;
+        left: -10px;
+        font-size: 0.6em;
+      }
+    }
+  }
+  .reunion-right-card {
+    width: 30%;
+    float: left;
+    position: relative;
+    top: 0%;
+    margin-left: -25px;
+    @include prefix(transform, translateY(37%));
+    p {
+      margin-bottom: 15px;
+      line-height: 2.3em;
+      font-size: small;
+      color : #495057 !important;
+    }
+
+    .date {
+      color: $primary;
+      font-size: 1.5em;
+    }
+
+    .heure {
+    color: $primary;
+    font-size: 1.7em;
+    display: inline;
+
+    span:nth-child(1)::after {
+      content: "h-";
+      top: 0;
+      left: -10px;
+      font-size: 0.6em;
+    }
+    span:nth-child(2)::after {
+      content: "h";
+      top: 0;
+      left: -10px;
+      font-size: 0.6em;
+    }
+  }
+}
+  }
+
+  .product-sidebar {
+    height: 100%;
+    background: $dark-blue;
+    width: 50px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: -1;
+    @include prefix(border-radius, 0 2px 2px 0);
+
+    button {
+      border: 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+      color: #fff;
+      padding: 0.9em;
+      font-size: 0.8em;
+      width: 50px;
+      height: 50px;
+      overflow: hidden;
+      @include prefix(transition, right 0.3s ease);
+      @include prefix(transition, all 0.4s ease);
+
+      &.detail {
+        background: transparent url("../assets/icons/info.png") no-repeat 15px;
+      }
+
+      &.edit {
+        background: transparent url("../assets/icons/edit.png") no-repeat 15px;
+      }
+
+      &.delete {
+        background: transparent url("../assets/icons/del.gif") no-repeat 10px;
+      }
+
+      span {
+        @include transparency(0);
+        white-space: nowrap;
+        margin-left: 30px;
+      }
+
+      &:hover {
+        width: 130px;
+        background-color: $green;
+        position: relative;
+        background-position: 15px center;
+        border-color: $green;
+      }
+
+      &:hover span {
+        @include transparency(1);
+      }
+    }
+  }
+
+  &:hover .product-sidebar {
+    @include prefix(transform, translateX(100%));
+    z-index: 1;
+  }
+}
+
+// Media Queries
+//----------------------------------------
+@media screen and (max-width: 480px) {
+  #content {
+    margin-top: 60px;
+  }
+
+  .product {
+    .product-sidebar {
+      width: 100%;
+      height: 50px;
+      bottom: 0px;
+      left: 0;
+      top: inherit;
+      @include prefix(border-radius, 0 0px 2px 2px);
+      @include prefix(transition, bottom 0.3s ease);
+    }
+    &:hover .product-sidebar {
+      bottom: -50px;
+    }
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .product .product-sidebar {
+    bottom: -50px;
+  }
+}
+
+
