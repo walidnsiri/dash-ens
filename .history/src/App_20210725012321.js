@@ -10,7 +10,6 @@ const loading = (
   </div>
 );
 
-
 // Containers
 const TheLayout = React.lazy(() => import("./containers/TheLayout"));
 
@@ -36,7 +35,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <React.Suspense fallback={loading}>
-
+        <Switch>
         <UserContext.Provider value={[user, setUser]}>
             {user &&
             (<>
@@ -50,14 +49,15 @@ export default function App() {
             {!user && (
               <>
                 <Route
-                  path="/login"
+                  path="/login/:token"
                   name="Login Page"
                   render={(props) => <Login {...props} />}
                 />
+                <Redirect to="/login" />
               </>
             )}
             </UserContext.Provider>
-
+        </Switch>
       </React.Suspense>
     </BrowserRouter>
   );

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect,useLocation } from "react-router-dom";
 import { UserContext } from "./utils/UserContext";
 import "./scss/style.scss";
-import { queryApi } from "./utils/queryApi";
+//import { queryApi } from "./utils/queryApi";
 
 const loading = (
   <div className="pt-3 text-center">
@@ -10,6 +10,9 @@ const loading = (
   </div>
 );
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 
 // Containers
 const TheLayout = React.lazy(() => import("./containers/TheLayout"));
@@ -36,7 +39,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <React.Suspense fallback={loading}>
-
+        <Switch>
         <UserContext.Provider value={[user, setUser]}>
             {user &&
             (<>
@@ -54,10 +57,11 @@ export default function App() {
                   name="Login Page"
                   render={(props) => <Login {...props} />}
                 />
+                <Redirect to="/login" />
               </>
             )}
             </UserContext.Provider>
-
+        </Switch>
       </React.Suspense>
     </BrowserRouter>
   );

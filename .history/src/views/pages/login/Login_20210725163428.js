@@ -248,7 +248,7 @@ function Card(setUser) {
           <CCardBody>
             <CForm onSubmit={formik.handleSubmit}>
               <h1>Login</h1>
-              <p className="text-muted mb-3">Connectez-vous à votre compte</p>
+              <p className="text-muted">Connectez-vous à votre compte</p>
               <CFormGroup>
                 <CInputGroup className="mb-1">
                   <CInputGroupPrepend>
@@ -333,9 +333,9 @@ function Card(setUser) {
           <CCardBody>
             <CForm onSubmit={formikEmail.handleSubmit}>
               <h1>Réinitialisation du mot de passe</h1>
-              <p className="text-muted mb-4">Veuillez saisir votre email</p>
+              <p className="text-muted mb-5">Veuillez saisir votre email</p>
               
-              <CInputGroup className="mb-4">
+              <CInputGroup className="mb-3">
                 <CInputGroupPrepend>
                   <CInputGroupText>
                     <CIcon name="cil-envelope-closed" />

@@ -248,9 +248,9 @@ function Card(setUser) {
           <CCardBody>
             <CForm onSubmit={formik.handleSubmit}>
               <h1>Login</h1>
-              <p className="text-muted mb-3">Connectez-vous à votre compte</p>
+              <p className="text-muted">Connectez-vous à votre compte</p>
               <CFormGroup>
-                <CInputGroup className="mb-1">
+                <CInputGroup className="mb-2">
                   <CInputGroupPrepend>
                     <CInputGroupText>
                       <CIcon name="cil-user" />

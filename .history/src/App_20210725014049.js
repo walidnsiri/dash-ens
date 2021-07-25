@@ -54,6 +54,7 @@ export default function App() {
                   name="Login Page"
                   render={(props) => <Login {...props} />}
                 />
+                <Redirect to="/login" />
               </>
             )}
             </UserContext.Provider>
