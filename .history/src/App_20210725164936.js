@@ -10,6 +10,7 @@ const loading = (
   </div>
 );
 
+
 // Containers
 const TheLayout = React.lazy(() => import("./containers/TheLayout"));
 
@@ -20,42 +21,41 @@ const Login = React.lazy(() => import("./views/pages/login/Login"));
 //const Page500 = React.lazy(() => import("./views/pages/page500/Page500"));
 
 export default function App() {
-  const [user, setUser] = useState(null);
+  const [user,setUser] = useState(null);
 
-  const isloggedin = async () => {
-    const [user, error] = await queryApi("public/logged", null, "POST");
+  const isloggedin =  async () =>  {
+    const [user,error]= await queryApi("public/logged",null, 'POST');
     if (error) console.error(error);
-    else {
-      setUser(user);
-    }
-  };
+    else {setUser(user);};
+  }
 
   useEffect(() => {
     isloggedin();
-  }, []);
-
+  },[]);
+    
   return (
     <BrowserRouter>
       <React.Suspense fallback={loading}>
-        <Switch>
-          <UserContext.Provider value={[user, setUser]}>
-            {user && (
-              <>
-                <Route
-                  path="/"
-                  name="Home"
-                  render={(props) => <TheLayout {...props} />}
-                />
+<Switch>
+        <UserContext.Provider value={[user, setUser]}>
+            {user &&
+            (<>
+              <Route
+                path="/"
+                name="Home"
+                render={(props) => <TheLayout {...props} />}
+              />
               </>
             )}
-            <Route
-              path="/"
-              name="Login Page"
-              render={(props) => <Login {...props} />}
-            />
+              <Route
+                  path="/login"
+                  name="Login Page"
+                  render={(props) => <Login {...props} />}
+              />
             )
-          </UserContext.Provider>
-        </Switch>
+            </UserContext.Provider>
+            </Switch>
+
       </React.Suspense>
     </BrowserRouter>
   );

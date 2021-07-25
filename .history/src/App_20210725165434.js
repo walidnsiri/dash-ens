@@ -48,11 +48,16 @@ export default function App() {
                 />
               </>
             )}
+            {!user && (
+              <>
             <Route
-              path="/"
+              path="/login"
               name="Login Page"
               render={(props) => <Login {...props} />}
             />
+            <Redirect to="/login"></Redirect>
+            </>
+            )}
             )
           </UserContext.Provider>
         </Switch>

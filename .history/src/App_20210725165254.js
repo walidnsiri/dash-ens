@@ -49,7 +49,7 @@ export default function App() {
               </>
             )}
             <Route
-              path="/"
+              exact path="/"
               name="Login Page"
               render={(props) => <Login {...props} />}
             />
