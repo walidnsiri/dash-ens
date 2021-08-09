@@ -1,0 +1,42 @@
+.notification-card-botton{
+    padding-top: 10%;
+    padding-bottom: 10%;
+    padding-left: 10%;
+
+    &:hover {
+        background-color: #e74c3c;
+
+        .message{
+
+            .text-truncate {
+                color: white !important;
+            }
+        }
+    }
+    
+}
+
+
+.time{
+margin-top: 2%;
+font-size: 20px;
+}
+.title{
+    margin-top: 2%;
+    font-size: 30px;
+}
+.description{
+    margin: 10%;
+}
+.createdby{
+    margin: 10%;
+}
+.Participants{
+    margin: 10%;
+}
+.createdAt{
+    margin: 10%;
+}
+.modifiedAt{
+    margin: 10%;
+}

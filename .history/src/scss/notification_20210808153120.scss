@@ -1,0 +1,50 @@
+.notification-card-botton{
+    padding-top: 10%;
+    padding-bottom: 10%;
+    padding-left: 10%;
+
+    &:hover {
+        background-color: #e74c3c;
+
+        .message{
+
+            .text-truncate {
+                color: white !important;
+            }
+        }
+    }
+    
+}
+
+
+.time{
+margin-top: 2%;
+font-size: 20px;
+}
+.title{
+    margin-top: 2%;
+    font-size: 30px;
+}
+.description{
+    margin: 5%;
+}
+.createdby{
+    margin: 5%;
+}
+.Participants{
+    margin: 5%;
+}
+.createdAt{
+    margin-top: 10%;
+}
+.modifiedAt{
+    //margin: 10%;
+}
+
+.scroll-notifs{
+    max-height: 300px;
+    overflow-y: hidden;
+    direction: ltr;
+    scrollbar-color: #d4aa70 #e4e4e4;
+    scrollbar-width: thin;
+}
