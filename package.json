@@ -55,18 +55,21 @@
     "react-use-gesture": "^8.0.1",
     "redux": "4.0.5",
     "sass": "^1.32.12",
+    "serve": "^12.0.0",
     "yup": "^0.29.3"
   },
   "devDependencies": {
     "redux-devtools": "^3.7.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "react-scripts start",
+    "start": "serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:cov": "npm test -- --coverage --watchAll=false",
     "test:debug": "react-scripts --inspect-brk test --runInBand",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
