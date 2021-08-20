@@ -53,7 +53,6 @@ export default function App() {
               name="Login Page"
               render={(props) => <Login {...props} />}
             />
-            )
           </UserContext.Provider>
         </Switch>
       </React.Suspense>
