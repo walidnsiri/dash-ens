@@ -1,10 +1,39 @@
 import React from "react";
 import PropTypes from "prop-types";
-import equipe from "../../../assets/img/partenaire.jpg";
 import { CImg } from "@coreui/react";
 import avatar from "../../../assets/img/avatars/6.jpg";
+import { GetImage } from "utils/getImage";
+import { productionEnum } from "enums/production.enum";
+
+// import images
+import research_thesis from "../../../assets/img/research_thesis.jpg";
+import projet_innovant from "../../../assets/img/projet_innovant2.jpg";
+import scientific_paper from "../../../assets/img/scientific_paper.png";
+import article from "../../../assets/img/article.jpg";
+
+
+
 const CustomCard = (props) => {
-  const { type } = props;
+
+  const { type, rdi } = props;
+
+  const GetImage = function (production) {
+  
+
+    if(production === productionEnum.Article_de_recherche) {
+      return article;
+    }
+    if(production === productionEnum.papier_scientifique) {
+      return scientific_paper;
+    }
+    if (production === productionEnum.these_de_recherche) {
+      return research_thesis;
+    }
+    if (production === productionEnum.developpement_projet_innovant){
+      return projet_innovant;
+    }
+
+  }
 
   // render
   return (
@@ -22,13 +51,14 @@ const CustomCard = (props) => {
               <span>Supprimer</span>
             </button>
           </div>
-          <div className="product-image">
-            <figure>
-              <img src={equipe} alt="card img" className="product-image" />
-            </figure>
-          </div>
+
           {type === "reunion" && (
             <>
+              <div className="product-image">
+                <figure>
+                  <img src={research_thesis} alt="card img" className="product-image" />
+                </figure>
+              </div>
               <div className="product-description">
                 <div className="info">
                   <h1>Equipe RDI</h1>
@@ -36,7 +66,7 @@ const CustomCard = (props) => {
                     <b>Description:</b> <br />
                     Lancement Projet
                   </p>
-                  <p>
+                  <div>
                     <p>
                       <b>Crée par:</b> <br />
                       <div className="c-avatar">
@@ -47,7 +77,7 @@ const CustomCard = (props) => {
                         />
                       </div>
                     </p>
-                  </p>
+                  </div>
                 </div>
                 <div className="reunion-right-card">
                   <p>
@@ -68,26 +98,36 @@ const CustomCard = (props) => {
           )}
           {type === "production" && (
             <>
+              <div className="product-image">
+                <figure>
+                  <img src={GetImage(rdi.production)} alt="card img" className="product-image" />
+                </figure>
+              </div>
               <div className="product-description">
                 <div className="info">
-                  <h1>Article scientifique</h1>
+                  <h1>{rdi?.production}</h1>
                   <p>
                     <b>Description:</b> <br />
-                    description production
+                    {rdi?.description}
                   </p>
-                  <p>
+                  <div>
                     <p>
                       <b>Ref Production:</b> <br />
-                      Classement 1
+                      {rdi?.refproduction_id}
                     </p>
-                  </p>
+                  </div>
                 </div>
                 <div className="production-right-card" >
-                  <p>
+                  <div className="date_div">
                     <b>Date:</b>
-                    <div className="date">12-12-2021</div>
-                  </p>
-                  <p>
+                    <div className="date">{rdi?.date_production}</div>
+                  </div>
+                  <div>
+                    <b>Charge horaire:</b>
+                    <div className="date">{rdi?.charge_h}</div>
+                  </div>
+                  {
+                  /*<p>
                     <b>Crée par:</b> <br />
                     <div className="c-avatar">
                       <CImg
@@ -97,6 +137,7 @@ const CustomCard = (props) => {
                       />
                     </div>
                   </p>
+                  */}
                 </div>
               </div>
             </>
@@ -118,33 +159,3 @@ CustomCard.propTypes = {
 };
 
 export default CustomCard;
-
-/*<div className="col col-lg-4 col-md-6 col-sm-12 col-xs-12 mt-4">
-        <div className={`card ${className}`}>
-          <div className="card-img-block">
-            <img className="card-img-top" src={hoss} alt="Card cap"></img>
-          </div>
-          <div className="card-body pt-0">
-            <h5 className="card-title">Houssem Zoghlami</h5>
-            <p className="card-text">
-              Ajouté le vendredi, <b>7 août 2020 à 12:00</b>
-            </p>
-            <p className="card-text">
-              Modifier le samedi, <b>5 septembre 2020 à 08:20</b>
-            </p>
-          </div>
-          <div className="icon-block text-center">
-            <Link to="/users/1">
-              <i className="fa fa-info-circle"></i>
-            </Link>
-            <Link to="/user/update/1">
-              {" "}
-              <i className="fa fa-pencil"></i>
-            </Link>
-            <Link to="#">
-              {" "}
-              <i className="fa fa-trash"></i>
-            </Link>
-          </div>
-        </div>
-      </div>*/

@@ -16,6 +16,7 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+import { productionEnum } from "../../../../enums/production.enum";
 
 import CustomCard from "../../../components/custom/CustomCard";
 

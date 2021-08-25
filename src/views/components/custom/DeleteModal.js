@@ -48,7 +48,7 @@ const DeleteModal = (props) => {
               className="btn btn-secondary"
               onClick={onClose}
             >
-              Cancel
+              Annuler
             </button>
             <button
               type="button"

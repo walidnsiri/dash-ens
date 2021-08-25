@@ -243,7 +243,7 @@ const ShowUsers = () => {
                 <CInput
                   id="input1-group2"
                   name="input1-group2"
-                  placeholder="Rechercher..."
+                  placeholder="Rechercher par nom d'utilisateur"
                   value={searchInput}
                   onChange={handleInputChange}
                   className="shadow-sm bg-white rounded border-0 search-bar"

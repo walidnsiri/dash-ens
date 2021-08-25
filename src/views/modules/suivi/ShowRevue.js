@@ -30,8 +30,8 @@ const ShowRevue = () => {
         <div className="scoreboard__podium-rank">2</div>
       </div>
        <div className="scoreboard__podium-number">
-           Bar de Wever
-         <small><span className="js-podium-data">160</span></small>
+           Ahmed aziz daboussi 
+         <small><span className="js-podium-data">8</span></small>
       </div>
     
     </div>
@@ -41,8 +41,8 @@ const ShowRevue = () => {
         
       </div>
         <div className="scoreboard__podium-number">
-           Charles Michel
-          <small><span className="js-podium-data">195</span></small>
+           Seif Eddine ben hamza
+          <small><span className="js-podium-data">9</span></small>
       </div>
     </div>
     <div className="scoreboard__podium js-podium is-visible bump" data-height="150px">
@@ -50,8 +50,8 @@ const ShowRevue = () => {
            <div className="scoreboard__podium-rank">3</div>
       </div>
         <div className="scoreboard__podium-number">
-          Jan Jambon
-          <small><span className="js-podium-data">100</span></small>
+          Mohamed hajd aissa
+          <small><span className="js-podium-data">5</span></small>
       </div>
     </div>
   </div>
@@ -75,7 +75,7 @@ const ShowRevue = () => {
                   </div>
                 </div>
               </div>
-              <h3 className="performance-title">Firas Matoussi</h3>
+              <h3 className="performance-title">Seif Eddine ben hamza</h3>
               <h4 className="performance-subtitle">Assistant Technologue</h4>
             </div>
             <div className="performance-desc mobile">
@@ -193,7 +193,7 @@ const ShowRevue = () => {
                   <div className="score-caption">
                     <div className="score-title">Encadrements</div>
                     <div className="score-score">
-                      <strong>15</strong>
+                      <strong>0</strong>
                     </div>
                   </div>
                 </li>
@@ -202,7 +202,7 @@ const ShowRevue = () => {
                   <div className="score-caption">
                     <div className="score-title">Interventions</div>
                     <div className="score-score">
-                      <strong>15</strong>
+                      <strong>0</strong>
                     </div>
                   </div>
                 </li>
@@ -211,7 +211,7 @@ const ShowRevue = () => {
                   <div className="score-caption">
                     <div className="score-title">Rdi</div>
                     <div className="score-score">
-                      <strong>15</strong>
+                      <strong>3</strong>
                     </div>
                   </div>
                 </li>
@@ -220,7 +220,7 @@ const ShowRevue = () => {
                   <div className="score-caption">
                     <div className="score-title">Formations</div>
                     <div className="score-score">
-                      <strong>15</strong>
+                      <strong>4</strong>
                     </div>
                   </div>
                 </li>
@@ -229,7 +229,7 @@ const ShowRevue = () => {
                   <div className="score-caption">
                     <div className="score-title">Services</div>
                     <div className="score-score">
-                      <strong>15</strong>
+                      <strong>2</strong>
                     </div>
                   </div>
                 </li>
@@ -238,7 +238,7 @@ const ShowRevue = () => {
                
                 <li className="score-item score-item-total">
                   <div className="score-summary">
-                    <span>150</span>
+                    <span>9</span>
                   </div>
                   <div className="total-caption">
                     <div className="total-cat">

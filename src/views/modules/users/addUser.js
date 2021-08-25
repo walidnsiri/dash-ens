@@ -47,13 +47,7 @@ const AddUsers = (props) => {
   const history = useHistory();
   const [collapsed, setCollapsed] = useState(true);
   const [collapsed2, setCollapsed2] = useState(false);
-  /*const {type, user } = props;
-  
-  if (type === "update")
-  {
-    //[fullname, email,role]=fetchapi("");
-  }*/
-  
+
   const handleCancel = () => {
     history.push("/user");
   };

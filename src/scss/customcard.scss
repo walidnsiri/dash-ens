@@ -82,7 +82,7 @@ main[role="main"] {
       padding: 15px;
       color: #aaa;
       font-size: 0.85em;
-      width: 70%;
+      width: 50%;
       float: left;
       margin: 0;
       text-align: justify !important;
@@ -101,17 +101,22 @@ main[role="main"] {
       }
     }
     .production-right-card {
-      width: 30%;
-      float: left;
+      width: 20%;
+      float: right;
       position: relative;
-      top: 0%;
-      margin-left: -25px;
-      @include prefix(transform, translateY(34%));
+      margin-right: 15%;
+      //top: 0%;
+      //margin-left: -25px;
+      @include prefix(transform, translateY(42%));
       p {
-        margin-bottom: 15px;
+        //margin-bottom: 15px;
         line-height: 2.3em;
         font-size: small;
         color : #495057 !important;
+      }
+
+      .date_div {
+        margin-bottom: 22px;
       }
 
       .date {

@@ -8,7 +8,7 @@ import { queryApi } from "../utils/queryApi";
  */
 function getImageFromLocalStorage(image = null) {
   if (image) {
-    const storedimage = localStorage.getItem("user-image");
+    const storedimage = localStorage.getItem(image);
     if (storedimage){
         return storedimage;
     }
@@ -54,7 +54,7 @@ export async function GetImage(img = null) {
     }
     const serviceimage = await fetchImageFromService(img);
     if (serviceimage) {
-      localStorage.setItem("user-image", serviceimage);
+      localStorage.setItem(img, serviceimage);
       return serviceimage;
     }
   }
