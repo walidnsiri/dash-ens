@@ -144,12 +144,12 @@ main[role="main"] {
     }
   }
   .reunion-right-card {
-    width: 30%;
-    float: left;
+    width: 20%;
+    float: right;
     position: relative;
-    top: 0%;
-    margin-left: -25px;
-    @include prefix(transform, translateY(37%));
+    //top: 0%;
+    margin-right: 15%;
+    @include prefix(transform, translateY(42%));
     p {
       margin-bottom: 15px;
       line-height: 2.3em;
@@ -160,6 +160,10 @@ main[role="main"] {
     .date {
       color: $primary;
       font-size: 1.5em;
+    }
+
+    .date_div {
+      margin-bottom: 22px;
     }
 
     .heure {

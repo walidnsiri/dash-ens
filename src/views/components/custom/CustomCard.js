@@ -1,53 +1,166 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { CImg } from "@coreui/react";
 import avatar from "../../../assets/img/avatars/6.jpg";
 import { GetImage } from "utils/getImage";
 import { productionEnum } from "enums/production.enum";
-
+import { reunionEnum } from "enums/reunion.enum";
+import { descriptionEnum } from "enums/description.enum";
+import { queryApi } from "../../../utils/queryApi";
+import DeleteModal from "../../components/custom/DeleteModal";
 // import images
 import research_thesis from "../../../assets/img/research_thesis.jpg";
 import projet_innovant from "../../../assets/img/projet_innovant2.jpg";
 import scientific_paper from "../../../assets/img/scientific_paper.png";
 import article from "../../../assets/img/article.jpg";
+import team from "../../../assets/img/equipe.jpg";
+import partenaire from "../../../assets/img/partenaire.jpg";
+import drdi from "../../../assets/img/drdi.JPG";
+import { useHistory } from "react-router-dom";
 
 
 
 const CustomCard = (props) => {
-
-  const { type, rdi } = props;
+  const history = useHistory();
+  const { type, rdi, setdeleteRerender, page, setCurrentPage, setModal, reunion } = props;
+  const [deleteModal, setdeleteModal] = useState({ show: false, message: "" });
 
   const GetImage = function (production) {
-  
 
-    if(production === productionEnum.Article_de_recherche) {
+
+    if (production === productionEnum.Article_de_recherche) {
       return article;
     }
-    if(production === productionEnum.papier_scientifique) {
+    if (production === productionEnum.papier_scientifique) {
       return scientific_paper;
     }
     if (production === productionEnum.these_de_recherche) {
       return research_thesis;
     }
-    if (production === productionEnum.developpement_projet_innovant){
+    if (production === productionEnum.developpement_projet_innovant) {
       return projet_innovant;
     }
 
   }
 
+  const GetImageReunion = function (titre) {
+    if (titre === reunionEnum.DRDI) {
+      return drdi;
+    }
+    if (titre === reunionEnum.Partenaire) {
+      return partenaire;
+    }
+    if (titre === reunionEnum.Equipe_rdi) {
+      return team;
+    }
+  }
+  function handleEdit() {
+    if (type === "production") {
+      history.push({
+        pathname: '/productionRdi/edit',
+        state: {  // location state
+          rdi: rdi,
+        },
+      });
+    }
+    else {
+      history.push({
+        pathname: '/reunionRdi/edit',
+        state: {  // location state
+          reunion: reunion,
+        },
+      });
+    }
+  }
+
+  async function handleDelete() {
+    if(type === "production") {
+    const onClose = () => {
+      setdeleteModal({ ...deleteModal, show: false });
+    };
+    const onConfirm = async () => {
+      const [res, error] = await queryApi("rdi/" + rdi.id, null, "DELETE");
+      if (res) {
+        onClose();
+        setModal({
+          show: true,
+          message: "La production rdi a été supprimé avec succès",
+          type: "success",
+        });
+        if (page) {
+          if (page.count === 1) {
+            setCurrentPage(page.totalpages - 1)
+          }
+          else {
+            setdeleteRerender(true);
+          }
+        }
+      }
+      if (error) {
+        onClose();
+        setModal({ show: true, message: error.details, type: "error" });
+      }
+    };
+
+
+    setdeleteModal({
+      show: true,
+      message:
+        `Voulez-vous vraiment supprimer cette production rdi?`,
+      onClose,
+      onConfirm,
+    });
+  }else {
+    const onClose = () => {
+      setdeleteModal({ ...deleteModal, show: false });
+    };
+    const onConfirm = async () => {
+      const [res, error] = await queryApi("rdi/reunion/" + reunion.id, null, "DELETE");
+      if (res) {
+        onClose();
+        setModal({
+          show: true,
+          message: "La réunion rdi a été supprimé avec succès",
+          type: "success",
+        });
+        if (page) {
+          if (page.count === 1) {
+            setCurrentPage(page.totalpages - 1)
+          }
+          else {
+            setdeleteRerender(true);
+          }
+        }
+      }
+      if (error) {
+        onClose();
+        setModal({ show: true, message: error.details, type: "error" });
+      }
+    };
+
+
+    setdeleteModal({
+      show: true,
+      message:
+        `Voulez-vous vraiment supprimer cette réunion rdi?`,
+      onClose,
+      onConfirm,
+    });
+
+  }
+  }
+
   // render
   return (
     <>
+      <DeleteModal {...deleteModal} />
       <main role="main">
         <div className="product">
           <div className="product-sidebar">
-            <button className="detail">
-              <span>Détails</span>
-            </button>
-            <button className="edit">
+            <button className="edit" onClick={() => handleEdit()}>
               <span>Modifier</span>
             </button>
-            <button className="delete">
+            <button className="delete" onClick={() => handleDelete()}>
               <span>Supprimer</span>
             </button>
           </div>
@@ -56,18 +169,18 @@ const CustomCard = (props) => {
             <>
               <div className="product-image">
                 <figure>
-                  <img src={research_thesis} alt="card img" className="product-image" />
+                  <img src={GetImageReunion(reunion?.titre)} alt="card img" className="product-image" />
                 </figure>
               </div>
               <div className="product-description">
                 <div className="info">
-                  <h1>Equipe RDI</h1>
+                  <h1>{reunion?.titre}</h1>
                   <p>
                     <b>Description:</b> <br />
-                    Lancement Projet
+                    {reunion?.description}
                   </p>
                   <div>
-                    <p>
+                    <div>
                       <b>Crée par:</b> <br />
                       <div className="c-avatar">
                         <CImg
@@ -76,22 +189,22 @@ const CustomCard = (props) => {
                           alt="admin@bootstrapmaster.com"
                         />
                       </div>
-                    </p>
+                    </div>
                   </div>
                 </div>
                 <div className="reunion-right-card">
-                  <p>
+                  <div className="date_div">
                     <b>Date:</b>
-                    <div className="date">12-12-2021</div>
-                  </p>
-                  <p>
+                    <div className="date">{reunion?.date_reunion}</div>
+                  </div>
+                  <div>
                     <b>Heure:</b>
                     <br />
                     <div className="heure">
-                      <span>10</span>
-                      <span>11</span>
+                      <span>{reunion?.heure_deb}</span>
+                      <span>{reunion?.heure_fin}</span>
                     </div>
-                  </p>
+                  </div>
                 </div>
               </div>
             </>

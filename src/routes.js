@@ -15,11 +15,15 @@ const updateUsers = React.lazy(() => import('./views/modules/users/updateUser'))
 const Suivi = React.lazy(() => import('./views/modules/suivi/ShowSuivi'));
 const revue = React.lazy(() => import('./views/modules/suivi/ShowRevue'));
 
-// RDI
+// Production RDI
 const productionRdi = React.lazy(() => import('./views/modules/rdi/production/showProduction'));
 const addproductionRdi = React.lazy(() => import('./views/modules/rdi/production/addProduction'));
+const updateproductionRdi = React.lazy(() => import('./views/modules/rdi/production/updateProduction'));
+
+// Reunion RDI
 const reunionRdi = React.lazy(() => import('./views/modules/rdi/reunion/showReunion'));
 const addreunionRdi = React.lazy(() => import('./views/modules/rdi/reunion/addReunion'));
+const updateReunionRdi = React.lazy(() => import('./views/modules/rdi/reunion/updateReunion'));
 
 //icons
 const CoreUIIcons = React.lazy(() => import('./views/icons/coreui-icons/CoreUIIcons'));
@@ -41,8 +45,10 @@ const routes = [
   { path: '/revue', name: 'revue', component: revue },
   { path: '/rdi/production', name: 'Production Rdi', component: productionRdi },
   { path: '/productionRdi/add', name: 'Ajouter Production Rdi', component: addproductionRdi },
+  { path: '/productionRdi/edit', name: 'Modifier Production Rdi', component: updateproductionRdi },
   { path: '/reunion', name: 'Réunion Rdi', component: reunionRdi },
   { path: '/reunionRdi/add', name: 'Ajouter Réunion Rdi', component: addreunionRdi },
+  { path: '/reunionRdi/edit', name: 'Modifier Réunion Rdi', component: updateReunionRdi },
   { path: '/icons', exact: true, name: 'Icons', component: CoreUIIcons },
   { path: '/icons/coreui-icons', name: 'CoreUI Icons', component: CoreUIIcons },
   { path: '/icons/flags', name: 'Flags', component: Flags },

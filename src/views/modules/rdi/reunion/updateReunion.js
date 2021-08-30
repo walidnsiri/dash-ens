@@ -22,6 +22,7 @@ import {
 import { descriptionEnum } from "../../../../enums/description.enum";
 import { reunionEnum } from "../../../../enums/reunion.enum";
 
+import { useHistory,useLocation } from "react-router-dom";
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -29,7 +30,6 @@ import DatePicker from 'react-date-picker';
 import { productionEnum } from "enums/production.enum"
 import CIcon from "@coreui/icons-react";
 import { queryApi } from '../../../../utils/queryApi';
-import { useHistory } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import SuccessErrorModal from "../../../components/custom/SuccessErrorModal";
@@ -37,7 +37,7 @@ import AddProductionModal from "../../../components/custom/addproductionModal";
 import { Range, getTrackBackground } from "react-range";
 import { DateRangeSharp } from "@material-ui/icons";
 
-const AddRdiSchema = Yup.object().shape({
+const updateRdiSchema = Yup.object().shape({
     titre: Yup.string()
         .required("Titre obligatoire!"),
     description: Yup.string().required("Description Obligatoire!"),
@@ -54,32 +54,35 @@ const AddRdiSchema = Yup.object().shape({
     datereunion: Yup.date().required("date réunion obligatoire!").typeError("Date invalide")
 });
 
-const initialValues = {
-    titre: "",
-    description: "",
-    heured: { values: [8] },
-    heuref: { values: [9] },
-    datereunion: null,
-}
 
-const AddReunion = (props) => {
+
+const UpdateReunion = (props) => {
+    const location = useLocation();
+    const { reunion } = location.state;
     const [modal, setModal] = useState({ show: false, message: "", type: "success" });
     const history = useHistory();
     const [collapsed, setCollapsed] = useState(true);
     const [collapsed2, setCollapsed2] = useState(true);
 
+    const initialValues = {
+        titre: reunion? reunion.titre : "",
+        description: reunion? reunion.description:"",
+        heured: reunion? { values: [reunion.heure_deb] } : {values:[8]},
+        heuref: reunion? { values: [reunion.heure_fin] } : {values:[9]},
+        datereunion: new Date(reunion.date_reunion),
+    }
 
-    const addreunion = async function (values) {
+
+    const updatereunion = async function (values) {
         let year = values.datereunion.getFullYear();
         let month = values.datereunion.getMonth() + 1;
         if (month < 10) { month = "0" + month }
         let day = values.datereunion.getDate();
         if(day < 10) {day= "0" + day}
-
         let heured = values.heured.values[0]; 
         let heuref= values.heuref.values[0];
-        if(heured <10) heured= "0" + heured;
-        if(heuref <10) heuref= "0" + heuref;
+        if(heured <10 && heured.toString().length == 1) heured= "0" + heured;
+        if(heuref <10 && heuref.toString().length == 1) heuref= "0" + heuref;
 
         const body = {
           titre: values.titre,
@@ -89,9 +92,9 @@ const AddReunion = (props) => {
           date_reunion: year + "-" + month + "-" + day
         };
         
-        const [reunion, error] = await queryApi("rdi/reunion", body, 'POST');
-        if (reunion) {
-          setModal({ show: true, message: "La réunion a été ajouté avec succès", type: 'success' });
+        const [res, error] = await queryApi("rdi/reunion/" + reunion.id, body, 'PUT');
+        if (res) {
+          setModal({ show: true, message: "La réunion a été modifié avec succès", type: 'success' });
         }
         if (error) setModal({ show: true, message: error.details, type: 'error' });
     }
@@ -103,9 +106,9 @@ const AddReunion = (props) => {
 
     const formik = useFormik({
         initialValues: initialValues,
-        validationSchema: AddRdiSchema,
+        validationSchema: updateRdiSchema,
         onSubmit: values => {
-            addreunion(values);
+            updatereunion(values);
         },
     });
 
@@ -197,7 +200,7 @@ const AddReunion = (props) => {
                                                 </CFormText>
                                             ) : (
                                                 <CFormText>
-                                                    La description de la réunion à ajouter
+                                                    La description de la réunion à modifier
                                                 </CFormText>
                                             )}
                                         </CFormGroup>
@@ -206,7 +209,7 @@ const AddReunion = (props) => {
                                 </CRow>
                                 <div className="form-actions">
                                     <CButton type="submit" color="primary">
-                                        Ajouter
+                                        Modifier
                                     </CButton>
                                     <CButton
                                         color="secondary"
@@ -436,4 +439,4 @@ const AddReunion = (props) => {
         </>);
 };
 
-export default AddReunion;
+export default UpdateReunion;

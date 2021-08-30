@@ -49,13 +49,7 @@ const items = [
       },
     ],
   },
-
-
-
-
-
-
-
+  
   {
     _tag: "CSidebarNavDropdown",
     name: "Activités RDI",
@@ -70,7 +64,7 @@ const items = [
       {
         _tag: "CSidebarNavItem",
         name: "Réunion",
-        to: "/rdi/reunion",
+        to: "/reunion",
       },
     ],
   },
