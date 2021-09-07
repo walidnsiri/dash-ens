@@ -16,7 +16,7 @@ const initialState = {
 
 
 const changeNotificationsSlice = createSlice({
-    name: 'notification',
+    name: 'notifications',
     initialState: initialState,
     reducers: {
         setNotifications: (state, action) => {
@@ -25,7 +25,10 @@ const changeNotificationsSlice = createSlice({
           //fetch user from database and update users
 
           state.notifications=action.payload;
-      }
+        },
+        addNotification: (state,action) => {
+          state.notifications.push(action.payload);
+        }
     }
   });
 

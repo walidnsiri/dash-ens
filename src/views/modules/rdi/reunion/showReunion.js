@@ -135,7 +135,7 @@ const ShowReunion = () => {
         if( heure < 10) {heure = "0" + heure;}
         body["query"] = { ...body["query"], heure_fin: heure };
       }
-      console.log(body)
+      
       const [res, error] = await queryApi("rdi/reunion/search", body, "POST");
       if (res) {
         setReunions(res.reunion);
@@ -151,7 +151,7 @@ const ShowReunion = () => {
     if (currentPage > 0) {
       fetchReunions();
     }
-    console.log(currentPage)
+    
 
   }, [currentPage, searchInput, date, titre, description, deleteRerender,isActiveDeb,isActiveFin,deb,fin])
 

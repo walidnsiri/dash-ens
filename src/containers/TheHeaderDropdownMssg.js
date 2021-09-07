@@ -1,4 +1,5 @@
-import React from 'react'
+import React, {useEffect,useState,useContext} from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import {
   CBadge,
   CDropdown,
@@ -8,8 +9,84 @@ import {
   CImg
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import { queryApi } from "../utils/queryApi";
+import {setNotifications,selectNotifications} from '../features/notificationsSlice';
+import { Client } from '@stomp/stompjs';
+import { UserContext } from "utils/UserContext";
+import addNotification from 'react-push-notification';
+
+const SOCKET_URL = 'ws://localhost:8799/ws';
 
 const TheHeaderDropdownMssg = () => {
+  const [user,] = useContext(UserContext)
+  const dispatch = useDispatch();
+  const notifications = useSelector(selectNotifications);
+  const [message,setMessage]= useState(null);
+
+  useEffect(()=>  {
+    let onConnected = () => {
+      client.subscribe('/users/queue/messages', function (msg) {
+        if (msg.body) {
+          var jsonBody = JSON.parse(msg.body);
+          console.log(jsonBody)
+          if (jsonBody) {
+            setMessage(jsonBody)
+            if(user.appNotificationEnabled){
+              addNotification({
+                duration: 10000,
+                title: `Notification ${jsonBody.notificationView.type}`,
+                subtitle: jsonBody.notificationView.createdAt,
+                message: 'Vous avez reçu une notification',
+                theme: 'darkblue',
+                native: true // when using native, your OS will handle theming.
+              });
+            }
+          }
+        }
+      });
+    }
+
+    let onDisconnected = () => {
+      console.log("Disconnected!!")
+    }
+
+    const client = new Client({
+      brokerURL: SOCKET_URL,
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+      onConnect: onConnected,
+      onDisconnect: onDisconnected,
+      connectHeaders: {username: user.id}
+    });
+
+    client.activate();
+
+
+    /*const fetchNotifications = async () => {
+      
+      const body = {
+        pageRequest: {
+          number: 1,
+          limit: 4,
+        },
+        query: {
+          "user_id" : ""
+        },
+      };
+      const [res, error] = await queryApi("notification/search", body, "POST");
+      if (res) {
+        //
+
+      }
+      if (error) {
+        console.error(error);
+      }
+    };*/
+  },[])
+
+ // useEffect(()=> {console.log(message)},[message])
+  
   const itemsCount = 4
   return (
     <CDropdown
