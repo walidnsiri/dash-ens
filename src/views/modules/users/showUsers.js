@@ -24,6 +24,9 @@ import { queryApi } from "../../../utils/queryApi";
 import SuccessErrorModal from "../../components/custom/SuccessErrorModal";
 import { useHistory } from "react-router-dom";
 
+import { LoaderSmall } from "../../../views/components/custom/Loaders";
+import { trackPromise} from 'react-promise-tracker';
+
 function removeItem(arr, value) {
   const index = arr.indexOf(value);
   if (index > -1) {
@@ -104,7 +107,7 @@ const ShowUsers = () => {
       if (error) console.error(error);
     };
     if(currentPage > 0) {
-      fetchUsers();
+      trackPromise(fetchUsers());
     }
   }, [currentPage, searchInput, roles, date, enabledSwitch,deleteRerender]);
 
@@ -269,11 +272,12 @@ const ShowUsers = () => {
             ))}
           </CRow>
           {(users?.length === 0 || !users) ? (
-            <CCol sm="12" xl="12" xs="12" md="12" style={{ paddingTop: "4%" }}>
+            <><CCol sm="12" xl="12" xs="12" md="12" style={{ paddingTop: "4%" }}>
               <CAlert color="warning" className="h-100">
                 Pas d'utilisateurs trouvés.
               </CAlert>
             </CCol>
+            <LoaderSmall/></>
           ):  
             <CRow>
               <CCol className="mr-4">
@@ -288,6 +292,7 @@ const ShowUsers = () => {
               </CCol>
             </CRow>
           }
+          
         </CCol>
       </CRow>
     </>

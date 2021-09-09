@@ -136,7 +136,7 @@ const ModalFilterProduction = (props) => {
 
 
                         {!filtered && refs?.map((ref) => (
-                            <div className="" style={{ display: "inline-block" }}>
+                            <div key={ref.id} className="" style={{ display: "inline-block" }}>
                                 <CBadge key={ref.id} value ={ref.refproduction} data-key={ref.id} color={selectedBadge == ref.id ? "success" : "danger"} style={{ padding: "20px", marginRight: "15px", marginBottom: "15px" }} onClick={(e) => { handleSelect(e) }}
                                 >
                                     {ref.refproduction}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   CCard,
   CCardBody,
@@ -22,37 +22,77 @@ import CIcon from "@coreui/icons-react";
 import NotificationDetails from "./notificationDetails";
 import { UserContext } from "../../../utils/UserContext";
 import { queryApi } from "../../../utils/queryApi";
+import Moment from 'react-moment';
+import moment from 'moment'
 
-const Notifications = () => {
+import { LoaderSmall } from "../../../views/components/custom/Loaders";
+import { trackPromise} from 'react-promise-tracker';
 
+import { fetchImageFromService } from "../../../utils/getImage";
+
+
+const Notifications = (props) => {
+  const { sort } = props;
+  moment.locale("fr");
   const [user,] = useContext(UserContext)
-  const [notifications,setNotifications] = useState(null);
-  const [error,setError] = useState(null);
-  const [pageNumber,setPageNumber] = useState(1);
-  const [totalPages,setTotalPages] = useState(1);
+  const [notifications, setNotifications] = useState([]);
+  const [error, setError] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [notification, setNotification] = useState({});
+  const [loading, setLoading] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
+  const [filtered, setFiltered] = useState(false);
 
-  useEffect(()=> {
+  const fetchimg = async (im) => {
+    const img = await fetchImageFromService(im);
+    if (img) return img;
+  };
+  const fetchUser = async (id, index, notifs) => {
+    const [res, error] = await queryApi("user/" + id);
+    if (res) {
+      const img = await fetchimg(res.image);
+      notifs[index] = { ...notifs[index], "fullName": res.fullName, "image": img };
+      return notifs;
+    }
+  }
+
+  useEffect(() => { setPageNumber(1) }, [sort])
+
+  useEffect(() => {
     const fetchNotifications = async () => {
-      
+
       const body = {
         pageRequest: {
           number: pageNumber,
           limit: 6,
+          sort: sort
         },
         query: {
-          "user_id" : user.id
+          "user_id": user.id
         },
       };
+
       const [res, error] = await queryApi("notification/search", body, "POST");
       if (res) {
-        let notifs = notifications;
-        if(notifs == null) {setNotifications(res.notifications)}
-        else {
-          notifs.push(res.notifications);
+        if (pageNumber === 1) {
+          let notifs = res.notifications;
+          await Promise.all(notifs.map(async(notif, index) => {
+            notifs = await fetchUser(notif.id_ens_modifier, index, notifs);
+          }));
           setNotifications(notifs);
+          setTotalPages(res.totalPages)
+          setError(null);
         }
-        setTotalPages(res.totalPages)
-        setError(null);
+        else {
+          let notifs = res.notifications;
+          await Promise.all(notifs.map(async(notif, index) => {
+            notifs = await fetchUser(notif.id_ens_modifier, index, notifs);
+          }));
+          setNotifications([...notifications, ...notifs])
+          setTotalPages(res.totalPages)
+          setError(null);
+        }
       }
       if (error) {
         setError(error);
@@ -60,20 +100,58 @@ const Notifications = () => {
         setTotalPages(1);
       }
     };
-    fetchNotifications();
-  },[pageNumber]);
+    trackPromise(fetchNotifications());
+    if (notification.length == 0) {
+      setNotification(notifications[0]);
+    }
+  }, [pageNumber]);
+
+  useEffect(() => {
+    if (notification.length == 0) {
+      setNotification(notifications[0]);
+    }
+  }, [notifications])
+
+  /*useEffect(()=> {
+     if(notifications?.length > 0){
+        let load = [];
+       notifications.map((notif,index) => {
+          load[index] = true;
+          setLoading(load);
+          fetchUser(notif.id_ens_modifier,index);
+          load[index]=  false;
+          setLoading(load)
+         });
+     }
+   },[notifications])*/
+
+
+
+  const handleInputChange = (e) => {
+    if (e.target.value == "") {
+      setFiltered(false)
+    } else {
+      setFiltered(true)
+    }
+    setSearchInput(e.target.value)
+  }
+
+
 
   const handleScroll = (e) => {
     const target = e.target;
-    if(target.scrollHeight - target.scrollTop === target.clientHeight){
-      if(pageNumber < totalPages){
-        setPageNumber(pageNumber +1);
-        console.log("bottom")
+    if (target.scrollHeight - target.scrollTop === target.clientHeight) {
+      if (pageNumber < totalPages) {
+        setPageNumber(pageNumber + 1);
       }
-      
+
     }
   }
-  useEffect(()=>{console.log(notifications);console.log(totalPages);console.log(pageNumber)},[notifications,totalPages])
+
+  const handleNotificationClick = (index) => {
+    setNotification(notifications[index]);
+  }
+
   return (
     <CRow>
       <CCol lg="12" md="12" sm="12" xs="12" xl="4" xxl="4">
@@ -81,11 +159,11 @@ const Notifications = () => {
           <CInputGroupPrepend>
             <CButton
               type="button"
-              
+
               color="primary"
               className="shadow-lg search-button-notification"
-              style={{ zIndex: 1,backgroundColor:"rgb(231, 76, 60)",borderColor:"rgb(231, 76, 60)" }}
-              
+              style={{ zIndex: 1, backgroundColor: "rgb(231, 76, 60)", borderColor: "rgb(231, 76, 60)" }}
+
             >
               <CIcon name="cil-magnifying-glass" />
             </CButton>
@@ -94,49 +172,54 @@ const Notifications = () => {
             id="input1-group2"
             name="input1-group2"
             placeholder="Rechercher par enseignant.."
-            //value={searchInput}
-            //onChange={handleInputChange}
+            value={searchInput}
+            onChange={e => handleInputChange(e)}
             className="shadow-sm bg-white rounded border-0 search-bar-notification"
             style={{ zIndex: 0 }}
           />
         </CInputGroup>
         <div className="scroll-notifs" id="notif-scroll" onScroll={e => handleScroll(e)}>
-        {notifications?.length >0 && notifications.map((notification) => (
-          <CCard key={notification.id_event * Math.random(10)} style={{borderColor:"none"}}>
-            <CCardBody>
-              <div className="message">
-                <div className="pt-3 mr-3 float-left">
-                  <div className="c-avatar">
-                    <CImg
-                      src={"avatars/6.jpg"}
-                      className="c-avatar-img"
-                      alt="admin@bootstrapmaster.com"
-                    />
-                    <span className="c-avatar-status bg-success"></span>
+          {notifications?.map((notification, index) => (
+            <CCard
+              key={index}
+              style={{ borderColor: notification.read ? "none" : "red" }}
+              onClick={(e) => { handleNotificationClick(index) }}
+            >
+              <CCardBody>
+                <div className="message">
+                  <div className="pt-3 mr-3 float-left">
+                    <div className="c-avatar">
+                      {loading[index] ? "loading" : <CImg
+                        src={notification?.image ? notification?.image : ""}
+                        className="c-avatar-img"
+                        alt="admin@bootstrapmaster.com"
+                      />
+                      }
+                    </div>
+                  </div>
+                  <div>
+                    <small className="text-muted">{loading[index] ? "loading" : notification?.fullName ? notification.fullName : "..."}</small>
+                    <small className="text-muted float-right mt-1">
+
+                      <Moment fromNow locale="fr">{notification?.modifiedAt}</Moment>
+                    </small>
+                  </div>
+                  <div className="text-truncate font-weight-bold">
+                    <span className="fa fa-exclamation text-danger"></span>
+                    Notification {notification?.type}
+                  </div>
+                  <div className="small text-muted text-truncate">
+                    {moment(notification?.due_date).format('L')}
                   </div>
                 </div>
-                <div>
-                  <small className="text-muted">John Doe</small>
-                  <small className="text-muted float-right mt-1">
-                    Just now
-                  </small>
-                </div>
-                <div className="text-truncate font-weight-bold">
-                  <span className="fa fa-exclamation text-danger"></span>{" "}
-                  Notification {notification.type}
-                </div>
-                <div className="small text-muted text-truncate">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor incididunt...
-                </div>
-              </div>
-            </CCardBody>
-          </CCard>
-        ))}
+              </CCardBody>
+            </CCard>
+          ))}
+          <LoaderSmall/>
         </div>
       </CCol>
       <CCol xs="12" sm="12" md="12" lg="12" xl="8" xxl="8">
-        <NotificationDetails />
+        <NotificationDetails notification={notification} />
       </CCol>
     </CRow>
   );

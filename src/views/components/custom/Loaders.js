@@ -26,8 +26,18 @@ export const LoaderSmall = () => {
   const { promiseInProgress } = usePromiseTracker();
   return (
     promiseInProgress &&
+    <div
+      style={{
+        width: "100%",
+        height: "100",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+      }}
+    >
     <div className="loader">
-    <Loader type="ThreeDots" color="#DDDDDD" height={28} width={28} />
+    <Loader type="ThreeDots" color="#CC041C" height={100} width={100} />
+    </div>
     </div>
   );
 }

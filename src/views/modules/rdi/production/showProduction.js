@@ -27,6 +27,9 @@ import ModalFilterProduction from "../../../components/custom/modalFilterProduct
 import { Formik } from "formik";
 import SuccessErrorModal from "../../../components/custom/SuccessErrorModal";
 
+import { LoaderSmall } from "../../../../views/components/custom/Loaders";
+import { trackPromise} from 'react-promise-tracker';
+
 const ShowProduction = () => {
   const history = useHistory();
   const [currentPage, setCurrentPage] = useState(1);
@@ -129,7 +132,7 @@ const ShowProduction = () => {
       if (error) console.error(error);
     };
     if (currentPage > 0) {
-      fetchRdis();
+      trackPromise(fetchRdis());
     }
 
   }, [currentPage, searchInput, date, production, refId,deleteRerender])
@@ -307,11 +310,13 @@ const ShowProduction = () => {
             ))}
           </CRow>
           {(rdis?.length === 0 || !rdis) ? (
-            <CCol sm="12" xl="12" xs="12" md="12" style={{ paddingTop: "4%" }}>
+            <><CCol sm="12" xl="12" xs="12" md="12" style={{ paddingTop: "4%" }}>
               <CAlert color="warning" className="h-100">
                 Pas d'rdi trouvés.
               </CAlert>
             </CCol>
+            <LoaderSmall/>
+            </>
           ) :
             <CRow>
               <CCol className="mr-4">

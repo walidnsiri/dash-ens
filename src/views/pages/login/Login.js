@@ -362,7 +362,7 @@ function Card(setUser) {
               )}
               <CRow>
                 <CCol xs="6">
-                  <CButton color="primary" className="px-4" type="submit" disabled={renderEmailError?"true":""}>
+                  <CButton color="primary" className="px-4" type="submit" disabled={renderEmailError?true:false}>
                     Réinitialiser
                   </CButton>
                 </CCol>

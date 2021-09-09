@@ -6,7 +6,6 @@ import { userRolesObject } from "../../../enums/rolesObjects.enum";
 import { userRoles } from "../../../enums/roles.enum";
 import { queryApi } from "../../../utils/queryApi";
 import { fetchImageFromService } from "../../../utils/getImage";
-import { LoaderLarge } from "../../components/custom/Loaders";
 import DeleteModal from "../../components/custom/DeleteModal";
 
 
@@ -99,7 +98,6 @@ const UserCard = (props) => {
               );
             }
           })}
-          <LoaderLarge />
           <CImg src={img} />
         </div>
         <div className="post-content">

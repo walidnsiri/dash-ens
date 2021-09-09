@@ -26,6 +26,10 @@ import { useHistory } from "react-router-dom";
 
 import CustomCard from "../../../components/custom/CustomCard";
 
+
+import { LoaderSmall } from "../../../../views/components/custom/Loaders";
+import { trackPromise} from 'react-promise-tracker';
+
 const ShowReunion = () => {
   const history = useHistory();
 
@@ -149,7 +153,7 @@ const ShowReunion = () => {
       }
     };
     if (currentPage > 0) {
-      fetchReunions();
+      trackPromise(fetchReunions());
     }
     
 
@@ -516,24 +520,14 @@ const ShowReunion = () => {
             </CInputGroup>
           </CCol>
         </CRow>
-
-        <CRow className="d-flex justify-content-center">
-          {reunions?.map((reunion) => (
-            <CCol key={reunion.id} sm="12" xl="4" xs="12" md="6" >
-              <CustomCard key={reunion.id} className="profile-card" type="reunion" reunion={reunion} page={{ "totalpages": totalpages, "currentPage": currentPage, "count": reunion.length }}
-                setdeleteRerender={setdeleteRerender}
-                setCurrentPage={setCurrentPage}
-                setModal={setModal}>
-              </CustomCard>
-            </CCol>
-          ))}
-        </CRow>
         {(reunions?.length === 0 || !reunions) ? (
-          <CCol sm="12" xl="12" xs="12" md="12" style={{ paddingTop: "4%" }}>
+          <><CCol sm="12" xl="12" xs="12" md="12" style={{ paddingTop: "4%" }}>
             <CAlert color="warning" className="h-100">
               Pas de réunions rdi trouvés.
             </CAlert>
           </CCol>
+          
+          </>
         ) :
           <CRow>
             <CCol className="mr-4">
@@ -547,6 +541,18 @@ const ShowReunion = () => {
               />
             </CCol>
           </CRow>}
+          <CRow className="d-flex justify-content-center">
+          {reunions?.map((reunion) => (
+            <CCol key={reunion.id} sm="12" xl="4" xs="12" md="6" >
+              <CustomCard key={reunion.id} className="profile-card" type="reunion" reunion={reunion} page={{ "totalpages": totalpages, "currentPage": currentPage, "count": reunion.length }}
+                setdeleteRerender={setdeleteRerender}
+                setCurrentPage={setCurrentPage}
+                setModal={setModal}>
+              </CustomCard>
+            </CCol>
+          ))}
+          <LoaderSmall/>
+        </CRow>
       </CCol>
     </CRow>
 

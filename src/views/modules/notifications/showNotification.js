@@ -25,17 +25,18 @@ import CIcon from "@coreui/icons-react";
 import Notifications from "./notifications";
 import { useSelector, useDispatch } from 'react-redux'
 import {setNotifications,selectNotifications} from '../../../features/notificationsSlice';
+import { SettingsRemoteOutlined } from "@material-ui/icons";
 
 function ShowNotification() {
 
   const dispatch = useDispatch()
   const notifications = useSelector(selectNotifications)
   const [clicked, setclicked] = useState({});
+  const [sort,setSort] = useState("ascending")
  // const [notifications,setNotifications] = useState({});
   
   useEffect(() => {
     setclicked({1:true,2:false,3:false,4:false});
-    console.log(notifications)
   }, [])
   
   useEffect(() => {
@@ -55,6 +56,10 @@ function ShowNotification() {
     newclicked[number]= !clicked[number];
     setclicked(newclicked);
     }
+  }
+
+  const handleSort = (sort) => {
+    setSort(sort);
   }
 
   return (
@@ -152,8 +157,8 @@ function ShowNotification() {
     Trier:  ↓↑
   </CDropdownToggle>
   <CDropdownMenu>
-    <CDropdownItem href="#">↑ Ascendant</CDropdownItem>
-    <CDropdownItem href="#">↓ Descendant</CDropdownItem>
+    <CDropdownItem href="#" onClick={e => handleSort("ascending")} >↑ Ascendant</CDropdownItem>
+    <CDropdownItem href="#" onClick={e => handleSort("descending")} >↓ Descendant</CDropdownItem>
   </CDropdownMenu>
 </CDropdown>
           </CCol>
@@ -163,7 +168,7 @@ function ShowNotification() {
           <CCol lg="12" xs="12" md="12" sm="12" xl="12" xxl="12">
             <CCard>
                 <CCardBody>
-                <Notifications notifications=""/>
+                <Notifications sort={sort}/>
                 </CCardBody>
             </CCard>
           </CCol>

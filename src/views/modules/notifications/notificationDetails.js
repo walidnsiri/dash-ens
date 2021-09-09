@@ -19,11 +19,28 @@ import {
   CBadge
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
+import Moment from 'react-moment';
+import moment from 'moment'
+import { queryApi } from "../../../utils/queryApi";
 
-function NotificationDetails() {
+function NotificationDetails(props) {
+    moment.locale("fr");
+    const [reunion,setReunion] = useState({})
+    const {notification} = props;
+    
+    useEffect(()=> {
+        const fetchRdi = async() => {
+        if(notification?.type == "rdi"){
+            const [res, error] = await queryApi("rdi/reunion/" + notification?.id_event);
+            if(res){setReunion(res)}
+        }
+        }
+        fetchRdi();
+    },[notification])
+
     return (
         <>
-        <CBadge color="success" style={{marginBottom:"2%",marginTop:"2%"}}>Réunion RDI</CBadge>
+        <CBadge color="success" style={{marginBottom:"2%",marginTop:"2%"}}>{notification?.type === "rdi"? "Réunion RDI" : "Encadrement"}</CBadge>
         <hr
               style={{
                 height: "1px",
@@ -35,22 +52,26 @@ function NotificationDetails() {
               }}
             />
             
-        <div className="time text-muted">Today, 31 July 2021, 14:30</div>
-        <div className="title text-truncate font-weight-bold">Titre Réunion</div>
+        <div className="time text-muted">{moment(notification?.due_date).format('dddd')} de {reunion?.heure_deb}h à {reunion?.heure_fin}h</div>
+        <div className="title text-truncate font-weight-bold">Titre: {reunion?.titre}</div>
         <CCard>
             <CCardBody>
-            <div className="description"><h4>Description:</h4> Signature</div>
-        <div className="createdby"><h4>Crée par:</h4><span>Walid Nsiri</span></div>
+            <div className="description"><h4>Description:</h4> {reunion?.description}</div>
+        <div className="createdby"><h4>Crée par:</h4><span>{notification?.fullName}</span></div>
         <div className="Participants">
-            <h4>Participants:</h4>
-            <ul>
-                <li>Dhia khmiri</li>
-                <li>Rayen touati</li>
-                <li>Aziz daboussi</li>
-            </ul>
+        <div className="pt-3 mr-3 float-right">
+                  <div className="c-avatar">
+                    <CImg
+                      src={notification?.image? notification?.image: ""}
+                      style={{borderRadius: "50%",width:"200px",marginTop:"-250px",marginRight:"80px"}}
+                      alt="admin@bootstrapmaster.com"
+                    />
+                    
+                  </div>
+                </div>
         </div>
-        <div className="createdAt text-muted">Crée le : 31 July 2021, 14:30</div>
-        <div className="modifiedAt text-muted">Modifiée le: 31 July 2021, 14:30</div>
+        <div className="createdAt text-muted">Crée {moment(notification?.createdAt).calendar()}</div>
+        <div className="modifiedAt text-muted">Modifiée {moment(notification?.modifiedAt).calendar()}</div>
             </CCardBody>
         </CCard>
         
