@@ -15,20 +15,21 @@ import CIcon from "@coreui/icons-react";
 import logo from "../assets/img/brand/logo-esprit.svg"
 // routes config
 import routes from "../routes";
-import {setsidebar,selectSidebar} from '../features/sidebarShow';
+import { setsidebar, selectSidebar } from '../features/sidebarShow';
 
 import { useLocation, matchPath } from "react-router-dom";
 
 import {
   TheHeaderDropdown,
-  TheHeaderDropdownMssg
+  TheHeaderDropdownMssg,
+  TheHeaderDropdownFollowup
 } from "./index";
 
 const TheHeader = () => {
   const dispatch = useDispatch();
   const sidebarShow = useSelector(selectSidebar);
   const currPath = useLocation().pathname;
-  const [lastRouteName,setlastRouteName] =  useState("");
+  const [lastRouteName, setlastRouteName] = useState("");
 
   const toggleSidebar = () => {
     const val = [true, "responsive"].includes(sidebarShow)
@@ -43,7 +44,7 @@ const TheHeader = () => {
       : "responsive";
     dispatch(setsidebar(val));
   };
- 
+
   const getPaths = pathname => {
     const paths = ['/']
     if (pathname === '/') return paths;
@@ -54,7 +55,7 @@ const TheHeader = () => {
     })
     return paths
   }
-  
+
   useEffect(() => {
     if (routes) {
       const paths = getPaths(currPath)
@@ -67,10 +68,10 @@ const TheHeader = () => {
       let { [Object.keys(currRoutes).pop()]: lastRoute } = currRoutes;
       setlastRouteName(lastRoute.name);
     }
-   
+
   }, [currPath])
 
-  
+
   return (
     <>
       <CHeader withSubheader className="header-drop-shadow border-0">
@@ -92,30 +93,31 @@ const TheHeader = () => {
           <CHeaderNavItem className="px-3">
             <CHeaderNavLink to="/dashboard">Dashboard</CHeaderNavLink>
           </CHeaderNavItem>
-          
+
         </CHeaderNav>
 
         <CHeaderNav className="px-3">
+          <TheHeaderDropdownFollowup />
           <TheHeaderDropdownMssg />
           <TheHeaderDropdown />
         </CHeaderNav>
       </CHeader>
 
 
-        <CRow>
-          <CCol className="ml-5 mt-4 capitalize">
-            <h5>
-              <b>{lastRouteName}</b>
-            </h5>
-          </CCol>
+      <CRow>
+        <CCol className="ml-5 mt-4 capitalize">
+          <h5>
+            <b>{lastRouteName}</b>
+          </h5>
+        </CCol>
 
-          <CCol lg="3" xs="3" md="3" sm="3" className="ml-auto mr-5 mt-2">
-            <CBreadcrumbRouter
-              className="float-right"
-              routes={routes}
-            />
-          </CCol>
-        </CRow>
+        <CCol lg="3" xs="3" md="3" sm="3" className="ml-auto mr-5 mt-2">
+          <CBreadcrumbRouter
+            className="float-right"
+            routes={routes}
+          />
+        </CCol>
+      </CRow>
     </>
   );
 };

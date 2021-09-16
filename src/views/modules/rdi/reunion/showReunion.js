@@ -40,6 +40,7 @@ const ShowReunion = () => {
   const [deleteRerender, setdeleteRerender] = useState(false);
   const [radiocheckedTitle, setRadiocheckedTitle] = useState(true);
   const [radiocheckedDescription, setRadiocheckedDescription] = useState(true);
+  const [radiocheckedStatus, setRadiocheckedStatus] = useState(true);
   const [deb,setDeb] = useState({values: [8]});
   const [fin,setFin] = useState({values: [9]});
   const [isActiveDeb,setIsActiveDeb] = useState(false);
@@ -64,6 +65,7 @@ const ShowReunion = () => {
   });
   const [titre, setTitre] = useState("");
   const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("");
 
 
   function handleInputChange(e) {
@@ -71,6 +73,18 @@ const ShowReunion = () => {
     setSearchInput(e.target.value);
   }
   const [date, setdate] = useState(null);
+
+  function handleCheckboxStatus(e){
+    if (e.target.value === "all") {
+      setStatus(null);
+      setRadiocheckedStatus(true);
+      setCurrentPage(1);
+      return;
+    }
+    setRadiocheckedStatus(false);
+    setStatus(e.target.value);
+    setCurrentPage(1);
+  }
 
   function handleCheckbox(e) {
     if (e.target.value === "all") {
@@ -129,6 +143,9 @@ const ShowReunion = () => {
       if (description) {
         body["query"] = { ...body["query"], description: description };
       }
+      if (status) {
+        body["query"] = { ...body["query"], status: status };
+      }
       if (isActiveDeb){
         let heure = deb.values[0];
         if( heure < 10) {heure = "0" + heure;}
@@ -157,7 +174,7 @@ const ShowReunion = () => {
     }
     
 
-  }, [currentPage, searchInput, date, titre, description, deleteRerender,isActiveDeb,isActiveFin,deb,fin])
+  }, [currentPage, searchInput, date, titre, description, deleteRerender,isActiveDeb,isActiveFin,deb,fin,status])
 
 
   return (
@@ -315,6 +332,58 @@ const ShowReunion = () => {
                 </CLabel>
               </CFormGroup>
             </div>
+
+            <div className="mt-4 pt-4">
+              <h5 className="font-size-14 mb-3">Status</h5>
+              <CFormGroup variant="checkbox" className="checkbox">
+                <CInputRadio
+                  id="checkbox30"
+                  name="status"
+                  value="all"
+                  onChange={(e) => handleCheckboxStatus(e)}
+                  checked={radiocheckedStatus}
+                />
+                <CLabel
+                  variant="checkbox"
+                  className="form-check-label mt-1"
+                  htmlFor="checkbox30"
+                >
+                  Tout
+                </CLabel>
+              </CFormGroup>
+              <CFormGroup variant="checkbox" className="checkbox">
+                <CInputRadio
+                  id="checkbox31"
+                  name="status"
+                  value="Confirme"
+                  onChange={(e) => handleCheckboxStatus(e)}
+                />
+                <CLabel
+                  variant="checkbox"
+                  className="form-check-label mt-1"
+                  htmlFor="checkbox31"
+                >
+                  Confirmé
+                </CLabel>
+              </CFormGroup>
+              <CFormGroup variant="checkbox" className="checkbox">
+                <CInputRadio
+                  id="checkbox32"
+                  name="status"
+                  value="En_attente"
+                  onChange={(e) => handleCheckboxStatus(e)}
+                />
+                <CLabel
+                  variant="checkbox"
+                  className="form-check-label mt-1"
+                  htmlFor="checkbox32"
+                >
+                  En attente
+                </CLabel>
+              </CFormGroup>
+            </div>
+
+
             <div className="mt-4 pt-4">
               <h5 className="font-size-14 mb-3">Date</h5>
               <CFormGroup variant="checkbox" className="checkbox">
@@ -520,6 +589,18 @@ const ShowReunion = () => {
             </CInputGroup>
           </CCol>
         </CRow>
+          <CRow className="d-flex justify-content-center">
+          {reunions?.map((reunion) => (
+            <CCol key={reunion.id} sm="12" xl="4" xs="12" md="6" >
+              <CustomCard key={reunion.id} className="profile-card" type="reunion" reunion={reunion} page={{ "totalpages": totalpages, "currentPage": currentPage, "count": reunion.length }}
+                setdeleteRerender={setdeleteRerender}
+                setCurrentPage={setCurrentPage}
+                setModal={setModal}>
+              </CustomCard>
+            </CCol>
+          ))}
+          <LoaderSmall/>
+        </CRow>
         {(reunions?.length === 0 || !reunions) ? (
           <><CCol sm="12" xl="12" xs="12" md="12" style={{ paddingTop: "4%" }}>
             <CAlert color="warning" className="h-100">
@@ -541,18 +622,6 @@ const ShowReunion = () => {
               />
             </CCol>
           </CRow>}
-          <CRow className="d-flex justify-content-center">
-          {reunions?.map((reunion) => (
-            <CCol key={reunion.id} sm="12" xl="4" xs="12" md="6" >
-              <CustomCard key={reunion.id} className="profile-card" type="reunion" reunion={reunion} page={{ "totalpages": totalpages, "currentPage": currentPage, "count": reunion.length }}
-                setdeleteRerender={setdeleteRerender}
-                setCurrentPage={setCurrentPage}
-                setModal={setModal}>
-              </CustomCard>
-            </CCol>
-          ))}
-          <LoaderSmall/>
-        </CRow>
       </CCol>
     </CRow>
 

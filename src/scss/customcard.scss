@@ -62,7 +62,7 @@ main[role="main"] {
   max-width: 401px;
   width: 351px;
   position: relative;
-  @include prefix(box-shadow, 0 3px 5px rgba(105, 41, 41, 0.2));
+  //@include prefix(box-shadow, 0 3px 5px rgba(105, 41, 41, 0.2));
 
   .product-image {
    //margin-left: -1px;

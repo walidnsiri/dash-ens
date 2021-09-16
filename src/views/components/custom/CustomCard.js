@@ -155,7 +155,7 @@ const CustomCard = (props) => {
     <>
       <DeleteModal {...deleteModal} />
       <main role="main">
-        <div className="product">
+        <div className="product" style={{boxShadow: reunion?.status == "Confirme" ? "10px 10px 10px 10px rgba(231, 76, 60, 0.2)":"0 3px 5px rgba(105, 41, 41, 0.2)"}}>
           <div className="product-sidebar">
             <button className="edit" onClick={() => handleEdit()}>
               <span>Modifier</span>

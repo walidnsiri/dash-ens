@@ -22,15 +22,15 @@ import {
   CDropdownItem
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import Notifications from "./notifications";
+import Followups from "./followups";
 
 
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
-import DeleteIcon from '@material-ui/icons/Delete';
+import UpdateIcon from '@material-ui/icons/Update';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 
-function ShowNotification() {
+function ShowFollowup() {
 
   const [clicked, setclicked] = useState({});
   const [sort,setSort] = useState("descending")
@@ -68,10 +68,10 @@ function ShowNotification() {
               <div className="message align-items-center justify-content-center">
                 <div className="pt-3 mr-3 float-left"><NotificationsActiveIcon  style={{color:clicked[1]?"white":""}} /></div>
                 <div className="text-truncate font-weight-bold" style={{color:clicked[1]?"white":""}}>
-                  Toutes les notifications
+                  Toutes les notifications de suivi
                 </div>
                 <div className="small  text-truncate mt-2" style={{color:clicked[1]?"white":""}}>
-                  consulter toutes les notifiations reçues
+                  Consulter toutes les notifiations de suivi actives
                 </div>
               </div>
             </div>
@@ -92,7 +92,7 @@ function ShowNotification() {
                   Réunions Rdi
                 </div>
                 <div className="small text-truncate mt-2" style={{color:clicked[2]?"white":""}}>
-                  consulter toutes les notifiations RDI
+                  Consulter toutes les notifiations de suivi RDI 
                 </div>
               </div>
             </div>
@@ -113,7 +113,7 @@ function ShowNotification() {
                   Encadrement
                 </div>
                 <div className="small text-truncate mt-2" style={{color:clicked[3]?"white":""}}>
-                  consulter toutes les notifiations d'encadrement
+                  Consulter toutes les notifiations de suivi d'encadrement
                 </div>
               </div>
             </div>
@@ -129,10 +129,10 @@ function ShowNotification() {
             />
             <div className="notification-card-botton" onClick={()=>handleClick(4)} style={{backgroundColor:clicked[4]?"#e74c3c":""}}>
               <div className="message">
-                <div className="pt-3 mr-3 float-left"><DeleteIcon style={{color:clicked[4]?"white":""}}/></div>
-                <div className="text-truncate font-weight-bold" style={{color:clicked[4]?"white":""}}>Supprimées</div>
+                <div className="pt-3 mr-3 float-left"><UpdateIcon style={{color:clicked[4]?"white":""}}/></div>
+                <div className="text-truncate font-weight-bold" style={{color:clicked[4]?"white":""}}>A venir</div>
                 <div className="small text-truncate mt-2" style={{color:clicked[4]?"white":""}}>
-                  consulter toutes les notifiations supprimées
+                    Consulter toutes les notifiations de suivi à venir
                 </div>
               </div>
             </div>
@@ -143,7 +143,7 @@ function ShowNotification() {
         <CRow>
           <CCol className="mt-2">
             <div>
-              <h5 className="d-inline mr-2">Notifications </h5>
+              <h5 className="d-inline mr-2">Notification de Suivi</h5>
             </div>
           </CCol>
           <CCol lg="6" sm="6" md="6" xs="6" className="mr-4 mt-2">
@@ -164,7 +164,7 @@ function ShowNotification() {
           <CCol lg="12" xs="12" md="12" sm="12" xl="12" xxl="12">
             <CCard>
                 <CCardBody>
-                <Notifications sort={sort} clicked={clicked}/>
+                <Followups sort={sort} clicked={clicked}/>
                 </CCardBody>
             </CCard>
           </CCol>
@@ -174,4 +174,4 @@ function ShowNotification() {
   );
 }
 
-export default ShowNotification;
+export default ShowFollowup;

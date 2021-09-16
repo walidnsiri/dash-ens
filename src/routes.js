@@ -34,6 +34,9 @@ const Brands = React.lazy(() => import('./views/icons/brands/Brands'));
 const showNotifications = React.lazy(() => import('./views/modules/notifications/showNotification'));
 const notificationDetails = React.lazy(() => import('./views/modules/notifications/notificationDetails'));
 
+//Followups
+const showFollowups = React.lazy(() => import('./views/modules/followups/showFollowup'));
+
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -55,6 +58,7 @@ const routes = [
   { path: '/icons/brands', name: 'Brands', component: Brands },
   { path: '/notifications', name: 'Notifications', component: showNotifications },
   { path: '/notifications/details', name: 'détails de la notification', component: notificationDetails },
+  { path: '/followups', name: 'Notification de Suivi', component: showFollowups },
 ];
 
 export default routes;

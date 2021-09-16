@@ -18,6 +18,7 @@ import {
   CImg,
   CBadge,
 } from "@coreui/react";
+import useravatar from "../../../assets/img/avatars/user.png";
 import CIcon from "@coreui/icons-react";
 import NotificationDetails from "./notificationDetails";
 import { UserContext } from "../../../utils/UserContext";
@@ -32,7 +33,7 @@ import { fetchImageFromService } from "../../../utils/getImage";
 
 
 const Notifications = (props) => {
-  const { sort } = props;
+  const { sort,clicked } = props;
   moment.locale("fr");
   const [user,] = useContext(UserContext)
   const [notifications, setNotifications] = useState([]);
@@ -43,6 +44,23 @@ const Notifications = (props) => {
   const [loading, setLoading] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [filtered, setFiltered] = useState(false);
+  const [borderColor,setBorderColor] = useState(new Map());
+
+  const handleBorderColor = (read) => {
+      if(read) return "none";
+      return "red";
+  }
+
+
+  const getClickedType = () => {
+    if(clicked[1]) return "";
+    if(clicked[2]) return "rdi";
+    if(clicked[3]) return "encadrement";
+  }
+  const getClickedDeleted = () => {
+    if(clicked[4]) return true;
+    return false;
+  }
 
   const fetchimg = async (im) => {
     const img = await fetchImageFromService(im);
@@ -57,7 +75,7 @@ const Notifications = (props) => {
     }
   }
 
-  useEffect(() => { setPageNumber(1) }, [sort])
+  useEffect(() => { setPageNumber(1);setNotifications([]) }, [sort,clicked])
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -69,7 +87,10 @@ const Notifications = (props) => {
           sort: sort
         },
         query: {
-          "user_id": user.id
+          "user_id": user.id,
+          "type": getClickedType(),
+          "deleted" : getClickedDeleted(),
+          //"id_ens_creator" : "60cca063b036b51e8d33013a"
         },
       };
 
@@ -80,9 +101,14 @@ const Notifications = (props) => {
           await Promise.all(notifs.map(async(notif, index) => {
             notifs = await fetchUser(notif.id_ens_modifier, index, notifs);
           }));
+          setNotification({...notifs[0]});
+          if(notifs.length > 0){
+          notifs[0] = {...notifs[0],read:true};
           setNotifications(notifs);
+          }
           setTotalPages(res.totalPages)
           setError(null);
+          if(notifs.length == 0 ) setNotification({});
         }
         else {
           let notifs = res.notifications;
@@ -101,30 +127,7 @@ const Notifications = (props) => {
       }
     };
     trackPromise(fetchNotifications());
-    if (notification.length == 0) {
-      setNotification(notifications[0]);
-    }
-  }, [pageNumber]);
-
-  useEffect(() => {
-    if (notification.length == 0) {
-      setNotification(notifications[0]);
-    }
-  }, [notifications])
-
-  /*useEffect(()=> {
-     if(notifications?.length > 0){
-        let load = [];
-       notifications.map((notif,index) => {
-          load[index] = true;
-          setLoading(load);
-          fetchUser(notif.id_ens_modifier,index);
-          load[index]=  false;
-          setLoading(load)
-         });
-     }
-   },[notifications])*/
-
+  }, [pageNumber,sort,clicked]);
 
 
   const handleInputChange = (e) => {
@@ -149,12 +152,17 @@ const Notifications = (props) => {
   }
 
   const handleNotificationClick = (index) => {
-    setNotification(notifications[index]);
+    setNotification({...notifications[index]});
+    let notifs = notifications;
+    notifs[index] = {...notifs[index],read:true};
+    setNotifications([...notifs]);
   }
+
+
 
   return (
     <CRow>
-      <CCol lg="12" md="12" sm="12" xs="12" xl="4" xxl="4">
+      <CCol lg="12" md="12" sm="12" xs="12" xl={notifications?.length>0 ? "4" : "12"} xxl={notifications?.length>0 ? "4" : "12"}>
         <CInputGroup className="input-group-notification">
           <CInputGroupPrepend>
             <CButton
@@ -176,51 +184,59 @@ const Notifications = (props) => {
             onChange={e => handleInputChange(e)}
             className="shadow-sm bg-white rounded border-0 search-bar-notification"
             style={{ zIndex: 0 }}
+            disabled= {notifications?.length > 0? false : true}
           />
         </CInputGroup>
         <div className="scroll-notifs" id="notif-scroll" onScroll={e => handleScroll(e)}>
-          {notifications?.map((notification, index) => (
+          {notifications?.map((notificatio, index) => (
             <CCard
               key={index}
-              style={{ borderColor: notification.read ? "none" : "red" }}
+              style={{ borderColor: handleBorderColor(notificatio.read), backgroundColor: notificatio.id_event=== notification.id_event? "#ECECEC" : "transparent"}}
               onClick={(e) => { handleNotificationClick(index) }}
             >
               <CCardBody>
                 <div className="message">
                   <div className="pt-3 mr-3 float-left">
                     <div className="c-avatar">
-                      {loading[index] ? "loading" : <CImg
-                        src={notification?.image ? notification?.image : ""}
+                      <CImg
+                        src={notificatio?.image ? notificatio?.image : useravatar}
                         className="c-avatar-img"
                         alt="admin@bootstrapmaster.com"
                       />
-                      }
                     </div>
                   </div>
                   <div>
-                    <small className="text-muted">{loading[index] ? "loading" : notification?.fullName ? notification.fullName : "..."}</small>
+                    <small className="text-muted">{notificatio?.fullName}</small>
                     <small className="text-muted float-right mt-1">
 
-                      <Moment fromNow locale="fr">{notification?.modifiedAt}</Moment>
+                      <Moment fromNow locale="fr">{notificatio?.createdAt}</Moment>
                     </small>
                   </div>
                   <div className="text-truncate font-weight-bold">
                     <span className="fa fa-exclamation text-danger"></span>
-                    Notification {notification?.type}
+                    Notification {notificatio?.type}
                   </div>
                   <div className="small text-muted text-truncate">
-                    {moment(notification?.due_date).format('L')}
+                    {moment(notificatio?.due_date).format('L')}
                   </div>
                 </div>
               </CCardBody>
             </CCard>
+            
           ))}
           <LoaderSmall/>
         </div>
       </CCol>
+      {notifications?.length > 0 ?
       <CCol xs="12" sm="12" md="12" lg="12" xl="8" xxl="8">
-        <NotificationDetails notification={notification} />
-      </CCol>
+        <NotificationDetails notification={notification}/>
+      </CCol>:
+      <CCol sm="12" xl="12" xs="12" md="12" style={{ paddingTop: "4%" }}>
+      <CAlert color="warning" className="h-100">
+        Pas de notification trouvés.
+      </CAlert>
+    </CCol>
+      }
     </CRow>
   );
 };
