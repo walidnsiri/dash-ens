@@ -107,7 +107,7 @@ const polar = {
   labels: ["Red", "Green", "Yellow", "Grey", "Blue"],
 };
 const ShowSuivi = () => {
-  const [chart, ] = useState("rdi");
+  const [chart, ] = useState("interventions");
 
   return (
     <>
