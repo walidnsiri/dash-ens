@@ -4,6 +4,9 @@ import { UserContext } from "./utils/UserContext";
 import "./scss/style.scss";
 import { queryApi } from "./utils/queryApi";
 
+import {fetchGroupUsers,selectGroupRdi,selectGroupUP} from './features/groupSlice';
+import { useSelector, useDispatch } from 'react-redux'
+
 const loading = (
   <div className="pt-3 text-center">
     <div className="sk-spinner sk-spinner-pulse"></div>
@@ -21,18 +24,27 @@ const Login = React.lazy(() => import("./views/pages/login/Login"));
 
 export default function App() {
   const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
+
+  const groupUp = useSelector(selectGroupUP);
+  const groupRDI = useSelector(selectGroupRdi);
 
   const isloggedin = async () => {
-    const [user, error] = await queryApi("public/logged", null, "POST");
+    const [res, error] = await queryApi("public/logged", null, "POST");
     if (error) console.error(error);
     else {
-      setUser(user);
+      setUser(res.userView);
+      const groups = res.groupViews;
+      groups.map((group,index) => {dispatch(fetchGroupUsers(group));});
+      
     }
   };
 
   useEffect(() => {
     isloggedin();
   }, []);
+
+
 
   return (
     <BrowserRouter>

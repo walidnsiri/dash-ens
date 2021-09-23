@@ -16,6 +16,8 @@ import {
 } from "@coreui/react-chartjs";
 import { CImg } from "@coreui/react";
 import avatar from "../../../assets/img/avatars/6.jpg";
+import { useSelector } from 'react-redux'
+import {selectGroupUP} from '../../../features/groupSlice';
 const options = {
   // tooltips: {
   //   enabled: false,
@@ -108,6 +110,7 @@ const polar = {
 };
 const ShowSuivi = () => {
   const [chart, ] = useState("interventions");
+  const groupUp = useSelector(selectGroupUP);
 
   return (
     <>
@@ -160,14 +163,14 @@ const ShowSuivi = () => {
             <ul className="list-group flex-md-row flex-md-wrap ul-suivi">
               <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0  border-top li-backg">
                 <CCallout color="danger d-inline-block mt-0">
-                  <h6 className="mb-1">Rdis</h6>
+                  <h6 className="mb-1">Production RDI</h6>
                   <strong className="h4 mb-0">12</strong>
                 </CCallout>
                 
               </li>
               <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top">
                 <CCallout color="danger d-inline-block mt-0">
-                  <h6 className="mb-1">Congés</h6>
+                  <h6 className="mb-1">Réunions RDI</h6>
                   <strong className="h4 mb-0">7</strong>
                 </CCallout>
               </li>

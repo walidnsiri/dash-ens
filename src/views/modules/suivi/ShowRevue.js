@@ -1,257 +1,277 @@
-import React from "react";
+import React,{ useState, useEffect }  from "react";
 import {
   CLink
 } from "@coreui/react";
 import { CImg } from "@coreui/react";
 import avatar from "../../../assets/img/avatars/6.jpg";
 //import cup from "../../../assets/img/GoldTrophy.png"
+import { queryApi } from "../../../utils/queryApi";
+import { fetchImageFromService } from "../../../utils/getImage";
+
+
 const ShowRevue = () => {
+
+  const [topPerformers, setTopPerformers] = useState([]);
+  const [navigation, setNavigation] = useState("WEEK");
+
+  const fetchimg = async (im) => {
+    const img = await fetchImageFromService(im);
+    if (img) return img;
+  };
+  const fetchUser = async (id, index, perfs) => {
+    const [res, error] = await queryApi("user/" + id);
+    if (res) {
+      const img = await fetchimg(res.image);
+      perfs[index] = { ...perfs[index], "fullName": res.fullName, "image": img };
+      return perfs;
+    }
+  }
+
+  useEffect(()=>{
+    const fetchTopPerformers = async () => {
+    const body = {
+        periode: navigation,
+        //ids: [],
+        //date:""
+    };
+    const [res, error] = await queryApi("performance/performers", body, "POST");
+      if (res) {
+        let perfs = res;
+        await Promise.all(perfs.map(async(perf, index) => {
+          perfs = await fetchUser(perf.userId, index, perfs);
+        }));
+        setTopPerformers(perfs);
+      }
+      if (error) {
+        console.error(error);
+        setTopPerformers([]);
+      }
+    }
+    fetchTopPerformers();
+    
+  },[navigation])
+
+  const handleClick = (e) => {
+      if (e.target.innerText== "PRÉC"){
+        if(navigation == "WEEK"){
+          setNavigation("MONTH");
+        }
+        if(navigation == "MONTH"){
+          setNavigation("YEAR");
+        }
+      }
+      if (e.target.innerText== "SUIV"){
+        if(navigation == "MONTH"){
+          setNavigation("WEEK");
+        }
+        if(navigation == "YEAR"){
+          setNavigation("MONTH");
+        }
+      }
+  }
+
   return (
     <>
-    <nav className="thmbnail-nav">
-      <CLink to="" className="thumbnail-nav__link prev cust-btn">
-        <span className="thumbnail-nav__label prev">Préc</span>
-      </CLink>
-      <CLink to="" className="thumbnail-nav__link next cust-btn">
-        <span className="thumbnail-nav__label next">Suiv</span>
-      </CLink>
-    </nav>
-    <div className="performance-section">
-      <div className="performance-container">
-        <div className="performance-wrapper">
-          <h1 className="title">Meilleur Performance de la semaine</h1>
-          <div className="performance-top">
-            <figure className="performance-thumbnail">
-              <div className="performance-card">
-<div className="scoreboard">
-  <div className="scoreboard__podiums">
-    <div className="scoreboard__podium js-podium is-visible bump" data-height="200px">
-      <div className="scoreboard__podium-base scoreboard__podium-base--second is-expanding heightscale-second">
-        <div className="scoreboard__podium-rank">2</div>
-      </div>
-       <div className="scoreboard__podium-number">
-           Ahmed aziz daboussi 
-         <small><span className="js-podium-data">8</span></small>
-      </div>
-    
-    </div>
-    <div className="scoreboard__podium js-podium is-visible bump" data-height="250px">
-       <div className="scoreboard__podium-base scoreboard__podium-base--first is-expanding ">
-        <div className="scoreboard__podium-rank">1</div>
-        
-      </div>
-        <div className="scoreboard__podium-number">
-           Seif Eddine ben hamza
-          <small><span className="js-podium-data">9</span></small>
-      </div>
-    </div>
-    <div className="scoreboard__podium js-podium is-visible bump" data-height="150px">
-       <div className="scoreboard__podium-base scoreboard__podium-base--third is-expanding ">
-           <div className="scoreboard__podium-rank">3</div>
-      </div>
-        <div className="scoreboard__podium-number">
-          Mohamed hajd aissa
-          <small><span className="js-podium-data">5</span></small>
-      </div>
-    </div>
-  </div>
+      <nav className="thmbnail-nav">
+      {navigation !== "YEAR" &&
+        <CLink to="" className="thumbnail-nav__link prev cust-btn"  value="prec" onClick={e=>handleClick(e)}>
+          <span className="thumbnail-nav__label prev">Préc</span>
+        </CLink>
+      }
+        {navigation !== "WEEK" &&        
+        <CLink to="" className="thumbnail-nav__link next cust-btn" value="suiv" onClick={e=>handleClick(e)}>
+          <span className="thumbnail-nav__label next">Suiv</span>
+        </CLink>
+        }
+      </nav>
+      <div className="performance-section">
+        <div className="performance-container">
+          <div className="performance-wrapper">
+            <h1 className="title">Meilleur Performance {navigation=="WEEK" && "de la semaine"}{navigation=="MONTH" && "du mois"}{navigation=="YEAR" && "de l'année"}</h1>
+            <div className="performance-top">
+              <figure className="performance-thumbnail">
+                <div className="performance-card">
+                  <div className="scoreboard">
+                    <div className="scoreboard__podiums">
+                      {topPerformers[1] &&
+                      <div className="scoreboard__podium js-podium is-visible bump" data-height="200px">
+                        <div className="scoreboard__podium-base scoreboard__podium-base--second is-expanding heightscale-second">
+                          <div className="scoreboard__podium-rank">2</div>
+                        </div>
+                        <div className="scoreboard__podium-number">
+                          {topPerformers[1].fullName}
+                          <small><span className="js-podium-data">{topPerformers[1].totalCount}</span></small>
+                        </div>
+                      </div>
+                      }
+                      {topPerformers[0] &&
+                      <div className="scoreboard__podium js-podium is-visible bump" data-height="250px">
+                        <div className="scoreboard__podium-base scoreboard__podium-base--first is-expanding ">
+                          <div className="scoreboard__podium-rank">1</div>
+                        </div>
+                        <div className="scoreboard__podium-number">
+                        {topPerformers[0].fullName}
+                          <small><span className="js-podium-data">{topPerformers[0].totalCount}</span></small>
+                        </div>
+                      </div>
+                      }
+                      {topPerformers[2] &&
+                      <div className="scoreboard__podium js-podium is-visible bump" data-height="150px">
+                        <div className="scoreboard__podium-base scoreboard__podium-base--third is-expanding ">
+                          <div className="scoreboard__podium-rank">3</div>
+                        </div>
+                        <div className="scoreboard__podium-number">
+                        {topPerformers[2].fullName}
+                          <small><span className="js-podium-data">{topPerformers[2].totalCount}</span></small>
+                        </div>
+                      </div>
+                    }
+                    </div>
 
-  
-              </div>
-              </div>
-            </figure>
-            <div className="performance-side">
-              <div className="performance-avatar">
-                <div className="medal-container">
-                  <div className="medal icon--star"></div>
 
-                  <div className="star-cluster">
-                    <div className="icon--twinkle star-a"></div>
-                    <div className="icon--twinkle delay-twinkle star-b"></div>
-                    <div className="icon--twinkle star-c"></div>
-
-                    <div className="icon--twinkle  star-d"></div>
-                    <div className="icon--twinkle delay-twinkle star-e"></div>
                   </div>
                 </div>
+              </figure>
+              {topPerformers[0] &&
+              <div className="performance-side">
+                <div className="performance-avatar">
+                  <div className="medal-container">
+                    <div className="medal icon--star"></div>
+
+                    <div className="star-cluster">
+                      <div className="icon--twinkle star-a"></div>
+                      <div className="icon--twinkle delay-twinkle star-b"></div>
+                      <div className="icon--twinkle star-c"></div>
+
+                      <div className="icon--twinkle  star-d"></div>
+                      <div className="icon--twinkle delay-twinkle star-e"></div>
+                    </div>
+                  </div>
+                </div>
+                <h3 className="performance-title">{topPerformers[0].fullName}</h3>
+                <h4 className="performance-subtitle">Assistant Technologue</h4>
               </div>
-              <h3 className="performance-title">Seif Eddine ben hamza</h3>
-              <h4 className="performance-subtitle">Assistant Technologue</h4>
-            </div>
-            <div className="performance-desc mobile">
-              <p>
-                <em>Mension Honorable</em>
-              </p>
-            </div>
-          </div>
-          <div className="performance-scores">
-            <div className="performance-scores-top">
-              <div className="performance-desc">
+              }
+              
+              <div className="performance-desc mobile">
                 <p>
-                  <em>Mension Honorable</em>
+                
+                  <em>Mension Honorable</em><br/>
+                  {topPerformers.length < 2 &&
+                  "Pas de mention honorable"
+                  }
                 </p>
               </div>
             </div>
-            <div className="performance-enseignant">
-              <figure className="single-enseignant">
-                <CImg
-                  width="40"
-                  height="40"
-                  src={avatar}
-                  className=""
-                  alt="admin@bootstrapmaster.com"
-                />
-                <figcaption className="single-enseignant-info">
-                  <h4 className="info-name">Firas Matoussi</h4>
-                  <h5 className="info-grade">Assistant Technologue</h5>
-                  <div className="info-scores">
-                    <span className="info-single-score">F 50</span>
-                    <span className="info-single-score">S 12</span>
-                    <span className="info-single-score">I 6</span>
-                    <span className="info-single-score">R 18</span>
-                    <span className="info-single-score">E 21</span>
-                    <span className="info-single-score info-single-score-total">
-                      T 115
-                    </span>
-                  </div>
-                </figcaption>
-              </figure>
-              <figure className="single-enseignant">
-                <CImg
-                  width="40"
-                  height="40"
-                  src={avatar}
-                  className=""
-                  alt="admin@bootstrapmaster.com"
-                />
-                <figcaption className="single-enseignant-info">
-                  <h4 className="info-name">Firas Matoussi</h4>
-                  <h5 className="info-grade">Assistant Technologue</h5>
-                  <div className="info-scores">
-                    <span className="info-single-score">F 50</span>
-                    <span className="info-single-score">S 12</span>
-                    <span className="info-single-score">I 6</span>
-                    <span className="info-single-score">R 18</span>
-                    <span className="info-single-score">E 21</span>
-                    <span className="info-single-score info-single-score-total">
-                      T 115
-                    </span>
-                  </div>
-                </figcaption>
-              </figure>
-              <figure className="single-enseignant">
-                <CImg
-                  width="40"
-                  height="40"
-                  src={avatar}
-                  className=""
-                  alt="admin@bootstrapmaster.com"
-                />
-                <figcaption className="single-enseignant-info">
-                  <h4 className="info-name">Firas Matoussi</h4>
-                  <h5 className="info-grade">Assistant Technologue</h5>
-                  <div className="info-scores">
-                    <span className="info-single-score">F 50</span>
-                    <span className="info-single-score">S 12</span>
-                    <span className="info-single-score">I 6</span>
-                    <span className="info-single-score">R 18</span>
-                    <span className="info-single-score">E 21</span>
-                    <span className="info-single-score info-single-score-total">
-                      T 115
-                    </span>
-                  </div>
-                </figcaption>
-              </figure>
-              <figure className="single-enseignant">
-                <CImg
-                  width="40"
-                  height="40"
-                  src={avatar}
-                  className=""
-                  alt="admin@bootstrapmaster.com"
-                />
-                <figcaption className="single-enseignant-info">
-                  <h4 className="info-name">Firas Matoussi</h4>
-                  <h5 className="info-grade">Assistant Technologue</h5>
-                  <div className="info-scores">
-                    <span className="info-single-score">F 50</span>
-                    <span className="info-single-score">S 12</span>
-                    <span className="info-single-score">I 6</span>
-                    <span className="info-single-score">R 18</span>
-                    <span className="info-single-score">E 21</span>
-                    <span className="info-single-score info-single-score-total">
-                      T 115
-                    </span>
-                  </div>
-                </figcaption>
-              </figure>
-            </div>
-            <div className="performance-scores-bottom">
-              <ul className="score_list completed">
-              <li className="score-item">
-                  <div></div>
-                  <div className="score-caption">
-                    <div className="score-title">Encadrements</div>
-                    <div className="score-score">
-                      <strong>0</strong>
+            <div className="performance-scores">
+              <div className="performance-scores-top">
+              
+                <div className="performance-desc">
+                  <p>
+                  <em>Mension Honorable</em><br></br>
+                  {topPerformers.length < 2 &&
+                    "Pas de mention honorable"
+                  }
+                  </p>
+                </div>
+              </div>
+              <div className="performance-enseignant">
+                {topPerformers?.map((performer, index)=>{
+                  {index>2 &&
+                <figure className="single-enseignant">
+                  <CImg
+                    width="40"
+                    height="40"
+                    src={performer[index].image}
+                    className=""
+                    alt="admin@bootstrapmaster.com"
+                  />
+                  <figcaption className="single-enseignant-info">
+                    <h4 className="info-name">{performer[index].fullName}</h4>
+                    <h5 className="info-grade">Assistant Technologue</h5>
+                    <div className="info-scores">
+                      <span className="info-single-score">F {performer[index].formation}</span>
+                      <span className="info-single-score">S {performer[index].service}</span>
+                      <span className="info-single-score">I {performer[index].interventions}</span>
+                      <span className="info-single-score">R {performer[index].rdi+performer[index].reunion_rdi}</span>
+                      <span className="info-single-score">E {performer[index].encadrement}</span>
+                      <span className="info-single-score info-single-score-total">
+                      T {performer[index].totalCount} S {performer[index].score} 
+                      </span>
                     </div>
-                  </div>
-                </li>
-                <li className="score-item">
-                  <div></div>
-                  <div className="score-caption">
-                    <div className="score-title">Interventions</div>
-                    <div className="score-score">
-                      <strong>0</strong>
+                  </figcaption>
+                </figure>
+                }
+                })}
+              </div>
+              {topPerformers[0] &&
+              <div className="performance-scores-bottom">
+                <ul className="score_list completed">
+                  <li className="score-item">
+                    <div></div>
+                    <div className="score-caption">
+                      <div className="score-title">Encadrements</div>
+                      <div className="score-score">
+                        <strong>{topPerformers[0].encadrement}</strong>
+                      </div>
                     </div>
-                  </div>
-                </li>
-                <li className="score-item">
-                  <div></div>
-                  <div className="score-caption">
-                    <div className="score-title">Rdi</div>
-                    <div className="score-score">
-                      <strong>3</strong>
+                  </li>
+                  <li className="score-item">
+                    <div></div>
+                    <div className="score-caption">
+                      <div className="score-title">Interventions</div>
+                      <div className="score-score">
+                        <strong>{topPerformers[0].interventions}</strong>
+                      </div>
                     </div>
-                  </div>
-                </li>
-                <li className="score-item">
-                  <div></div>
-                  <div className="score-caption">
-                    <div className="score-title">Formations</div>
-                    <div className="score-score">
-                      <strong>4</strong>
+                  </li>
+                  <li className="score-item">
+                    <div></div>
+                    <div className="score-caption">
+                      <div className="score-title">Rdi</div>
+                      <div className="score-score">
+                        <strong>{topPerformers[0].rdi+topPerformers[0].reunion_rdi}</strong>
+                      </div>
                     </div>
-                  </div>
-                </li>
-                <li className="score-item">
-                  <div></div>
-                  <div className="score-caption">
-                    <div className="score-title">Services</div>
-                    <div className="score-score">
-                      <strong>2</strong>
+                  </li>
+                  <li className="score-item">
+                    <div></div>
+                    <div className="score-caption">
+                      <div className="score-title">Formations</div>
+                      <div className="score-score">
+                        <strong>{topPerformers[0].formation}</strong>
+                      </div>
                     </div>
-                  </div>
-                </li>
-               
-                
-               
-                <li className="score-item score-item-total">
-                  <div className="score-summary">
-                    <span>9</span>
-                  </div>
-                  <div className="total-caption">
-                    <div className="total-cat">
-                        Total
+                  </li>
+                  <li className="score-item">
+                    <div></div>
+                    <div className="score-caption">
+                      <div className="score-title">Services</div>
+                      <div className="score-score">
+                        <strong>{topPerformers[0].service}</strong>
+                      </div>
                     </div>
-                  </div>
-                </li>
-              </ul>
+                  </li>
+
+
+
+                  <li className="score-item score-item-total">
+                    <div className="score-summary">
+                      <span>{Number.parseFloat(topPerformers[0].score).toPrecision(4)}</span>
+                    </div>
+                    <div className="total-caption">
+                      <div className="total-cat">
+                        SCORE
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              }
             </div>
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 };
@@ -259,7 +279,7 @@ const ShowRevue = () => {
 export default ShowRevue;
 
 
-/* podium 
+/* podium
                 <div className="podium-item">
                   <div className="podium-base">
                   <div className="podium-rank">2</div>

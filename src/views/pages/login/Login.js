@@ -6,7 +6,8 @@ import { UserContext } from "utils/UserContext";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 //import useQuery from "../../components/custom/useQuery";
-
+import {fetchGroupUsers} from '../../../features/groupSlice';
+import { useDispatch } from 'react-redux'
 import {
   CButton,
   CCard,
@@ -111,6 +112,7 @@ function Logo() {
 }
 
 function Card(setUser) {
+  const dispatch = useDispatch();
   let query = useQuery();
   const mountedRef = useRef(true)
   const [isTokenValid, setIsTokenValid] = useState(false);
@@ -214,10 +216,12 @@ function Card(setUser) {
       username: values.email,
       password: values.password,
     });
-    const [user, error] = await queryApi("public/login", body, "POST");
-    if (user) {
-      setUser.setUser(user);
+    const [res, error] = await queryApi("public/login", body, "POST");
+    if (res) {
+      setUser.setUser(res.userView);
       setRenderError(false);
+      const groups =res.groupViews; 
+      groups.map((group) => {dispatch(fetchGroupUsers(group))});
     }
     if (error) {
       setRenderError(true);

@@ -30,6 +30,8 @@ import { LoaderSmall } from "../../../views/components/custom/Loaders";
 import { trackPromise} from 'react-promise-tracker';
 
 import { fetchImageFromService } from "../../../utils/getImage";
+import { useSelector } from 'react-redux'
+import {selectGroupRdi} from '../../../features/groupSlice';
 
 
 const Notifications = (props) => {
@@ -45,6 +47,21 @@ const Notifications = (props) => {
   const [searchInput, setSearchInput] = useState("");
   const [filtered, setFiltered] = useState(false);
   const [borderColor,setBorderColor] = useState(new Map());
+  const groupRDI = useSelector(selectGroupRdi);
+  const [createdUserId, setCreatedUserId] = useState("");
+
+  const convertUserfullNameToId = (groupRDI,searchInput) => {
+    let userids=[];
+    if(groupRDI){
+      let users = groupRDI.users;
+      users.map((user,index)=>{
+        if(user.fullName.toLowerCase().includes(searchInput)){
+          userids.push(user.id);
+        }
+      })
+    }
+    setCreatedUserId(userids[0]? userids[0]: "empty");
+  }
 
   const handleBorderColor = (read) => {
       if(read) return "none";
@@ -74,8 +91,9 @@ const Notifications = (props) => {
       return notifs;
     }
   }
+  useEffect(()=>{setCreatedUserId("");setSearchInput("")},[clicked])
 
-  useEffect(() => { setPageNumber(1);setNotifications([]) }, [sort,clicked])
+  useEffect(() => { setPageNumber(1);setNotifications([]) }, [sort,clicked,createdUserId])
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -90,10 +108,10 @@ const Notifications = (props) => {
           "user_id": user.id,
           "type": getClickedType(),
           "deleted" : getClickedDeleted(),
-          //"id_ens_creator" : "60cca063b036b51e8d33013a"
+          "id_ens_creator" : createdUserId
         },
       };
-
+      if(createdUserId == "empty") return;
       const [res, error] = await queryApi("notification/search", body, "POST");
       if (res) {
         if (pageNumber === 1) {
@@ -127,16 +145,18 @@ const Notifications = (props) => {
       }
     };
     trackPromise(fetchNotifications());
-  }, [pageNumber,sort,clicked]);
+  }, [pageNumber,sort,clicked,createdUserId]);
 
 
   const handleInputChange = (e) => {
     if (e.target.value == "") {
       setFiltered(false)
+      setCreatedUserId("");
     } else {
       setFiltered(true)
     }
     setSearchInput(e.target.value)
+    convertUserfullNameToId(groupRDI,e.target.value);
   }
 
 
@@ -163,6 +183,7 @@ const Notifications = (props) => {
   return (
     <CRow>
       <CCol lg="12" md="12" sm="12" xs="12" xl={notifications?.length>0 ? "4" : "12"} xxl={notifications?.length>0 ? "4" : "12"}>
+     {!clicked[3] && 
         <CInputGroup className="input-group-notification">
           <CInputGroupPrepend>
             <CButton
@@ -184,9 +205,9 @@ const Notifications = (props) => {
             onChange={e => handleInputChange(e)}
             className="shadow-sm bg-white rounded border-0 search-bar-notification"
             style={{ zIndex: 0 }}
-            disabled= {notifications?.length > 0? false : true}
+            //disabled= {notifications?.length > 0? false : true}
           />
-        </CInputGroup>
+        </CInputGroup>}
         <div className="scroll-notifs" id="notif-scroll" onScroll={e => handleScroll(e)}>
           {notifications?.map((notificatio, index) => (
             <CCard

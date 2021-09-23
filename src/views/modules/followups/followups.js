@@ -31,6 +31,8 @@ import { LoaderSmall } from "../../../views/components/custom/Loaders";
 import { trackPromise } from 'react-promise-tracker';
 
 import { fetchImageFromService } from "../../../utils/getImage";
+import { useSelector } from 'react-redux'
+import {selectGroupRdi} from '../../../features/groupSlice';
 
 
 const Followups = (props) => {
@@ -50,6 +52,21 @@ const Followups = (props) => {
   const [isAnswered, setIsAnswered] = useState("");
   const [isActive, setIsActive] = useState("");
   const [type, setType] = useState("");
+  const groupRDI = useSelector(selectGroupRdi);
+  const [createdUserId, setCreatedUserId] = useState("");
+
+  const convertUserfullNameToId = (groupRDI,searchInput) => {
+    let userids=[];
+    if(groupRDI){
+      let users = groupRDI.users;
+      users.map((user,index)=>{
+        if(user.fullName.toLowerCase().includes(searchInput)){
+          userids.push(user.id);
+        }
+      })
+    }
+    setCreatedUserId(userids[0]? userids[0]: "empty");
+  }
 
   /*const getClickedType = () => {
     if (clicked[1]) return "";
@@ -84,8 +101,6 @@ const Followups = (props) => {
     if (clicked[3]) {
       setType("encadrement");
       setIsActive("");
-      
-      
     }
     if (clicked[4]) {
       setType("");
@@ -94,6 +109,8 @@ const Followups = (props) => {
     setIsAnswered("");
     setRadiocheckedAnswered(true);
     setRadiocheckedActif(true);
+    setCreatedUserId("");
+    setSearchInput("");
 
   }, [clicked])
 
@@ -128,7 +145,7 @@ const Followups = (props) => {
     setIsAnswered(e.target.value)
   }
 
-  useEffect(() => { setPageNumber(1); setFollowups([]) }, [sort, isAnswered, isActive, type])
+  useEffect(() => { setPageNumber(1); setFollowups([]) }, [sort, isAnswered, isActive, type,createdUserId])
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -140,7 +157,7 @@ const Followups = (props) => {
           sort: sort
         },
         query: {
-          //"id_ens_creator": "60cca063b036b51e8d33013a",
+          "id_ens_creator": createdUserId,
           "user_id": user.id,
           "type": type,
           "deleted": false,
@@ -149,7 +166,7 @@ const Followups = (props) => {
 
         },
       };
-
+      if(createdUserId == "empty") return;
       const [res, error] = await queryApi("notification/followup/search", body, "POST");
       if (res) {
         if (pageNumber === 1) {
@@ -183,17 +200,19 @@ const Followups = (props) => {
       }
     };
     trackPromise(fetchNotifications());
-  }, [pageNumber, sort, isAnswered, isActive, type]);
+  }, [pageNumber, sort, isAnswered, isActive, type,createdUserId]);
 
 
 
   const handleInputChange = (e) => {
     if (e.target.value == "") {
       setFiltered(false)
+      setCreatedUserId("");
     } else {
       setFiltered(true)
     }
-    setSearchInput(e.target.value)
+    setSearchInput(e.target.value);
+    convertUserfullNameToId(groupRDI,e.target.value);
   }
 
 
@@ -221,7 +240,7 @@ const Followups = (props) => {
   return (
     <CRow>
       <CCol lg="12" md="12" sm="12" xs="12" xl={followups?.length > 0 ? "4" : "12"} xxl={followups?.length > 0 ? "4" : "12"}>
-        <CInputGroup className="input-group-notification">
+      {!clicked[3] &&  <CInputGroup className="input-group-notification">
           <CInputGroupPrepend>
             <CButton
               type="button"
@@ -243,7 +262,7 @@ const Followups = (props) => {
             className="shadow-sm bg-white rounded border-0 search-bar-followup"
             style={{ zIndex: 0 }}
           />
-        </CInputGroup>
+        </CInputGroup>}
         {(type == '' && clicked[1]) &&
           <div className="c-inline-block p-3 mt-2">
             <h5 className="font-size-14 mb-3 d-inline mr-2">Répondue: </h5>
