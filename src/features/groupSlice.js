@@ -16,12 +16,19 @@ const fetchimg = async (im) => {
 
 export const fetchGroupUsers = createAsyncThunk("groups/fetchUsers", async (group)=> {
     let users=group.users;
-    users.map(async(user,index) => {
-            const img = await fetchimg(user.image);
-            return { ...users[index], "image": img };
-    });
+    let new_users = [];
+    await Promise.all(users.map(async(user,index) => {
+            const new_user =  await fetchUserImage(user);
+            new_users.push(new_user);
+    }));
+    group.users=new_users;
     return group;
 })
+
+const fetchUserImage = async(user)  => {
+  const img = await fetchimg(user.image);
+  return {...user, "image" : img? img : ""}
+}
 
 
 

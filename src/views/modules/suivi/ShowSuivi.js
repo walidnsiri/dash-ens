@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CCard,
   CCardBody,
@@ -15,9 +15,13 @@ import {
   CChartBar,
 } from "@coreui/react-chartjs";
 import { CImg } from "@coreui/react";
-import avatar from "../../../assets/img/avatars/6.jpg";
+
+import avatar from "../../../assets/img/avatars/user.png";
 import { useSelector } from 'react-redux'
 import {selectGroupUP} from '../../../features/groupSlice';
+import ModalSelectEnseignant from "../../../views/components/custom/ModalSelectEnseignant";
+import ModalSuiviFilters from "../../../views/components/custom/ModalSuiviFilters";
+
 const options = {
   // tooltips: {
   //   enabled: false,
@@ -74,7 +78,7 @@ const line = {
 };
 
 const bar = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
+  labels: ["January", "February", "March", "April", "May", "June", "July","bnlabla"],
   datasets: [
     {
       label: "2021",
@@ -83,7 +87,7 @@ const bar = {
       borderWidth: 1,
       hoverBackgroundColor: "rgba(255,99,132,0.4)",
       hoverBorderColor: "rgba(255,99,132,1)",
-      data: [65, 59, 80, 81, 56, 55, 40],
+      data: [65, 59, 80, 81, 56, 55, 40,0,0],
     },
   ],
 };
@@ -109,11 +113,69 @@ const polar = {
   labels: ["Red", "Green", "Yellow", "Grey", "Blue"],
 };
 const ShowSuivi = () => {
-  const [chart, ] = useState("interventions");
+  const [chart, setChart] = useState("rdi");
   const groupUp = useSelector(selectGroupUP);
+  const [selectEnseignantModal,setSelectEnseignantModal] = useState({ show: false});
+  const [modalSuiviFilters,setModalSuiviFilters] = useState({ show: false});
+  const [periode,setPeriode] = useState("YEAR");
+  const [date,setDate] = useState(null);
+  
+  const [enseignant,SetEnseignant] = useState(groupUp?.users? groupUp?.users[0]: {});
+  
+
+  const handleEnseignantSelection= () => {
+    const onClose = () => {
+      setSelectEnseignantModal({ ...selectEnseignantModal, show: false });
+    };
+    const setEnseignant = (ens) => {
+      SetEnseignant(ens);
+    }
+    
+    setSelectEnseignantModal({
+      show:true,
+      users:groupUp?.users, 
+      onClose,
+      setEnseignant,
+      enseignant
+    })
+  }
+  const handleFilterSelection= () => {
+    const onClose = () => {
+      setModalSuiviFilters({ ...modalSuiviFilters, show: false });
+    };
+    const setPeriod = (periode) => {
+      setPeriode(periode);
+      setDate(null);
+    }
+    const setDat = (date) => {
+      setDate(date);
+      if(date = null){
+        setPeriode("YEAR")
+      }
+      
+    }
+    
+    setModalSuiviFilters({
+      show:true,
+      onClose,
+      setDat,
+      setPeriod,
+    })
+  }
+
+  useEffect(()=> {
+    console.log(periode);console.log(date)
+    //fetch performances
+    const fetchPerformances = async () => {}
+    fetchPerformances();
+
+},[enseignant,periode,date])
+
 
   return (
     <>
+  <ModalSelectEnseignant {...selectEnseignantModal}/>  
+  <ModalSuiviFilters {...modalSuiviFilters}/>
       <CRow>
         <CCol xs="12" sm="12" md="12" lg="12" xl="12">
           <CCard className="border-0 shadow-sm pb-1 card-backg">
@@ -124,23 +186,34 @@ const ShowSuivi = () => {
                     <div className="mr-4">
                       <div className="avatar-lg mr-4 mt-1">
                         <CImg
-                          src={avatar}
+                          src={enseignant?.image? enseignant?.image : avatar}
                           className="c-avatar-img"
                           alt="admin@bootstrapmaster.com"
                         />
                       </div>
                     </div>
                     <div className="left-button">
-                      <CButton className="bottons">
-                        C
+                    <CButton className="bottons" onClick={handleEnseignantSelection}>
+                        E
                       </CButton>
-                      <CButton className="buttonstyle">
-                          changer enseignant
+                      <CButton className="buttonstyle" onClick={handleEnseignantSelection}>
+                          Changer enseignant
+                      </CButton>
+                      </div>
+                      <div className="left-bot-button">
+                      <CButton className="bottons" onClick={handleFilterSelection}>
+                        F
+                      </CButton>
+                        <CButton className="buttonstyle" onClick={handleFilterSelection}>
+                          Changer les filtres
                       </CButton>
                     </div>
+
+
+
                     <div className="suivi-card-body-info">
                       <div className="mb-2">
-                        <h2 className="mt-1">Firas matoussi</h2>
+                        <h2 className="mt-1">{enseignant?.fullName}</h2>
                         <div className="d-inline-block">
                           <p>
                             <b>Grade:</b> Assistant Technologue
@@ -153,7 +226,7 @@ const ShowSuivi = () => {
                       </div>
                       <div>
                         <b>E-mail: </b>
-                        <b>user@esprit.tn</b>
+                        <b>{enseignant?.username}</b>
                       </div>
                     </div>
                   </div>
@@ -161,41 +234,41 @@ const ShowSuivi = () => {
               </CRow>
             </CCardBody>
             <ul className="list-group flex-md-row flex-md-wrap ul-suivi">
-              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0  border-top li-backg">
+              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0  border-top li-backg" onClick={e => setChart("rdi")}>
                 <CCallout color="danger d-inline-block mt-0">
                   <h6 className="mb-1">Production RDI</h6>
                   <strong className="h4 mb-0">12</strong>
                 </CCallout>
                 
               </li>
-              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top">
+              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => setChart("reunion")}>
                 <CCallout color="danger d-inline-block mt-0">
                   <h6 className="mb-1">Réunions RDI</h6>
                   <strong className="h4 mb-0">7</strong>
                 </CCallout>
               </li>
-              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top">
+              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => setChart("encadrement")}>
                 <CCallout color="danger d-inline-block mt-0">
                   <h6 className="mb-1">Encadrements</h6>
                   <strong className="h4 mb-0">2</strong>
                 </CCallout>
               </li>
 
-              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top">
+              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => setChart("formation")}>
                 <CCallout color="danger d-inline-block mt-0">
                   <h6 className="mb-1">Formations</h6>
                   <strong className="h4 mb-0">8</strong>
                 </CCallout>
               </li>
 
-              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top">
+              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => setChart("service")}>
                 <CCallout color="danger d-inline-block mt-0">
                   <h6 className="mb-1">Services</h6>
                   <strong className="h4 mb-0">8</strong>
                 </CCallout>
               </li>
 
-              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top">
+              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => setChart("interventions")}>
                 <CCallout color="danger d-inline-block mt-0">
                   <h6 className="mb-1">Interventions</h6>
                   <strong className="h4 mb-0">50</strong>
@@ -214,7 +287,7 @@ const ShowSuivi = () => {
                 {chart === "interventions" ? (
                   <>
                     <CCol md="12" xs="12" lg="6" xl="6">
-                      <h4 className="mb-5">Doughnut</h4>
+                      <h4 className="mb-5">{chart.toUpperCase()}</h4>
                       <div className="chart-wrapper chart-card">
                         <CChartDoughnut
                           datasets={doughnut.datasets}
@@ -225,7 +298,7 @@ const ShowSuivi = () => {
                       <hr />
                     </CCol>
                     <CCol md="12" xs="12" lg="6" xl="6">
-                      <h4 className="mb-5">Polar</h4>
+                      <h4 className="mb-5"><br/></h4>
                       <div className="chart-wrapper chart-card">
                         <CChartPolarArea
                           datasets={polar.datasets}
@@ -245,7 +318,7 @@ const ShowSuivi = () => {
                 ) : (
                   <>
                     <CCol md="12" xs="12" lg="6" xl="6">
-                      <h4 className="mb-5">Line</h4>
+                      <h4 className="mb-5">{chart.toUpperCase()}</h4>
                       <div className="chart-wrapper">
                         <CChartLine
                           datasets={line.datasets}
@@ -256,7 +329,7 @@ const ShowSuivi = () => {
                       <hr />
                     </CCol>
                     <CCol md="12" xs="12" lg="6" xl="6">
-                      <h4 className="mb-5">Bar</h4>
+                      <h4 className="mb-5"><br/></h4>
                       <div className="chart-wrapper">
                         <CChartBar
                           datasets={bar.datasets}

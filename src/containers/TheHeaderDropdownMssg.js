@@ -65,7 +65,7 @@ const TheHeaderDropdownMssg = () => {
     });
 
     client.activate();
-    if(notifications.length == 0) {dispatch(fetchNotifications());}
+    if( notifications?.length == 0) {dispatch(fetchNotifications());}
   },[])
 
   return (

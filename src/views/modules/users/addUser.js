@@ -96,10 +96,11 @@ const AddUsers = (props) => {
         "password": values.password,
         "fullName": values.fullname,
         "authorities": [values.role],
-        "up": JSON.parse(selectedteacher).up
+        "up": typeCompte == userRoles.ENS?JSON.parse(selectedteacher).up:""
       },
       file: values.files
     }
+    console.log(body)
     const [user, error] = await queryApi("user/register", body, 'POST', true);
     if (user) {
       setModal({ show: true, message: "L'utilisateur a été ajouté avec succès", type: 'success' });

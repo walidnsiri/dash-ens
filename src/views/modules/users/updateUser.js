@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CButton,
   CCard,
@@ -18,6 +18,7 @@ import {
 import { queryApi } from "../../../utils/queryApi";
 import Accept from "../../components/custom/Accept";
 import { userRoles } from "../../../enums/roles.enum";
+import { upEnum } from "../../../enums/up.enum";
 
 import { useHistory, useLocation } from "react-router-dom";
 import { useFormik } from "formik";
@@ -35,7 +36,8 @@ const updateUserSchema = Yup.object().shape({
 });
 
 const UpdateUsers = (props) => {
-  //const { user } = props;
+  const location = useLocation()
+  const { user } = location.state
   const [modal, setModal] = useState({
     show: false,
     message: "",
@@ -44,8 +46,22 @@ const UpdateUsers = (props) => {
   const history = useHistory();
   const [collapsed, setCollapsed] = useState(true);
   const [collapsed2, setCollapsed2] = useState(false);
-  const location = useLocation()
-  const { user } = location.state
+  const [typeCompte,setTypeCompte] = useState(user?.authorities[0].authority);
+  const [up,setUp] = useState("");
+  
+  
+  useEffect(()=>{
+    const GetUPGroupByUserId = async() => {
+      if(user){
+        const [res, error] = await queryApi("group/GetUPGroupByUserId/"+user.id, null, 'GET');
+        if(res){
+          setUp(res.up);
+        }else {setUp("");}
+      }
+    }
+      GetUPGroupByUserId();
+  },[]);
+
   const handleCancel = () => {
     history.push("/user");
   };
@@ -55,6 +71,7 @@ const UpdateUsers = (props) => {
     role: user?.authorities[0].authority ? user.authorities[0].authority : "",
     enabled: user?.enabled ? user.enabled : false,
     files: [],
+    up: up
   };
 
   const updateUser = async function (values) {
@@ -64,7 +81,8 @@ const UpdateUsers = (props) => {
         password: values.password,
         fullName: values.fullname,
         authorities: [values.role],
-        enabled: values.enabled
+        enabled: values.enabled,
+        up: values.up
       },
       file: values.files,
     };
@@ -81,6 +99,7 @@ const UpdateUsers = (props) => {
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: updateUserSchema,
+    enableReinitialize: true,
     onSubmit: (values) => {
         updateUser(values);
     },
@@ -159,14 +178,25 @@ const UpdateUsers = (props) => {
                         id="select"
                         value={formik.values.role}
                         onChange={formik.handleChange}
+                        
                       >
                         <option value="">Veuillez choisir le role</option>
+                        {typeCompte==userRoles.USER_ADMIN &&
+                          <option value={userRoles.USER_ADMIN}>Admin</option>
+                        }
+                        {(typeCompte == userRoles.ENS_UP || typeCompte == userRoles.ENS || typeCompte == userRoles.ENS_CHEF )&&
+                        <>
                         <option value={userRoles.ENS_CHEF}>
                           Chef de département
                         </option>
                         <option value={userRoles.ENS_UP}>Enseignant cup</option>
                         <option value={userRoles.ENS}>Enseignant</option>
-                        <option value={userRoles.USER_ADMIN}>Admin</option>
+                        </>
+                        }
+                        {typeCompte==userRoles.DSI &&
+                          <option value={userRoles.DSI}>DSI</option>
+                        }
+                        
                       </CSelect>
                       {formik.errors.role && formik.touched.role ? (
                         <CFormText>
@@ -219,6 +249,29 @@ const UpdateUsers = (props) => {
                         onChange={() => formik.setFieldValue("enabled", !formik.values.enabled)}
                       />
                     </CFormGroup>}
+                    {(formik.values.role == userRoles.ENS_UP || formik.values.role == userRoles.ENS_CHEF || formik.values.role == userRoles.ENS) && 
+                    <CFormGroup>
+                      <CLabel htmlFor="up">
+                        <em>UP*</em>
+                      </CLabel>
+                      <CSelect
+                        custom
+                        name="up"
+                        id="select"
+                        value={formik.values.up}
+                        onChange={formik.handleChange} 
+                      >
+                        <option value="">Veuillez choisir l'up</option>
+                        {Object.keys(upEnum).map((key,val)=>{
+                          return <option value={key}>{key}</option>
+                        })}
+                        
+                      </CSelect>
+                        <CFormText>
+                          L'up de l'utilisateur à modifier
+                        </CFormText>
+                    </CFormGroup>
+                    }
                   </CCol>
                 </CRow>
                 <div className="form-actions">

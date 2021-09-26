@@ -277,15 +277,3 @@ const ShowRevue = () => {
 };
 
 export default ShowRevue;
-
-
-/* podium
-                <div className="podium-item">
-                  <div className="podium-base">
-                  <div className="podium-rank">2</div>
-                  <div className="podium-info">
-                    <div className="podium-name">Firas Matoussi</div>
-                    <div className="podium-score">150</div>
-                  </div>
-                  </div>
-                </div>*/

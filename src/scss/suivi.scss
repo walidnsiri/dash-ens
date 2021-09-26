@@ -20,7 +20,25 @@
             box-shadow: 0 3px 5px 1px rgba(105, 41, 41, 0.2);
         }
     }
+    .left-bot-button {
+        float: right;
+        position: absolute;
+        right: 15px;
+        bottom: 50px;
+        font-size: 15px;
+        
+        .bottons{ display:none; }
+        
+        .buttonstyle {
+            background: $danger;
+            color: white;
+            border-radius: 20px;
+            box-sizing: border-box;
+            box-shadow: 0 3px 5px 1px rgba(105, 41, 41, 0.2);
+        }
     }
+    }
+
 
     @media screen and (max-width: 600px) {
         .left-button {
@@ -39,7 +57,24 @@
                display: none;
             }
         }
+        .left-bot-button {
+            float: right;
+            position: absolute;
+            right: 10px;
+            bottom: 80px;
+            font-size: 15px;
+            
+            .bottons{ background: $danger;
+                color: white;;
+                border-radius: 20px;
+                box-sizing: border-box;
+                box-shadow: 0 3px 5px 1px rgba(105, 41, 41, 0.2); }
+            
+            .buttonstyle {
+               display: none;
+            }
         }
+    }
 
     .avatar-lg {
         width: 6rem !important;

@@ -413,3 +413,17 @@ border-radius: 10px;
 -webkit-box-shadow: inset 0 0 6px #e74c3c;
 background-color: #e74c3c;
 }
+
+
+
+//add production css
+.scroll-ens{
+  padding: 10px;
+  float: left;
+  max-height: 400px;
+  width: 100%;
+  background: #ffffff;
+  overflow-y: scroll;
+  margin-bottom: 25px;
+  direction: rtl;
+}
