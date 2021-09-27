@@ -18,6 +18,7 @@ const TheLayout = React.lazy(() => import("./containers/TheLayout"));
 
 // Pages
 const Login = React.lazy(() => import("./views/pages/login/Login"));
+const ShowGroups = React.lazy(() => import("./views/modules/groups/showGroups"));
 //const Register = React.lazy(() => import("./views/pages/register/Register"));
 //const Page404 = React.lazy(() => import("./views/pages/page404/Page404"));
 //const Page500 = React.lazy(() => import("./views/pages/page500/Page500"));
@@ -64,6 +65,11 @@ export default function App() {
               exact path="/"
               name="Login Page"
               render={(props) => <Login {...props} />}
+            />
+            <Route
+              exact path="/groups"
+              name="Group"
+              render={(props) => <ShowGroups {...props} />}
             />
           </UserContext.Provider>
         </Switch>

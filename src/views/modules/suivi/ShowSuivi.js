@@ -21,6 +21,7 @@ import { useSelector } from 'react-redux'
 import {selectGroupUP} from '../../../features/groupSlice';
 import ModalSelectEnseignant from "../../../views/components/custom/ModalSelectEnseignant";
 import ModalSuiviFilters from "../../../views/components/custom/ModalSuiviFilters";
+import { queryApi } from "../../../utils/queryApi";
 
 const options = {
   // tooltips: {
@@ -166,7 +167,16 @@ const ShowSuivi = () => {
   useEffect(()=> {
     console.log(periode);console.log(date)
     //fetch performances
-    const fetchPerformances = async () => {}
+    const fetchPerformances = async () => {
+      const body = {
+          "periode" : periode,
+          "id_ens"  : enseignant.id_ens,
+      }
+      const [res, error] = await queryApi("performance/summary", body, "POST");
+      if(res){
+        
+      }
+    }
     fetchPerformances();
 
 },[enseignant,periode,date])

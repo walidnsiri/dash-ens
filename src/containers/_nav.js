@@ -27,6 +27,19 @@ const items = [
     ],
   },
   {
+    _tag: "CSidebarNavDropdown",
+    name: "Groupes",
+    to: "/groups",
+    icon: "cil-drop",
+    _children: [
+      {
+        _tag: "CSidebarNavItem",
+        name: "Afficher",
+        to: "/groups",
+      },
+    ],
+  },
+  {
     _tag: "CSidebarNavTitle",
     _children: ["Gestions"],
   },

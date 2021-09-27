@@ -37,6 +37,9 @@ const notificationDetails = React.lazy(() => import('./views/modules/notificatio
 //Followups
 const showFollowups = React.lazy(() => import('./views/modules/followups/showFollowup'));
 
+//Groups
+const showGroups = React.lazy(() => import('./views/modules/groups/showGroups'));
+
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -59,6 +62,7 @@ const routes = [
   { path: '/notifications', name: 'Notifications', component: showNotifications },
   { path: '/notifications/details', name: 'détails de la notification', component: notificationDetails },
   { path: '/followups', name: 'Notification de Suivi', component: showFollowups },
+  { path: '/groups', name: 'Groupes', component: showGroups },
 ];
 
 export default routes;
