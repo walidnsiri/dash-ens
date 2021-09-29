@@ -137,7 +137,7 @@ const ModalAddGroup = (props) => {
                                 </CFormGroup>
                                 }
                             <div className="scroll-ens">
-                                <CheckboxCardMultiple users={users} setEnseignant={setens} enseignant={enseignant} />
+                                <CheckboxCardMultiple users={users} setEnseignant={setens} enseignant={enseignant} checkboxgrid="gridCheckbox"/>
                             </div>
                         </div>
 

@@ -1,21 +1,64 @@
 import React, { useState, useEffect } from "react";
 
 import avatar from "../../../assets/img/avatars/user.png";
+import {
+    CCol,
+    CAlert,
+} from "@coreui/react";
 
 const CheckboxCardMultiple = (props) => {
 
-    const {users,setEnseignant,enseignant} = props;
-    const [ens,setEns] = useState({});
+    const {users,setEnseignant,enseignant,checkboxgrid,setFilterUsersCombines,type} = props;
+    const [userse,setUserse] = useState([]);
+    const [selectedUsers,setSelectedUsers] = useState([]);
 
-    useEffect(()=>{
-        setEns(enseignant);
-    },[enseignant])
+    const setUsers = (users) => {
+        if(setFilterUsersCombines){
+        setFilterUsersCombines(users);
+        }
+    }
+
+    useEffect(() => {
+        if(type == "added"){setSelectedUsers(users)}
+        setUserse(users)
+      }, [users])
+    
+    
+    const handleUserSelect = (e,user) => {
+        setTimeout(()=>{
+            const u = selectedUsers.filter(u => u.id === user.id);
+            if(u.length > 0){
+                const us = selectedUsers.filter(u => u.id !== user.id);
+                setSelectedUsers([...us]);
+                if(us.length > 0){
+                    setUsers([...us]);
+                }
+                if(us.length == 0){
+                    setUsers([user]);
+                }
+            }
+            if(u.length == 0){
+                if(selectedUsers.length == 0){
+                    setSelectedUsers([user]);
+                    setUsers([user]);
+                }
+                else {
+                    setSelectedUsers([...selectedUsers, user]);
+                    setUsers([...selectedUsers,user]);
+                }
+            }
+        },200)
+    }
+
+
+
     return (
     <>
-        <div className="gridCheckbox" >
-            {users?.map((user,index) => {
-            return <label key={index} className="checkboxcard" style={{marginRight:"10px"}} onClick={e=>{setEnseignant(user);setEns(user)}} >
-                <input className="checkboxcard__input" type="checkbox" checked={user == ens? true: false} onChange={e=>setEns(user)}/>
+    {userse?.length >0 ? 
+        <div className={checkboxgrid} >
+            {userse?.map((user,index) => {
+            return <label key={index*Math.random(10)} className="checkboxcard" style={{marginRight:"10px"}} onClick={e => handleUserSelect(e,user)} >
+                <input className="checkboxcard__input" type="checkbox" checked={selectedUsers.includes(user)? true: false} onChange={e=>{}}/>
                 <div className="checkboxcard__body">
                     <div className="checkboxcard__body-cover"><img className="checkboxcard__body-cover-image" src={user?.image? user?.image : avatar} /><span className="checkboxcard__body-cover-checkbox">
                         <svg className="checkboxcard__body-cover-checkbox--svg" viewBox="0 0 12 10">
@@ -23,12 +66,18 @@ const CheckboxCardMultiple = (props) => {
                         </svg></span></div>
                     <header className="checkboxcard__body-header">
                         <h2 className="checkboxcard__body-header-title">{user?.fullName}</h2>
-                        <p className="checkboxcard__body-header-subtitle">{user?.authorities[0].authority}</p>
+                        <p className="checkboxcard__body-header-subtitle">{user?.authorities[0]?.authority? user?.authorities[0]?.authority : ""}</p>
                     </header>
                 </div>
             </label>
             })}
         </div>
+    :<CCol sm="12" xl="12" xs="12" md="12" style={{ paddingTop: "4%" }}>
+    <CAlert color="warning" className="h-100">
+        Pas de d'utilisateurs non assignées trouvés.
+    </CAlert>
+</CCol>
+    }
     </>
     )
 }

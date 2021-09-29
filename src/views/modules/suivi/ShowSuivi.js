@@ -18,7 +18,7 @@ import { CImg } from "@coreui/react";
 
 import avatar from "../../../assets/img/avatars/user.png";
 import { useSelector } from 'react-redux'
-import {selectGroupUP} from '../../../features/groupSlice';
+import { selectGroupUP } from '../../../features/groupSlice';
 import ModalSelectEnseignant from "../../../views/components/custom/ModalSelectEnseignant";
 import ModalSuiviFilters from "../../../views/components/custom/ModalSuiviFilters";
 import { queryApi } from "../../../utils/queryApi";
@@ -30,68 +30,75 @@ const options = {
   // },
   maintainAspectRatio: false,
 };
-const line = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
-  datasets: [
-    {
-      label: "2020",
-      fill: false,
-      lineTension: 0.1,
-      backgroundColor: "rgba(75,192,192,0.4)",
-      borderColor: "rgba(75,192,192,1)",
-      borderCapStyle: "butt",
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: "miter",
-      pointBorderColor: "rgba(75,192,192,1)",
-      pointBackgroundColor: "#fff",
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: "rgba(75,192,192,1)",
-      pointHoverBorderColor: "rgba(220,220,220,1)",
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      data: [65, 59, 80, 81, 56, 55, 40],
-    },
-    {
-      label: "2021",
-      fill: false,
-      lineTension: 0.1,
-      backgroundColor: "rgba(75,192,192,0.4)",
-      borderColor: "rgba(75,192,192,1)",
-      borderCapStyle: "butt",
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: "miter",
-      pointBorderColor: "rgba(75,192,192,1)",
-      pointBackgroundColor: "#fff",
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: "rgba(75,192,192,1)",
-      pointHoverBorderColor: "rgba(220,220,220,1)",
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      data: [12, 50, 86, 91, 21, 75, 30],
-    },
-  ],
-};
 
-const bar = {
-  labels: ["January", "February", "March", "April", "May", "June", "July","bnlabla"],
-  datasets: [
-    {
-      label: "2021",
-      backgroundColor: "rgba(255,99,132,0.2)",
-      borderColor: "rgba(255,99,132,1)",
-      borderWidth: 1,
-      hoverBackgroundColor: "rgba(255,99,132,0.4)",
-      hoverBorderColor: "rgba(255,99,132,1)",
-      data: [65, 59, 80, 81, 56, 55, 40,0,0],
-    },
-  ],
-};
+const Line = (labels,event) => {
+  const line = {
+    labels: labels,
+    datasets: [
+      {
+        label: event[0]?.label,
+        fill: false,
+        lineTension: 0.1,
+        backgroundColor: "rgba(75,192,192,0.4)",
+        borderColor: "red",
+        borderCapStyle: "butt",
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderJoinStyle: "miter",
+        pointBorderColor: "red",
+        pointBackgroundColor: "#fff",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "red",
+        pointHoverBorderColor: "red",
+        pointHoverBorderWidth: 2,
+        pointRadius: 1,
+        pointHitRadius: 10,
+        data: event[0]?.data_points,
+      },
+      {
+        label: event[1]?.label,
+        fill: false,
+        lineTension: 0.1,
+        backgroundColor: "rgba(75,192,192,0.4)",
+        borderColor: "rgba(75,192,192,1)",
+        borderCapStyle: "butt",
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderJoinStyle: "miter",
+        pointBorderColor: "rgba(75,192,192,1)",
+        pointBackgroundColor: "#fff",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "rgba(75,192,192,1)",
+        pointHoverBorderColor: "rgba(220,220,220,1)",
+        pointHoverBorderWidth: 2,
+        pointRadius: 1,
+        pointHitRadius: 10,
+        data: event[1]?.data_points,
+      },
+    ],
+  };
+  return line;
+}
+
+const Bar = (labels,event) => {
+  const bar = {
+    labels: labels,
+    datasets: [
+      {
+        label: event[0]?.label,
+        backgroundColor: "rgba(255,99,132,0.2)",
+        borderColor: "rgba(255,99,132,1)",
+        borderWidth: 1,
+        hoverBackgroundColor: "rgba(255,99,132,0.4)",
+        hoverBorderColor: "rgba(255,99,132,1)",
+        data: event[0]?.data_points,
+      },
+    ],
+  };
+  return bar;
+}
 
 const doughnut = {
   labels: ["Red", "Green", "Yellow"],
@@ -116,31 +123,38 @@ const polar = {
 const ShowSuivi = () => {
   const [chart, setChart] = useState("rdi");
   const groupUp = useSelector(selectGroupUP);
-  const [selectEnseignantModal,setSelectEnseignantModal] = useState({ show: false});
-  const [modalSuiviFilters,setModalSuiviFilters] = useState({ show: false});
-  const [periode,setPeriode] = useState("YEAR");
-  const [date,setDate] = useState(null);
-  
-  const [enseignant,SetEnseignant] = useState(groupUp?.users? groupUp?.users[0]: {});
-  
+  const [selectEnseignantModal, setSelectEnseignantModal] = useState({ show: false });
+  const [modalSuiviFilters, setModalSuiviFilters] = useState({ show: false });
+  const [periode, setPeriode] = useState("YEAR");
+  const [date, setDate] = useState(null);
+  const [labels,setLabels] = useState([]);
+  const [event, setEvent] = useState({});
+  const [keys,setKeys] = useState({});
+  const [ensRecordsCounted,setEnsRecordsCounted] = useState({});
+  const [line,setLine] = useState({});
+  const [bar,setBar] = useState({});
 
-  const handleEnseignantSelection= () => {
+  const [enseignant, SetEnseignant] = useState(groupUp?.users ? groupUp?.users[0] : {});
+
+
+  const handleEnseignantSelection = () => {
     const onClose = () => {
       setSelectEnseignantModal({ ...selectEnseignantModal, show: false });
     };
+    
     const setEnseignant = (ens) => {
       SetEnseignant(ens);
     }
-    
+
     setSelectEnseignantModal({
-      show:true,
-      users:groupUp?.users, 
+      show: true,
+      users: groupUp?.users,
       onClose,
       setEnseignant,
       enseignant
     })
   }
-  const handleFilterSelection= () => {
+  const handleFilterSelection = () => {
     const onClose = () => {
       setModalSuiviFilters({ ...modalSuiviFilters, show: false });
     };
@@ -150,42 +164,70 @@ const ShowSuivi = () => {
     }
     const setDat = (date) => {
       setDate(date);
-      if(date = null){
+      if (date = null) {
         setPeriode("YEAR")
       }
-      
+
     }
-    
+
     setModalSuiviFilters({
-      show:true,
+      show: true,
       onClose,
       setDat,
       setPeriod,
     })
   }
 
-  useEffect(()=> {
-    console.log(periode);console.log(date)
+  const LabelUpdate = () => {
+      if(periode == "YEAR"){
+        const labels= ["January", "February", "March", "April", "May", "June", "July", "bnlabla"]; 
+        setLabels(labels);
+      }
+      if(periode == "MONTH"){
+        const labels= ["Semaine 1", "Semaine 2", "Semaine 3", "Semaine 4", "Semaine 5", "Semaine 6"];
+        setLabels(labels);
+      }
+      if(periode == "WEEK"){
+        const labels= ["Lundi", "Mardi", "Mercredi", "Jeudi", "Venredi", "Samedi", "Dimanche"];
+        setLabels(labels);
+      }
+  }
+
+  useEffect(() => {
     //fetch performances
     const fetchPerformances = async () => {
       const body = {
-          "periode" : periode,
-          "id_ens"  : enseignant.id_ens,
+        "periode": periode,
+        "id_ens" : "60cca063b036b51e8d33013a"
+        //"id_ens": enseignant.id
       }
       const [res, error] = await queryApi("performance/summary", body, "POST");
-      if(res){
-        
+      if (res) {
+          setKeys(res.keys);
+          setEnsRecordsCounted(res.ensRecordsCounted);
+          setEvent(res.keys.rdi);
       }
     }
-    fetchPerformances();
+    if (enseignant && periode != "") {
+      LabelUpdate();
+      fetchPerformances();
+    }
 
-},[enseignant,periode,date])
+  }, [enseignant, periode, date])
 
-
+  useEffect(()=>{
+    const line = Line(labels,event);
+    const bar = Bar(labels,event);
+    console.log(line);
+    console.log(bar);
+    setLine(line);
+    setBar(bar);
+  },[event]);
+  
   return (
     <>
-  <ModalSelectEnseignant {...selectEnseignantModal}/>  
-  <ModalSuiviFilters {...modalSuiviFilters}/>
+      <ModalSelectEnseignant {...selectEnseignantModal} />
+      <ModalSuiviFilters {...modalSuiviFilters} />
       <CRow>
         <CCol xs="12" sm="12" md="12" lg="12" xl="12">
           <CCard className="border-0 shadow-sm pb-1 card-backg">
@@ -196,26 +238,26 @@ const ShowSuivi = () => {
                     <div className="mr-4">
                       <div className="avatar-lg mr-4 mt-1">
                         <CImg
-                          src={enseignant?.image? enseignant?.image : avatar}
+                          src={enseignant?.image ? enseignant?.image : avatar}
                           className="c-avatar-img"
                           alt="admin@bootstrapmaster.com"
                         />
                       </div>
                     </div>
                     <div className="left-button">
-                    <CButton className="bottons" onClick={handleEnseignantSelection}>
+                      <CButton className="bottons" onClick={handleEnseignantSelection}>
                         E
                       </CButton>
                       <CButton className="buttonstyle" onClick={handleEnseignantSelection}>
-                          Changer enseignant
+                        Changer enseignant
                       </CButton>
-                      </div>
-                      <div className="left-bot-button">
+                    </div>
+                    <div className="left-bot-button">
                       <CButton className="bottons" onClick={handleFilterSelection}>
                         F
                       </CButton>
-                        <CButton className="buttonstyle" onClick={handleFilterSelection}>
-                          Changer les filtres
+                      <CButton className="buttonstyle" onClick={handleFilterSelection}>
+                        Changer les filtres
                       </CButton>
                     </div>
 
@@ -244,44 +286,44 @@ const ShowSuivi = () => {
               </CRow>
             </CCardBody>
             <ul className="list-group flex-md-row flex-md-wrap ul-suivi">
-              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0  border-top li-backg" onClick={e => setChart("rdi")}>
+              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0  border-top li-backg" onClick={e => {setChart("rdi");setEvent(keys.rdi)}}>
                 <CCallout color="danger d-inline-block mt-0">
                   <h6 className="mb-1">Production RDI</h6>
-                  <strong className="h4 mb-0">12</strong>
+                  <strong className="h4 mb-0">{ensRecordsCounted?.rdi}</strong>
                 </CCallout>
-                
+
               </li>
-              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => setChart("reunion")}>
+              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => {setChart("reunion");setEvent(keys.reunion)}}>
                 <CCallout color="danger d-inline-block mt-0">
                   <h6 className="mb-1">Réunions RDI</h6>
-                  <strong className="h4 mb-0">7</strong>
+                  <strong className="h4 mb-0">{ensRecordsCounted?.reunion}</strong>
                 </CCallout>
               </li>
-              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => setChart("encadrement")}>
+              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => {setChart("encadrement");setEvent(keys.encadrement)}}>
                 <CCallout color="danger d-inline-block mt-0">
                   <h6 className="mb-1">Encadrements</h6>
-                  <strong className="h4 mb-0">2</strong>
+                  <strong className="h4 mb-0">{ensRecordsCounted?.encadrement}</strong>
                 </CCallout>
               </li>
 
-              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => setChart("formation")}>
+              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => {setChart("formation");setEvent(keys.formation)}}>
                 <CCallout color="danger d-inline-block mt-0">
                   <h6 className="mb-1">Formations</h6>
-                  <strong className="h4 mb-0">8</strong>
+                  <strong className="h4 mb-0">{ensRecordsCounted?.formation}</strong>
                 </CCallout>
               </li>
 
-              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => setChart("service")}>
+              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => {setChart("service");setEvent(keys.service)}}>
                 <CCallout color="danger d-inline-block mt-0">
                   <h6 className="mb-1">Services</h6>
-                  <strong className="h4 mb-0">8</strong>
+                  <strong className="h4 mb-0">{ensRecordsCounted?.service}</strong>
                 </CCallout>
               </li>
 
-              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => setChart("interventions")}>
+              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => {setChart("interventions");setEvent(keys.interventions)}}>
                 <CCallout color="danger d-inline-block mt-0">
                   <h6 className="mb-1">Interventions</h6>
-                  <strong className="h4 mb-0">50</strong>
+                  <strong className="h4 mb-0">{ensRecordsCounted?.interventions}</strong>
                 </CCallout>
               </li>
             </ul>
@@ -308,7 +350,7 @@ const ShowSuivi = () => {
                       <hr />
                     </CCol>
                     <CCol md="12" xs="12" lg="6" xl="6">
-                      <h4 className="mb-5"><br/></h4>
+                      <h4 className="mb-5"><br /></h4>
                       <div className="chart-wrapper chart-card">
                         <CChartPolarArea
                           datasets={polar.datasets}
@@ -339,7 +381,7 @@ const ShowSuivi = () => {
                       <hr />
                     </CCol>
                     <CCol md="12" xs="12" lg="6" xl="6">
-                      <h4 className="mb-5"><br/></h4>
+                      <h4 className="mb-5"><br /></h4>
                       <div className="chart-wrapper">
                         <CChartBar
                           datasets={bar.datasets}
