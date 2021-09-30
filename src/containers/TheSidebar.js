@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   CCreateElement,
@@ -17,9 +17,11 @@ import logo from "../assets/img/brand/logo-esprit.svg"
 import sygnet from "../assets/img/brand/sygnet.svg"
 import {setsidebar,selectSidebar} from '../features/sidebarShow';
 // sidebar nav config
-import navigation from './_nav'
+import {getItems} from './_nav'
+import { UserContext } from "../utils/UserContext";
 
 const TheSidebar = () => {
+  const [user,] = useContext(UserContext);
   const dispatch = useDispatch()
   const show = useSelector(selectSidebar)
   
@@ -46,7 +48,7 @@ const TheSidebar = () => {
       <CSidebarNav>
 
         <CCreateElement
-          items={navigation}
+          items={getItems(user)}
           components={{
             CSidebarNavDivider,
             CSidebarNavDropdown,

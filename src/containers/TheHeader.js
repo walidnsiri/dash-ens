@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   CHeader,
@@ -14,11 +14,12 @@ import {
 import CIcon from "@coreui/icons-react";
 import logo from "../assets/img/brand/logo-esprit.svg"
 // routes config
-import routes from "../routes";
+import {getRoutes} from "../routes";
 import { setsidebar, selectSidebar } from '../features/sidebarShow';
-
+import { UserContext } from "../utils/UserContext";
 import { useLocation, matchPath } from "react-router-dom";
-
+import {hasRole} from "../utils/user";
+import {userRoles} from "../enums/roles.enum";
 import {
   TheHeaderDropdown,
   TheHeaderDropdownMssg,
@@ -26,6 +27,7 @@ import {
 } from "./index";
 
 const TheHeader = () => {
+  const [user,] = useContext(UserContext);
   const dispatch = useDispatch();
   const sidebarShow = useSelector(selectSidebar);
   const currPath = useLocation().pathname;
@@ -57,6 +59,7 @@ const TheHeader = () => {
   }
 
   useEffect(() => {
+    const routes = getRoutes(user); 
     if (routes) {
       const paths = getPaths(currPath)
       const currRoutes = paths.map(path => {
@@ -66,7 +69,7 @@ const TheHeader = () => {
         }))
       }).filter(route => route)
       let { [Object.keys(currRoutes).pop()]: lastRoute } = currRoutes;
-      setlastRouteName(lastRoute.name);
+      if(lastRoute) setlastRouteName(lastRoute.name);
     }
 
   }, [currPath])
@@ -90,15 +93,19 @@ const TheHeader = () => {
         </CHeaderBrand>
 
         <CHeaderNav className="d-md-down-none mr-auto">
-          <CHeaderNavItem className="px-3">
+        { (!hasRole(user,userRoles.USER_ADMIN) &&  !hasRole(user,userRoles.DSI)) && 
+        <CHeaderNavItem className="px-3">
             <CHeaderNavLink to="/dashboard">Dashboard</CHeaderNavLink>
           </CHeaderNavItem>
-
+        }
         </CHeaderNav>
 
         <CHeaderNav className="px-3">
+        { (!hasRole(user,userRoles.USER_ADMIN) &&  !hasRole(user,userRoles.DSI)) && 
+          <>
           <TheHeaderDropdownFollowup />
           <TheHeaderDropdownMssg />
+          </>}
           <TheHeaderDropdown />
         </CHeaderNav>
       </CHeader>
@@ -114,7 +121,7 @@ const TheHeader = () => {
         <CCol lg="3" xs="3" md="3" sm="3" className="ml-auto mr-5 mt-2">
           <CBreadcrumbRouter
             className="float-right"
-            routes={routes}
+            routes={getRoutes(user)}
           />
         </CCol>
       </CRow>

@@ -1,10 +1,6 @@
 import React from 'react';
-
-
-const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'));
-
-
-
+import {hasRole} from "./utils/user";
+import {userRoles} from "./enums/roles.enum";
 
 // User routes
 const showUsers = React.lazy(() => import('./views/modules/users/showUsers'));
@@ -25,11 +21,6 @@ const reunionRdi = React.lazy(() => import('./views/modules/rdi/reunion/showReun
 const addreunionRdi = React.lazy(() => import('./views/modules/rdi/reunion/addReunion'));
 const updateReunionRdi = React.lazy(() => import('./views/modules/rdi/reunion/updateReunion'));
 
-//icons
-const CoreUIIcons = React.lazy(() => import('./views/icons/coreui-icons/CoreUIIcons'));
-const Flags = React.lazy(() => import('./views/icons/flags/Flags'));
-const Brands = React.lazy(() => import('./views/icons/brands/Brands'));
-
 //Notifications
 const showNotifications = React.lazy(() => import('./views/modules/notifications/showNotification'));
 const notificationDetails = React.lazy(() => import('./views/modules/notifications/notificationDetails'));
@@ -40,29 +31,45 @@ const showFollowups = React.lazy(() => import('./views/modules/followups/showFol
 //Groups
 const showGroups = React.lazy(() => import('./views/modules/groups/showGroups'));
 
-
-const routes = [
-  { path: '/', exact: true, name: 'Home' },
-  { path: '/dashboard', name: 'Dashboard', component: Dashboard },
-  { path: '/user', exact: true,  name: 'Utilisateurs', component: showUsers },
-  { path: '/user/add', exact: true, name: 'Ajouter utilisateur', component: addUsers },
-  { path: '/user/update', exact: true, name: 'Modifier utilisateur', component: updateUsers },
-  { path: '/suivi', name: 'Suivi', component: Suivi },
-  { path: '/revue', name: 'revue', component: revue },
-  { path: '/rdi/production', name: 'Production Rdi', component: productionRdi },
-  { path: '/productionRdi/add', name: 'Ajouter Production Rdi', component: addproductionRdi },
-  { path: '/productionRdi/edit', name: 'Modifier Production Rdi', component: updateproductionRdi },
-  { path: '/reunion', name: 'Réunion Rdi', component: reunionRdi },
-  { path: '/reunionRdi/add', name: 'Ajouter Réunion Rdi', component: addreunionRdi },
-  { path: '/reunionRdi/edit', name: 'Modifier Réunion Rdi', component: updateReunionRdi },
-  { path: '/icons', exact: true, name: 'Icons', component: CoreUIIcons },
-  { path: '/icons/coreui-icons', name: 'CoreUI Icons', component: CoreUIIcons },
-  { path: '/icons/flags', name: 'Flags', component: Flags },
-  { path: '/icons/brands', name: 'Brands', component: Brands },
+export const getRoutes = (user) => {
+  const routes = [];
+  //admin routes
+  if(hasRole(user,userRoles.USER_ADMIN)){
+    routes.push(
+    { path: '/user', exact: true,  name: 'Utilisateurs', component: showUsers },
+    { path: '/user/add', exact: true, name: 'Ajouter utilisateur', component: addUsers },
+    { path: '/user/update', exact: true, name: 'Modifier utilisateur', component: updateUsers },
+    { path: '/groups', name: 'Groupes', component: showGroups },
+    );
+  }
+  //cup or dsi
+  if(!hasRole(user,userRoles.USER_ADMIN)){
+    routes.push( { path: '/revue', name: 'Dashboard', component: revue },)
+  }
+  //all except admin
+  if(!hasRole(user,userRoles.USER_ADMIN)){
+    routes.push(
+    { path: '/suivi', name: 'Suivi', component: Suivi },
+    { path: '/rdi/production', name: 'Production Rdi', component: productionRdi },
+    { path: '/productionRdi/add', name: 'Ajouter Production Rdi', component: addproductionRdi },
+    { path: '/productionRdi/edit', name: 'Modifier Production Rdi', component: updateproductionRdi },
+    { path: '/reunion', name: 'Réunion Rdi', component: reunionRdi },
+    { path: '/reunionRdi/add', name: 'Ajouter Réunion Rdi', component: addreunionRdi },
+    { path: '/reunionRdi/edit', name: 'Modifier Réunion Rdi', component: updateReunionRdi },)
+  }
+  //all except admin and dsi
+  if(!hasRole(user,userRoles.USER_ADMIN) && !hasRole(user,userRoles.DSI)){
+  routes.push(
   { path: '/notifications', name: 'Notifications', component: showNotifications },
   { path: '/notifications/details', name: 'détails de la notification', component: notificationDetails },
   { path: '/followups', name: 'Notification de Suivi', component: showFollowups },
-  { path: '/groups', name: 'Groupes', component: showGroups },
-];
+  );
+  }
 
-export default routes;
+  console.log(routes)
+  return routes;
+}
+/*const routes = [
+  
+  { path: '/', exact: true, name: 'Home' },
+];*/

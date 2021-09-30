@@ -41,12 +41,13 @@ const fetchUserImage = async (user) => {
 }
 
 const ModalAddGroup = (props) => {
-    const { show, onClose, onConfirm, setEnseignant, enseignant,triggerUpdate } = props;
+    const { show, onClose, onConfirm, setEnseignant, enseignant, triggerUpdate } = props;
     const [modal, setModal] = useState({ show: false, message: "", type: "success" });
     const [typeGroup, setTypeGroup] = useState("");
     const [up, setUp] = useState("");
     const [users, setUsers] = useState([]);
     const [selectedUsers, setselectedUsers] = useState([]);
+    const [ups, setUps] = useState([]);
 
     const setSelectsUsers = (users) => {
         setselectedUsers(users);
@@ -80,13 +81,13 @@ const ModalAddGroup = (props) => {
 
     const addGroup = async function (e) {
         let proceed = validateFields();
-        
-        let ne_users =selectedUsers.map((user,index) => {
-            if(user.createdUser) {delete user.createdUser}
-            if(user.lastModifiedByUser) {delete user.lastModifiedByUser}
+
+        let ne_users = selectedUsers.map((user, index) => {
+            if (user.createdUser) { delete user.createdUser }
+            if (user.lastModifiedByUser) { delete user.lastModifiedByUser }
             //if(user.createdAt) {delete user.createdAt}
             //if(user.modifiedAt) {delete user.modifiedAt}
-            return user;   
+            return user;
         })
         //console.log(ne_users);
         const body = {
@@ -94,7 +95,7 @@ const ModalAddGroup = (props) => {
             "up": up,
             "users": ne_users,
         }
-        
+
         if (proceed) {
             const [group, error] = await queryApi("group/register", body, 'POST');
             if (group) {
@@ -138,6 +139,22 @@ const ModalAddGroup = (props) => {
         };
     }, [onClose]);
 
+    useEffect(() => {
+        //fetch ups not in agroup
+        const fetchUps = async () => {
+            //get all ups
+            const [resUp, errorUp] = await queryApi("pedagogique/ups/up", null, 'GET');
+            if (resUp) {
+                // fetch ups not in a group
+                const [res, error] = await queryApi("group/upNotInGroup", resUp, 'POST');
+                if (res) {
+                    setUps(res);
+                } else { setUps([]) }
+            } else { setUps([]) }
+        }
+        fetchUps();
+    }, [])
+
     return (
         <>
             <SuccessErrorModal onClose={() => setModal({ ...modal, show: false })} show={modal.show} type={modal.type} message={modal.message} />
@@ -175,9 +192,9 @@ const ModalAddGroup = (props) => {
                                     value={typeGroup}
                                     onChange={e => handleTypeChange(e)}
                                 >
-                                    <option value="">Veuillez choisir le type</option>
-                                    <option value="up">UP</option>
-                                    <option value="rdi">RDI</option>
+                                    <option value="">Veuillez choisir l'up</option>
+                                    <option value="rdi" >rdi</option>
+                                    <option value="up" >up</option>
                                 </CSelect>
                             </CFormGroup>
                             {typeGroup == "up" &&
@@ -193,15 +210,16 @@ const ModalAddGroup = (props) => {
                                         onChange={e => handleUpChange(e)}
                                     >
                                         <option value="">Veuillez choisir le type</option>
-                                        <option value="up">UP_JAVA</option>
-                                        <option value="rdi">RDI</option>
+                                        {ups.map((key, val) => {
+                                        return <option value={key} key={key}>{key}</option>
+                                        })}
                                     </CSelect>
                                 </CFormGroup>
                             }
                             {typeGroup == "up" && !validateFields() && <CFormText>
-                              <p className="text-danger">
-                                L'up ne doit pas être vide!
-                              </p>
+                                <p className="text-danger">
+                                    L'up ne doit pas être vide!
+                                </p>
                             </CFormText>}
 
                             {typeGroup != "" && <div className="scroll-ens">

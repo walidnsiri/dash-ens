@@ -14,8 +14,13 @@ import { useHistory } from "react-router-dom";
 import { queryApi } from "../utils/queryApi";
 import useravatar from "../assets/img/avatars/user.png";
 import { GetImage } from 'utils/getImage';
+import {hasRole} from "../utils/user";
+import {userRoles} from "../enums/roles.enum";
+import { useDispatch } from 'react-redux'
+import {resetState} from '../features/groupSlice';
 
 const TheHeaderDropdown = () => {
+  const dispatch = useDispatch();
   const [user, setUser] = useContext(UserContext)
   const [image, setImage] = useState(null);
   const history = useHistory();
@@ -24,7 +29,7 @@ const TheHeaderDropdown = () => {
   const handleLogout = async function () {
     const [, error] = await queryApi("public/logout", null, 'POST');
     if (error) console.error(error);
-    else { setUser(null); history.replace("/"); }
+    else { setUser(null);dispatch(resetState()); history.replace("/"); }
   }
 
   const handleImage = async function () {
@@ -63,6 +68,8 @@ const TheHeaderDropdown = () => {
         <CDropdownItem>
           <CIcon name="cil-user" className="mfe-2" />Profil
         </CDropdownItem>
+        { (!hasRole(user,userRoles.USER_ADMIN) &&  !hasRole(user,userRoles.DSI)) && 
+        <>
         <CDropdownItem >
           Activer la notification par e-mail
           <CSwitch
@@ -92,6 +99,7 @@ const TheHeaderDropdown = () => {
           Notifications
           <CBadge color="info" className="mfs-auto">42</CBadge>
         </CDropdownItem>
+        </>}
         <CDropdownItem divider />
         <CDropdownItem onClick={(e) => { handleLogout(e) }}>
           <CIcon name="cil-lock-locked" className="mfe-2" />

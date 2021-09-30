@@ -48,9 +48,12 @@ const UpdateUsers = (props) => {
   const [collapsed2, setCollapsed2] = useState(false);
   const [typeCompte,setTypeCompte] = useState(user?.authorities[0].authority);
   const [up,setUp] = useState("");
+  const [ups,setUps] = useState([]);
+  
   
   
   useEffect(()=>{
+    //fetch group by user id
     const GetUPGroupByUserId = async() => {
       if(user){
         const [res, error] = await queryApi("group/GetUPGroupByUserId/"+user.id, null, 'GET');
@@ -59,12 +62,22 @@ const UpdateUsers = (props) => {
         }else {setUp("");}
       }
     }
+    //fetch all ups
+    const fetchUps = async () => {
+      const [res, error] = await queryApi("pedagogique/ups/up", null, 'GET'); 
+      if(res){
+        setUps(res);
+      }else {setUps([])}
+    }
+    
       GetUPGroupByUserId();
+      fetchUps();
   },[]);
 
   const handleCancel = () => {
     history.push("/user");
   };
+
   const initialValues = {
     fullname: user?.fullName ? user.fullName : "",
     email: user?.username ? user.username : "",
@@ -262,8 +275,8 @@ const UpdateUsers = (props) => {
                         onChange={formik.handleChange} 
                       >
                         <option value="">Veuillez choisir l'up</option>
-                        {Object.keys(upEnum).map((key,val)=>{
-                          return <option value={key}>{key}</option>
+                        {ups.map((key,val)=>{
+                          return <option value={key} key={key}>{key}</option>
                         })}
                         
                       </CSelect>
