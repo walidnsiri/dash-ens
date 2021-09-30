@@ -8,56 +8,58 @@ import {
 
 const CheckboxCardMultiple = (props) => {
 
-    const {users,setEnseignant,enseignant,checkboxgrid,setFilterUsersCombines,type} = props;
+    const {users,setEnseignant,enseignant,checkboxgrid,setFilterUsersCombines,type,setSelectsUsers} = props;
     const [userse,setUserse] = useState([]);
     const [selectedUsers,setSelectedUsers] = useState([]);
 
-    const setUsers = (users) => {
+    const addOrRemoveUser = (user) => {
         if(setFilterUsersCombines){
-        setFilterUsersCombines(users);
+            setFilterUsersCombines(user);
         }
     }
 
-    useEffect(() => {
+    const updateSelectedUsersList =(users) =>{
+        if(setSelectsUsers) {
+            setSelectsUsers(users);
+        }
+    }
+
+     useEffect(() => {
         if(type == "added"){setSelectedUsers(users)}
-        setUserse(users)
       }, [users])
+
+      useEffect(() => {
+        updateSelectedUsersList(selectedUsers);
+      }, [selectedUsers])
+    
     
     
     const handleUserSelect = (e,user) => {
+        e.preventDefault();
         setTimeout(()=>{
             const u = selectedUsers.filter(u => u.id === user.id);
             if(u.length > 0){
                 const us = selectedUsers.filter(u => u.id !== user.id);
                 setSelectedUsers([...us]);
-                if(us.length > 0){
-                    setUsers([...us]);
-                }
-                if(us.length == 0){
-                    setUsers([user]);
-                }
             }
             if(u.length == 0){
                 if(selectedUsers.length == 0){
                     setSelectedUsers([user]);
-                    setUsers([user]);
                 }
                 else {
                     setSelectedUsers([...selectedUsers, user]);
-                    setUsers([...selectedUsers,user]);
                 }
             }
+            addOrRemoveUser(user);
         },200)
     }
 
-
-
     return (
     <>
-    {userse?.length >0 ? 
+    {users?.length >0 ? 
         <div className={checkboxgrid} >
-            {userse?.map((user,index) => {
-            return <label key={index*Math.random(10)} className="checkboxcard" style={{marginRight:"10px"}} onClick={e => handleUserSelect(e,user)} >
+            {users?.map((user,index) => {
+            return <label key={index*Math.random(10)} className="checkboxcard" style={{marginRight:"10px"}} onClick={e => {handleUserSelect(e,user)}} >
                 <input className="checkboxcard__input" type="checkbox" checked={selectedUsers.includes(user)? true: false} onChange={e=>{}}/>
                 <div className="checkboxcard__body">
                     <div className="checkboxcard__body-cover"><img className="checkboxcard__body-cover-image" src={user?.image? user?.image : avatar} /><span className="checkboxcard__body-cover-checkbox">

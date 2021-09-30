@@ -5,8 +5,9 @@ import logo from "../../../assets/img/brand/logo-esprit.svg";
 import { UserContext } from "utils/UserContext";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import {userRoles} from "../../../enums/roles.enum";
 //import useQuery from "../../components/custom/useQuery";
-import {fetchGroupUsers} from '../../../features/groupSlice';
+import {fetchGroupUsers,fetchGroupUsersAdminOrDsi} from '../../../features/groupSlice';
 import { useDispatch } from 'react-redux'
 import {
   CButton,
@@ -220,8 +221,12 @@ function Card(setUser) {
     if (res) {
       setUser.setUser(res.userView);
       setRenderError(false);
-      const groups =res.groupViews; 
-      groups.map((group) => {dispatch(fetchGroupUsers(group))});
+      const groups = res.groupViews;
+      if(res.userView.authorities?.filter(a => a.authority == userRoles.USER_ADMIN || a.authority == userRoles.DSI).length > 0 ){
+        groups.map((group,index) => {dispatch(fetchGroupUsersAdminOrDsi(group));});
+      }else {
+        groups.map((group,index) => {dispatch(fetchGroupUsers(group));});
+      }
     }
     if (error) {
       setRenderError(true);

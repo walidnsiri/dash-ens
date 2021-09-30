@@ -19,48 +19,111 @@ import {
     CPagination,
     CAlert,
     CInputRadio,
-    CBadge
+    CBadge,
+    CFormText
 } from "@coreui/react";
 import CheckboxCardMultiple from "../../../views/components/custom/checkboxCardMultiple";
 import SuccessErrorModal from "./SuccessErrorModal";
 import { queryApi } from '../../../utils/queryApi';
+import { fetchImageFromService } from "../../../utils/getImage";
+import { LoaderSmallArea } from "../../../views/components/custom/Loaders";
+import { trackPromise } from 'react-promise-tracker';
+import { areas } from "../../../constants/areas";
+
+const fetchimg = async (im) => {
+    const img = await fetchImageFromService(im);
+    if (img) return img;
+};
+
+const fetchUserImage = async (user) => {
+    const img = await fetchimg(user.image);
+    return { ...user, "image": img ? img : "" }
+}
 
 const ModalAddGroup = (props) => {
-    const { show, onClose, onConfirm, setEnseignant, enseignant } = props;
+    const { show, onClose, onConfirm, setEnseignant, enseignant,triggerUpdate } = props;
     const [modal, setModal] = useState({ show: false, message: "", type: "success" });
-    const [typeGroup,setTypeGroup] = useState("");
-    const [up,setUp] = useState("");
-    const [users,setUsers] = useState([]);
+    const [typeGroup, setTypeGroup] = useState("");
+    const [up, setUp] = useState("");
+    const [users, setUsers] = useState([]);
+    const [selectedUsers, setselectedUsers] = useState([]);
 
-    const setens = (ens) => {
-        setEnseignant(ens);
-        setTimeout(() => {
-            onClose();
-        }, 600)
+    const setSelectsUsers = (users) => {
+        setselectedUsers(users);
+    }
+
+    useEffect(() => {
+        const fetchNotBeloningUsers = async () => {
+
+            const body = {
+                type: typeGroup ? typeGroup : ""
+            };
+            const [res, error] = await queryApi("user/group/notbelonging", body, "POST");
+            if (res) {
+                const users = await Promise.all(res.map(async (user, index) => {
+                    return res[index] = await fetchUserImage(user);
+                }));
+                setUsers(users);
+            }
+        }
+        if (typeGroup != "") {
+            trackPromise(fetchNotBeloningUsers(), areas.group_users_to_add_modal);
+        }
+    }, [typeGroup])
+
+    const validateFields = () => {
+        if (typeGroup == 'rdi' && up == "") { return true }
+        if (typeGroup == "up" && up != "") { return true }
+        if (typeGroup == "up" && up == "") { return false }
+        return false;
     }
 
     const addGroup = async function (e) {
+        let proceed = validateFields();
+        
+        let ne_users =selectedUsers.map((user,index) => {
+            if(user.createdUser) {delete user.createdUser}
+            if(user.lastModifiedByUser) {delete user.lastModifiedByUser}
+            //if(user.createdAt) {delete user.createdAt}
+            //if(user.modifiedAt) {delete user.modifiedAt}
+            return user;   
+        })
+        //console.log(ne_users);
         const body = {
             "type": typeGroup,
             "up": up,
-            "users": users,
+            "users": ne_users,
         }
-        const [group, error] = await queryApi("group/register", body, 'POST', true);
-        if (group) {
-            onClose();
-            setTimeout(() => {
-                setModal({ show: true, message: "Le groupe a été ajouté avec succès", type: 'success' });
-            },400);
-        }
-        if (error) {
-            onClose();
-            setTimeout(() => {
-                setModal({ show: true, message: error.details, type: 'error' });
-            },400);
+        
+        if (proceed) {
+            const [group, error] = await queryApi("group/register", body, 'POST');
+            if (group) {
+                onClose();
+                setTimeout(() => {
+                    setModal({ show: true, message: "Le groupe a été ajouté avec succès", type: 'success' });
+                    triggerUpdate();
+                }, 400);
+            }
+            if (error) {
+                onClose();
+                console.error(error)
+                setTimeout(() => {
+                    setModal({ show: true, message: error.details, type: 'error' });
+                }, 400);
+            }
+        } else {
+
         }
     }
-    const handleTypeChange = (e) => {setTypeGroup(e.target.value)}
-    const handleUpChange = (e) => {setUp(e.target.value)}
+    const handleTypeChange = (e) => {
+        const type = e.target.value;
+        setTypeGroup(type);
+        if (type == "rdi") {
+            setUp("");
+        }
+        setUsers([]);
+    }
+    const handleUpChange = (e) => { setUp(e.target.value) }
 
 
     useEffect(() => {
@@ -74,7 +137,6 @@ const ModalAddGroup = (props) => {
             document.body.removeEventListener("keydown", closeOnEspaceKeyDown);
         };
     }, [onClose]);
-
 
     return (
         <>
@@ -102,23 +164,23 @@ const ModalAddGroup = (props) => {
                             </button>
                         </div>
                         <div className="modal-body" onClick={(e) => e.stopPropagation()}>
-                                <CFormGroup>
-                                    <CLabel htmlFor="text-input">
-                                        <em>Type</em>
-                                    </CLabel>
-                                    <CSelect
-                                        custom
-                                        name="typecompte"
-                                        id="select"
-                                        value={typeGroup}
-                                        onChange={e => handleTypeChange(e)}
-                                    >
-                                        <option value="">Veuillez choisir le type</option>
-                                        <option value="up">UP</option>
-                                        <option value="rdi">RDI</option>
-                                    </CSelect>
-                                </CFormGroup>
-                               {typeGroup == "up" &&
+                            <CFormGroup>
+                                <CLabel htmlFor="text-input">
+                                    <em>Type Group</em>
+                                </CLabel>
+                                <CSelect
+                                    custom
+                                    name="typecompte"
+                                    id="select"
+                                    value={typeGroup}
+                                    onChange={e => handleTypeChange(e)}
+                                >
+                                    <option value="">Veuillez choisir le type</option>
+                                    <option value="up">UP</option>
+                                    <option value="rdi">RDI</option>
+                                </CSelect>
+                            </CFormGroup>
+                            {typeGroup == "up" &&
                                 <CFormGroup>
                                     <CLabel htmlFor="text-input">
                                         <em>Type up</em>
@@ -131,36 +193,44 @@ const ModalAddGroup = (props) => {
                                         onChange={e => handleUpChange(e)}
                                     >
                                         <option value="">Veuillez choisir le type</option>
-                                        <option value="up">UP</option>
+                                        <option value="up">UP_JAVA</option>
                                         <option value="rdi">RDI</option>
                                     </CSelect>
                                 </CFormGroup>
-                                }
-                            <div className="scroll-ens">
-                                <CheckboxCardMultiple users={users} setEnseignant={setens} enseignant={enseignant} checkboxgrid="gridCheckbox"/>
-                            </div>
+                            }
+                            {typeGroup == "up" && !validateFields() && <CFormText>
+                              <p className="text-danger">
+                                L'up ne doit pas être vide!
+                              </p>
+                            </CFormText>}
+
+                            {typeGroup != "" && <div className="scroll-ens">
+                                <LoaderSmallArea area={areas.group_users_to_add_modal} />
+                                <CheckboxCardMultiple users={users} checkboxgrid="gridCheckbox" type="toadd" setSelectsUsers={setSelectsUsers} />
+                            </div>}
                         </div>
 
-                            <div className="modal-footer justify-content-center">
-                                <button
-                                    type="button"
-                                    className="btn btn-secondary"
-                                    onClick={e=>addGroup(e)}
-                                >
-                                    Ajouter
-                                </button>
-                                <button
-                                    type="button"
-                                    className="btn btn-secondary"
-                                    onClick={onClose}
-                                >
-                                    Anuller
-                                </button>
-                            </div>
+                        <div className="modal-footer justify-content-center">
+                            <button
+                                type="button"
+                                style={{ backgroundColor: "#34c38f", color: "white" }}
+                                className="btn btn-secondary"
+                                onClick={e => addGroup(e)}
+                            >
+                                Ajouter
+                            </button>
+                            <button
+                                type="button"
+                                className="btn btn-secondary"
+                                onClick={onClose}
+                            >
+                                Anuller
+                            </button>
                         </div>
                     </div>
                 </div>
+            </div>
         </>)
 }
 
-            export default ModalAddGroup;
+export default ModalAddGroup;

@@ -3,8 +3,8 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { UserContext } from "./utils/UserContext";
 import "./scss/style.scss";
 import { queryApi } from "./utils/queryApi";
-
-import {fetchGroupUsers,selectGroupRdi,selectGroupUP} from './features/groupSlice';
+import {userRoles} from "./enums/roles.enum";
+import {fetchGroupUsers,selectGroupRdi,selectGroupUP,fetchGroupUsersAdminOrDsi} from './features/groupSlice';
 import { useSelector, useDispatch } from 'react-redux'
 
 const loading = (
@@ -26,17 +26,17 @@ export default function App() {
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
 
-  const groupUp = useSelector(selectGroupUP);
-  const groupRDI = useSelector(selectGroupRdi);
-
   const isloggedin = async () => {
     const [res, error] = await queryApi("public/logged", null, "POST");
     if (error) console.error(error);
     else {
       setUser(res.userView);
       const groups = res.groupViews;
-      groups.map((group,index) => {dispatch(fetchGroupUsers(group));});
-      
+      if(res.userView.authorities?.filter(a => a.authority == userRoles.USER_ADMIN || a.authority == userRoles.DSI).length > 0 ){
+        groups.map((group,index) => {dispatch(fetchGroupUsersAdminOrDsi(group));});
+      }else {
+        groups.map((group,index) => {dispatch(fetchGroupUsers(group));});
+      }
     }
   };
 

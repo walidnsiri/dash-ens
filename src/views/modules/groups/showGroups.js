@@ -37,6 +37,7 @@ function ShowGroups() {
   const [clicked, setclicked] = useState({});
   const [sort, setSort] = useState("descending")
   const [modelAddGroup,setModelAddGroup] = useState({show:false})
+  const [triggerComponentReRender, setTriggerComponentReRender] = useState(false);
 
   useEffect(() => {
     setclicked({ 1: true, 2: false, 3: false });
@@ -60,9 +61,13 @@ function ShowGroups() {
     const onClose = () => {
       setModelAddGroup({ ...modelAddGroup, show: false });
     };
+    const triggerUpdate = () => {
+      setTriggerComponentReRender(!triggerComponentReRender);
+    }
     setModelAddGroup({
       show:true,
       onClose,
+      triggerUpdate
     });
   }
 
@@ -172,7 +177,7 @@ function ShowGroups() {
             <CCol lg="12" xs="12" md="12" sm="12" xl="12" xxl="12">
               <CCard>
                 <CCardBody>
-                  <Groups sort={sort} clicked={clicked} />
+                  <Groups sort={sort} clicked={clicked} triggerComponentReRender={triggerComponentReRender} setTriggerComponentReRender={setTriggerComponentReRender}/>
                 </CCardBody>
               </CCard>
             </CCol>

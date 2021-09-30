@@ -42,3 +42,25 @@ export const LoaderSmall = () => {
   );
 }
 
+  export const LoaderSmallArea = (props) => {
+    const { promiseInProgress } = usePromiseTracker({area: props.area, delay: 0});
+    return (
+      promiseInProgress &&
+      <div
+        style={{
+          width: "100%",
+          height: "100",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+      <div className="loader">
+      <Loader type="ThreeDots" color="#CC041C" height={props.height? props.height: "100"} width={props.width? props.width : "100"} />
+      </div>
+      </div>
+    );
+}
+
+
+

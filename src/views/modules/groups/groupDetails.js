@@ -33,6 +33,9 @@ import SuccessErrorModal from "../../components/custom/SuccessErrorModal";
 import CheckboxCardMultiple from "../../components/custom/checkboxCardMultiple";
 import { groupBy } from "lodash-es";
 import { fetchImageFromService } from "../../../utils/getImage";
+import { LoaderSmallArea } from "../../../views/components/custom/Loaders";
+import { trackPromise } from 'react-promise-tracker';
+import {areas} from "../../../constants/areas";
 
 const AnswerFollowupSchema = Yup.object().shape({
     answer: Yup.string()
@@ -46,45 +49,25 @@ const AnswerFollowupSchema = Yup.object().shape({
 function GroupDetails(props) {
     const [modal, setModal] = useState({ show: false, message: "", type: "success" });
     moment.locale("fr");
-    const { group } = props;
+    const { group,setTriggerComponentReRender,triggerComponentReRender } = props;
     const [collapsed, setCollapsed] = useState(false);
     const [collapsed1, setCollapsed1] = useState(true);
     const [users, setUsers] = useState([]);
     const [usersNotActive, setUsersNotActive] = useState([]);
     const [usersCombined, setUsersCombined] = useState([]);
 
-
-
-    useEffect(()=>{
-       //console.log(usersCombined);
-    },[usersCombined]);
-
-    const setFilterUsersCombines = (users) =>{
-       let usersc = usersCombined;
-        if(usersc.length == 1) {
-            if(users.filter( u => u.id == usersc[0].id).length >0){
-                setUsersCombined([]);
-            }
-            else {
-                //let fils = [...usersCombined,...users];
-                usersc.push(...users);
-                let filtered_users = usersc.reduce((unique, item) => {
-                    return unique.includes(item) ? unique : [...unique, item];
-                  }, []);
-                  setUsersCombined(filtered_users);
-            }
-            
-        }else {
-        let fils = [...usersCombined,...users];
-        console.log(fils);
-        //let fils = usersc.push(users);
-        let filtered_users = fils.reduce((unique, item) => {
-            return unique.includes(item) ? unique : [...unique, item];
-        }, []);
-        console.log(usersCombined)
-        console.log(filtered_users)
-        setUsersCombined(filtered_users);
+    const setFilterUsersCombines = (user) =>{
+        let users = usersCombined;
+        let userIn = users.filter(u => u.id == user.id); 
+        if(userIn.length == 0){
+            users = [...users,user];
+            setUsersCombined(users);
         }
+        if(userIn.length > 0){
+            let new_users = users.filter(u => u.id != user.id);
+            setUsersCombined(new_users);
+        }
+        
     }
 
     const initialValues = {
@@ -108,13 +91,6 @@ function GroupDetails(props) {
             answerFollowup(values);
         },
     });
-
-    useEffect(() => {
-        setUsers(group.users);
-        setUsersCombined(group.users);
-    }, [group])
-
-
     const fetchimg = async (im) => {
         const img = await fetchImageFromService(im);
         if (img) return img;
@@ -127,7 +103,14 @@ function GroupDetails(props) {
 
 
     useEffect(() => {
-         const fetchNotBeloningUsers = async () => {
+        setUsersNotActive([]);
+        setUsers(group.users);
+        setUsersCombined(group.users);
+    }, [group])
+
+
+    useEffect(() => {
+        const fetchNotBeloningUsers = async () => {
 
             const body = {
                 type : group?.type ? group?.type : "" 
@@ -140,8 +123,47 @@ function GroupDetails(props) {
                 setUsersNotActive(users);
             }
         }
-        fetchNotBeloningUsers();
-    }, [])
+        trackPromise(fetchNotBeloningUsers(),areas.group_users_to_add);
+    }, [group]);
+
+
+    //update groups
+    const handleAddEnseignant = async() => {
+        let ne_users =usersCombined.map((user,index) => {
+            if(user.createdUser) {delete user.createdUser}
+            if(user.lastModifiedByUser) {delete user.lastModifiedByUser}
+            //if(user.createdAt) {delete user.createdAt}
+            //if(user.modifiedAt) {delete user.modifiedAt}
+            return user;   
+        })
+        const body = {
+            type : group?.type ,
+            up : group?.up,
+            users : ne_users,
+        };
+        const [res, error] = await queryApi("group/"+ group.id, body, "PUT");
+        if(res){
+            setModal({ show: true, message: "Le groupe a été modifié avec succès", type: 'success' });
+            //update group
+            setTriggerComponentReRender(!triggerComponentReRender);
+        }else {
+            setModal({ show: true, message: error.details, type: 'error' });
+        }
+    }
+
+    //delete groups
+    const handleDeleteEnseignant = async() => {
+        const [res, error] = await queryApi("group/" + group.id, null, "DELETE");
+        if(res) {
+            setModal({ show: true, message: "Le groupe a été modifié avec succès", type: 'success' });
+            //remove group 
+            setTriggerComponentReRender(!triggerComponentReRender);
+
+        }else {
+            setModal({ show: true, message: error.details, type: 'error' });
+        }
+
+    }
 
     return (
         <>
@@ -191,7 +213,7 @@ function GroupDetails(props) {
                     <CCollapse show={collapsed1} timeout={1000}>
                         <CCardBody>
                             <div className="scroll-grp">
-                                <CheckboxCardMultiple users={users} setFilterUsersCombines={setFilterUsersCombines} checkboxgrid="gridCheckbox-grp" type="added"/>
+                                <CheckboxCardMultiple users={users} setFilterUsersCombines={setFilterUsersCombines} checkboxgrid="gridCheckbox-grp" type="added"/> 
                             </div>
                             <div className="createdAt text-muted">Crée {moment(group?.createdAt).calendar()}</div>
                             <div className="modifiedAt text-muted">Modifiée {moment(group?.modifiedAt).calendar()}</div>
@@ -232,14 +254,15 @@ function GroupDetails(props) {
                                     <CCol sm="6">
                                     </CCol>
                                     <div className="scroll-grp">
+                                        <LoaderSmallArea area={areas.group_users_to_add} height={50} width={50} />
                                         <CheckboxCardMultiple users={usersNotActive} setFilterUsersCombines={setFilterUsersCombines} checkboxgrid="gridCheckbox-grp" type="toadd"/>
                                     </div>
                                 </CRow>
                                 <div className="form-actions">
-                                    <CButton type="submit" style={{ backgroundColor: "#34c38f", color: "white" }}>
-                                        Ajouter enseignants
+                                    <CButton type="submit" style={{ backgroundColor: "#34c38f", color: "white" }} onClick={e => handleAddEnseignant()}>
+                                        Ajouter/Supprimer enseignants
                                     </CButton>
-                                    <CButton type="submit" className="ml-2" style={{ backgroundColor: "#e74c3c", color: "white" }}>
+                                    <CButton type="submit" className="ml-2" style={{ backgroundColor: "#e74c3c", color: "white" }} onClick={e =>handleDeleteEnseignant()}>
                                         supprimer le groupe
                                     </CButton>
                                 </div>
