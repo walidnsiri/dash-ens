@@ -100,7 +100,8 @@ const Bar = (labels,event) => {
   return bar;
 }
 
-const doughnut = {
+const Doughnut = (event) => {
+  const doughnut = {
   labels: ["Red", "Green", "Yellow"],
   datasets: [
     {
@@ -109,17 +110,25 @@ const doughnut = {
       hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
     },
   ],
+  }
+  return doughnut;
 };
-const polar = {
-  datasets: [
+
+const Polar = (event) => {
+  const polar = {
+    datasets: [
     {
       data: [11, 16, 7, 3, 14],
       backgroundColor: ["#FF6384", "#4BC0C0", "#FFCE56", "#E7E9ED", "#36A2EB"],
       label: "My dataset", // for legend
     },
-  ],
-  labels: ["Red", "Green", "Yellow", "Grey", "Blue"],
+    ],
+    labels: ["Red", "Green", "Yellow", "Grey", "Blue"],
+  }
+  return polar;
 };
+
+
 const ShowSuivi = () => {
   const [chart, setChart] = useState("rdi");
   const groupUp = useSelector(selectGroupUP);
@@ -127,15 +136,34 @@ const ShowSuivi = () => {
   const [modalSuiviFilters, setModalSuiviFilters] = useState({ show: false });
   const [periode, setPeriode] = useState("YEAR");
   const [date, setDate] = useState(null);
-  const [labels,setLabels] = useState([]);
+  const [labels,setLabels] = useState(["January", "February", "March", "April", "May", "June", "July", "bnlabla"]);
   const [event, setEvent] = useState({});
   const [keys,setKeys] = useState({});
   const [ensRecordsCounted,setEnsRecordsCounted] = useState({});
   const [line,setLine] = useState({});
   const [bar,setBar] = useState({});
+  const [polar,setPolar] = useState({});
+  const [doughnut,setDoughnut] = useState({});
 
-  const [enseignant, SetEnseignant] = useState(groupUp?.users ? groupUp?.users[0] : {});
+  const [enseignant, SetEnseignant] = useState({});
+  const [enseignants, SetEnseignants] = useState([]);
 
+
+  useEffect ( () => {
+    if(Array.isArray(groupUp)){
+    if(groupUp.length > 0) {
+        let users = [];
+        groupUp.map((grp,index) => {
+          users.push(...grp.users);
+        });
+        SetEnseignants(users);
+        if(users.length > 0) SetEnseignant(users[0]);
+    }}
+    else if(groupUp){
+      SetEnseignants(groupUp.users);
+      if(groupUp.users.length > 0) SetEnseignant(groupUp.users[0]);
+    }
+  },[groupUp])
 
   const handleEnseignantSelection = () => {
     const onClose = () => {
@@ -148,7 +176,7 @@ const ShowSuivi = () => {
 
     setSelectEnseignantModal({
       show: true,
-      users: groupUp?.users,
+      users: enseignants,
       onClose,
       setEnseignant,
       enseignant
@@ -216,12 +244,16 @@ const ShowSuivi = () => {
   }, [enseignant, periode, date])
 
   useEffect(()=>{
+    if(event){
     const line = Line(labels,event);
     const bar = Bar(labels,event);
-    console.log(line);
-    console.log(bar);
+    const polar = Polar(event);
+    const doughnut = Doughnut(event);
     setLine(line);
     setBar(bar);
+    setPolar(polar);
+    setDoughnut(doughnut);
+    }
   },[event]);
   
   return (

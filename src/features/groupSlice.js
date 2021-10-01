@@ -75,12 +75,12 @@ const changeGroupsSlice = createSlice({
       })
       .addCase(fetchGroupUsersAdminOrDsi.fulfilled, (state, action) => {
         const group = action.payload;
-        if (group.type == "rdi") {
-            let groupUP = Object.assign([], state.groupUP);
-            groupUP.push(group);
-            return {...state, groupUp : groupUP, status : 'succeeded'}
-        }
         if (group.type == "up") {
+            let groupUp = Object.assign([], state.groupUP);
+            groupUp.push(group);
+            return {...state, groupUP : groupUp, status : 'succeeded'}
+        }
+        if (group.type == "rdi") {
             let groupRDI = Object.assign([], state.groupRdi);
             groupRDI.push(group);
             return {...state, groupRdi : groupRDI, status : 'succeeded'}

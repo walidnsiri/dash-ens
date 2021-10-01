@@ -66,7 +66,6 @@ export const getRoutes = (user) => {
   );
   }
 
-  console.log(routes)
   return routes;
 }
 /*const routes = [

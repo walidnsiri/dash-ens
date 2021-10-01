@@ -32,7 +32,8 @@ export default function App() {
     else {
       setUser(res.userView);
       const groups = res.groupViews;
-      if(res.userView.authorities?.filter(a => a.authority == userRoles.USER_ADMIN || a.authority == userRoles.DSI).length > 0 ){
+      let userOrAdmin = res.userView.authorities?.filter(a => a.authority == userRoles.USER_ADMIN || a.authority == userRoles.DSI).length > 0;
+      if(userOrAdmin){
         groups.map((group,index) => {dispatch(fetchGroupUsersAdminOrDsi(group));});
       }else {
         groups.map((group,index) => {dispatch(fetchGroupUsers(group));});

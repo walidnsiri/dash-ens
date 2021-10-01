@@ -40,7 +40,7 @@ const TheContent = () => {
                   )} />
               )
             })}
-           { (!hasRole(user,userRoles.USER_ADMIN) &&  !hasRole(user,userRoles.DSI)) ?  <Redirect from="/" to="/revue" />: <Redirect from="/" to="/user" />}
+           { (!hasRole(user,userRoles.USER_ADMIN)) ?  <Redirect from="/" to="/revue" />: <Redirect from="/" to="/user" />}
           </Switch>
         </Suspense>
       </CContainer>
