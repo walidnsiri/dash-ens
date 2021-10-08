@@ -32,6 +32,10 @@ const TheHeaderDropdown = () => {
     else { setUser(null);dispatch(resetState()); history.replace("/"); }
   }
 
+  const HandleProfil = () => {
+    history.replace("/profil");
+  }
+
   const handleImage = async function () {
     const img = await GetImage(user.image);
     setImage(img);
@@ -63,9 +67,9 @@ const TheHeaderDropdown = () => {
           color="light"
           className="text-center"
         >
-          <strong>Account</strong>
+          <strong>Compte</strong>
         </CDropdownItem>
-        <CDropdownItem>
+        <CDropdownItem onClick={e => HandleProfil(e)}>
           <CIcon name="cil-user" className="mfe-2" />Profil
         </CDropdownItem>
         { (!hasRole(user,userRoles.USER_ADMIN) &&  !hasRole(user,userRoles.DSI)) && 

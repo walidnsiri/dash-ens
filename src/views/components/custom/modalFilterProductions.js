@@ -24,7 +24,7 @@ import { queryApi } from "../../../utils/queryApi";
 
 const ModalFilterProduction = (props) => {
 
-    const { show, onClose, message, onConfirm, setref } = props;
+    const { show, onClose, message, onConfirm, setref,refId } = props;
 
 
     const [refs, setRefs] = useState([]);
@@ -33,6 +33,11 @@ const ModalFilterProduction = (props) => {
     const [searchInput, setSearchInput] = useState("");
     const [selectedBadge, setSelectedBadge] = useState(1);
     
+    useEffect(()=> {
+        if(refId == null ){
+            setSelectedBadge(0);
+        }
+    },[refId])
 
     function handleInputChange(e) {
         setSearchInput(e.target.value);
@@ -87,7 +92,7 @@ const ModalFilterProduction = (props) => {
 
     return (
     <>
-    <div className={`modal delete ${show ? "show" : ""}`} onClick={onClose}>
+    <div className={`modal delete ${show ? "show" : ""}`} onClick={onClose} style={{"zIndex":"3"}}>
         <div className="modal-dialog modal-confirm">
             <div className="modal-content">
                 <div
@@ -125,8 +130,8 @@ const ModalFilterProduction = (props) => {
                     </div>
                     <div className="scroll-refprod">
 
-                        {filtered && filteredResults?.map((ref) => (
-                            <div className="" style={{ display: "inline-block" }}>
+                        {filtered && filteredResults?.map((ref,index) => (
+                            <div key={index} className="" style={{ display: "inline-block" }}>
                                 <CBadge key={ref.id} value ={ref.refproduction} data-key={ref.id} color={selectedBadge == ref.id ? "success" : "danger"} style={{ padding: "20px", marginRight: "15px", marginBottom: "15px" }} onClick={(e) => { handleSelect(e) }}
                                 >
                                     {ref.refproduction}
@@ -135,8 +140,8 @@ const ModalFilterProduction = (props) => {
                         ))}
 
 
-                        {!filtered && refs?.map((ref) => (
-                            <div key={ref.id} className="" style={{ display: "inline-block" }}>
+                        {!filtered && refs?.map((ref,index) => (
+                            <div key={index} className="" style={{ display: "inline-block" }}>
                                 <CBadge key={ref.id} value ={ref.refproduction} data-key={ref.id} color={selectedBadge == ref.id ? "success" : "danger"} style={{ padding: "20px", marginRight: "15px", marginBottom: "15px" }} onClick={(e) => { handleSelect(e) }}
                                 >
                                     {ref.refproduction}

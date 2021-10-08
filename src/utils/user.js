@@ -11,8 +11,9 @@ export const hasRole = (user,role) => {
 
 export const getUserIds = (users) => {
     let ids = [];
+    if(users){
     users.map((user,index) => {
         ids.push(user.id);
-    })
+    })}
     return ids;
 }

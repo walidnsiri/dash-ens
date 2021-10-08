@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import {
   CCard,
   CCardBody,
   CCardTitle,
   CCol,
   CRow,
+  CSelect,
   CFormGroup,
   CInputCheckbox,
   CLabel,
@@ -23,16 +24,20 @@ import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import { descriptionEnum } from "../../../../enums/description.enum";
 import { reunionEnum } from "../../../../enums/reunion.enum";
 import { useHistory } from "react-router-dom";
-
 import CustomCard from "../../../components/custom/CustomCard";
-
-
 import { LoaderSmall } from "../../../../views/components/custom/Loaders";
 import { trackPromise} from 'react-promise-tracker';
+import { UserContext } from "../../../../utils/UserContext";
+import { userRoles } from "../../../../enums/roles.enum";
+import { hasRole, getUserIds } from "../../../../utils/user";
+import { useSelector } from 'react-redux';
+import { selectGroupRdi } from '../../../../features/groupSlice';
+import SuccessErrorModal from "../../../components/custom/SuccessErrorModal";
 
 const ShowReunion = () => {
   const history = useHistory();
-
+  const [user,] = useContext(UserContext);
+  const groupRDI = useSelector(selectGroupRdi);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalpages, setTotalPages] = useState(1);
   const [reunions, setReunions] = useState(null);
@@ -41,23 +46,11 @@ const ShowReunion = () => {
   const [radiocheckedTitle, setRadiocheckedTitle] = useState(true);
   const [radiocheckedDescription, setRadiocheckedDescription] = useState(true);
   const [radiocheckedStatus, setRadiocheckedStatus] = useState(true);
+  const [radiocheckedCree, setRadiocheckedCree] = useState(true);
   const [deb,setDeb] = useState({values: [8]});
   const [fin,setFin] = useState({values: [9]});
   const [isActiveDeb,setIsActiveDeb] = useState(false);
   const [isActiveFin,setIsActiveFin] = useState(false);
-  
-
-  const handleHeureDeb = function(isdragged) {
-  console.log(isdragged)
-    /*if(!isDragged){
-      setIsActiveDeb()
-    }
-    if(isdragged && isActiveDeb){
-      return;
-    }
-    setIsActiveDeb(!isActiveDeb);
-*/
-  }
   const [modal, setModal] = useState({
     show: false,
     message: "",
@@ -66,7 +59,21 @@ const ShowReunion = () => {
   const [titre, setTitre] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
+  const [userIdsFilter,setUserIdsFilter] = useState([]);
+  const [userIds,setUserIds] = useState(getUserIds(groupRDI?.users))
+  const [creatorId,setCreatorId] = useState("");
 
+  useEffect ( () => {
+    const fetchUsers = async () => {
+      const [res, error] = await queryApi("user/users", null, "GET");
+      if(res) {
+        setUserIds(res);
+      }
+    }
+    if(hasRole(user,userRoles.DSI)){
+      fetchUsers();
+    }
+  },[])
 
   function handleInputChange(e) {
     setCurrentPage(1);
@@ -109,10 +116,20 @@ const ShowReunion = () => {
     setCurrentPage(1);
 
   }
-  function handleSelect(changes) {
-    console.log(changes);
-
+  
+  function handleCreeCheckbox(e) {
+    let users = e.target.value;
+    setCurrentPage(1);
+    if(users == ""){
+      setUserIdsFilter([])
+      setRadiocheckedCree(true);
+    }
+    else {
+      setUserIdsFilter(users.split(","));
+      setRadiocheckedCree(false);
+    }
   }
+
 
   const routeChange = () => {
     let path = '/reunionRdi/add';
@@ -126,6 +143,8 @@ const ShowReunion = () => {
           limit: 6,
         },
         query: {
+          id_ens_creator : hasRole(user,userRoles.DSI)? creatorId : user?.id? user.id : "",
+          userIds : userIdsFilter
         },
       };
       if (date !== null) {
@@ -156,7 +175,6 @@ const ShowReunion = () => {
         if( heure < 10) {heure = "0" + heure;}
         body["query"] = { ...body["query"], heure_fin: heure };
       }
-      
       const [res, error] = await queryApi("rdi/reunion/search", body, "POST");
       if (res) {
         setReunions(res.reunion);
@@ -174,11 +192,22 @@ const ShowReunion = () => {
     }
     
 
-  }, [currentPage, searchInput, date, titre, description, deleteRerender,isActiveDeb,isActiveFin,deb,fin,status])
+  }, [currentPage, searchInput, date, titre, description, deleteRerender,isActiveDeb,isActiveFin,deb,fin,status,userIdsFilter,creatorId])
 
+  const handleEnseignantSelectChange = (e) => {
+    setCreatorId(e.target.value);
+    setCurrentPage(1);
+  }
 
   return (
-    <CRow>
+      <>
+      <SuccessErrorModal
+        onClose={() => setModal({ ...modal, show: false })}
+        show={modal.show}
+        type={modal.type}
+        message={modal.message}
+      />
+    <CRow style={{"position" : "relative","zIndex": "1"}}>
       <CCol lg="3">
         <CCard className="border-0 shadow-sm">
           <CCardBody>
@@ -186,8 +215,62 @@ const ShowReunion = () => {
               className="mb-4"
               style={{ "fontWeight": "550", "fontSize": "0.9rem" }}
             >
-              Filter
+              Filtre
             </CCardTitle>
+
+            <div className="mt-4 pt-4">
+              <h5 className="font-size-14 mb-3">Crée par:</h5>
+              {hasRole(user,userRoles.DSI) ? <>
+                <CFormGroup>
+                    <CSelect
+                      custom
+                      name="creator"
+                      id="select"
+                      value={creatorId}
+                      onChange={e => handleEnseignantSelectChange(e)}
+                    >
+                      <option value="">Tout</option>
+                      {userIds?.map((user,index) => {
+                        return <option key = {index} value ={user.id}>{user.fullName}</option>
+                      })}
+                    </CSelect>
+                  </CFormGroup>
+                  </> 
+              :
+              <>
+              <CFormGroup variant="checkbox" className="checkbox">
+                <CInputRadio
+                  id="checkbox100"
+                  name="userIdsFilter"
+                  value={[]}
+                  onChange={(e) => handleCreeCheckbox(e)}
+                  checked={radiocheckedCree}
+                />
+                <CLabel
+                  variant="checkbox"
+                  className="form-check-label mt-1"
+                  htmlFor="checkbox100"
+                >
+                  Moi
+                </CLabel>
+              </CFormGroup>
+              <CFormGroup variant="checkbox" className="checkbox">
+                <CInputRadio
+                  id="checkbox200"
+                  name="userIdsFilter"
+                  value={userIds}
+                  onChange={(e) => handleCreeCheckbox(e)}
+                />
+                <CLabel
+                  variant="checkbox"
+                  className="form-check-label mt-1"
+                  htmlFor="checkbox200"
+                >
+                  Groupe RDI
+                </CLabel>
+              </CFormGroup>
+              </>}
+            </div>
             <div className="mt-4 pt-4">
               <h5 className="font-size-14 mb-3">Title</h5>
               <CFormGroup variant="checkbox" className="checkbox">
@@ -566,9 +649,11 @@ const ShowReunion = () => {
         <CRow>
           <CCol className="mt-2">
             <h5 className="d-inline mr-2">Réunions</h5>
-            <CButton className="addbutton" onClick={routeChange}>
-              <i className="fa fa-plus"></i>
-            </CButton>
+            {!hasRole(user, userRoles.DSI) &&
+              <CButton className="addbutton" onClick={routeChange}>
+                <i className="fa fa-plus"></i>
+              </CButton>
+              }
           </CCol>
           <CCol lg="6" sm="6" md="6" xs="6" className="mr-4">
             <CInputGroup >
@@ -602,13 +687,11 @@ const ShowReunion = () => {
           <LoaderSmall/>
         </CRow>
         {(reunions?.length === 0 || !reunions) ? (
-          <><CCol sm="12" xl="12" xs="12" md="12" style={{ paddingTop: "4%" }}>
+          <CCol sm="12" xl="12" xs="12" md="12" style={{ paddingTop: "4%" }}>
             <CAlert color="warning" className="h-100">
               Pas de réunions rdi trouvés.
             </CAlert>
           </CCol>
-          
-          </>
         ) :
           <CRow>
             <CCol className="mr-4">
@@ -624,8 +707,9 @@ const ShowReunion = () => {
           </CRow>}
       </CCol>
     </CRow>
-
+    </>
   );
+  
 };
 
 export default ShowReunion;

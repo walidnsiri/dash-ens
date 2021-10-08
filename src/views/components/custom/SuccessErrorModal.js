@@ -23,6 +23,7 @@ const SuccessErrorModal = (props) => {
         show ? "show" : ""
       } `}
       onClick={onClose}
+      style={{"zIndex":"2"}}
     >
       <div className="modal-dialog modal-confirm">
         <div className="modal-content">

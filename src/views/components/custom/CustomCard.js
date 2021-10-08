@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import PropTypes from "prop-types";
 import { CImg } from "@coreui/react";
 import avatar from "../../../assets/img/avatars/6.jpg";
@@ -17,10 +17,15 @@ import team from "../../../assets/img/equipe.jpg";
 import partenaire from "../../../assets/img/partenaire.jpg";
 import drdi from "../../../assets/img/drdi.JPG";
 import { useHistory } from "react-router-dom";
+import { UserContext } from "../../../utils/UserContext";
+import { userRoles } from "../../../enums/roles.enum";
+import { hasRole, getUserIds } from "../../../utils/user";
+
 
 
 
 const CustomCard = (props) => {
+  const [user,] = useContext(UserContext);
   const history = useHistory();
   const { type, rdi, setdeleteRerender, page, setCurrentPage, setModal, reunion } = props;
   const [deleteModal, setdeleteModal] = useState({ show: false, message: "" });
@@ -156,6 +161,7 @@ const CustomCard = (props) => {
       <DeleteModal {...deleteModal} />
       <main role="main">
         <div className="product" style={{boxShadow: reunion?.status == "Confirme" ? "10px 10px 10px 10px rgba(231, 76, 60, 0.2)":"0 3px 5px rgba(105, 41, 41, 0.2)"}}>
+        {!hasRole(user, userRoles.DSI) &&
           <div className="product-sidebar">
             <button className="edit" onClick={() => handleEdit()}>
               <span>Modifier</span>
@@ -164,7 +170,7 @@ const CustomCard = (props) => {
               <span>Supprimer</span>
             </button>
           </div>
-
+        }
           {type === "reunion" && (
             <>
               <div className="product-image">

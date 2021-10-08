@@ -82,6 +82,7 @@ const AddProduction = (props) => {
     let month = values.dateproduction.getMonth() + 1;
     if (month < 10) { month = "0" + month }
     let day = values.dateproduction.getDate();
+    if(day < 10) {day= "0" + day}
     const body = {
       production: values.production,
       description: values.description,
@@ -265,7 +266,7 @@ const AddProduction = (props) => {
                         <em>Date de production</em>
                       </CLabel>
                       <DatePicker
-                        format="y-MM-dd"
+                        format="yyyy-MM-dd"
                         className="datepicker border-0"
                         onChange={(e) => { formik.setFieldValue("dateproduction", e); }}
                         value={formik.values.dateproduction}
@@ -362,8 +363,8 @@ const AddProduction = (props) => {
                   <CCol sm="12" xl="12" xs="12" md="12" >
                     <div className="scroll-refprod">
 
-                      {filtered && filteredResults?.map((ref) => (
-                        <div className="" style={{ display: "inline-block" }} onMouseEnter={() => setHoveredRef(ref.id)}
+                      {filtered && filteredResults?.map((ref,index) => (
+                        <div key={index} className="" style={{ display: "inline-block" }} onMouseEnter={() => setHoveredRef(ref.id)}
                           onMouseLeave={() => setHoveredRef("")}>
                           <CBadge key={ref.id} data-key={ref.id} color={selectedBadge == ref.id ? "success" : "danger"} style={{ padding: "20px", marginRight: "15px", marginBottom: "15px" }} onClick={(e) => { handleSelect(e) }}
                           >
@@ -377,8 +378,8 @@ const AddProduction = (props) => {
                       ))}
 
 
-                      {!filtered && refs?.map((ref) => (
-                        <div className="" style={{ display: "inline-block" }} onMouseEnter={() => setHoveredRef(ref.id)}
+                      {!filtered && refs?.map((ref,index) => (
+                        <div key={index} className="" style={{ display: "inline-block" }} onMouseEnter={() => setHoveredRef(ref.id)}
                           onMouseLeave={() => setHoveredRef("")}>
                           <CBadge key={ref.id} data-key={ref.id} color={selectedBadge == ref.id ? "success" : "danger"} style={{ padding: "20px", marginRight: "15px", marginBottom: "15px" }} onClick={(e) => { handleSelect(e) }}
                           >

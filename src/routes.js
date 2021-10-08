@@ -31,8 +31,13 @@ const showFollowups = React.lazy(() => import('./views/modules/followups/showFol
 //Groups
 const showGroups = React.lazy(() => import('./views/modules/groups/showGroups'));
 
+//Profil
+
+const showProfil = React.lazy(() => import('./views/modules/profil/ShowProfil'));
+
 export const getRoutes = (user) => {
   const routes = [];
+  routes.push({ path: '/profil', exact: true,  name: 'Profil', component: showProfil },)
   //admin routes
   if(hasRole(user,userRoles.USER_ADMIN)){
     routes.push(
@@ -42,20 +47,17 @@ export const getRoutes = (user) => {
     { path: '/groups', name: 'Groupes', component: showGroups },
     );
   }
-  //cup or dsi
-  if(!hasRole(user,userRoles.USER_ADMIN)){
-    routes.push( { path: '/revue', name: 'Dashboard', component: revue },)
+  // cup or dsi
+  if(hasRole(user,userRoles.DSI) || hasRole(user,userRoles.ENS_UP)){
+  routes.push( { path: '/suivi', name: 'Suivi', component: Suivi },)
   }
   //all except admin
   if(!hasRole(user,userRoles.USER_ADMIN)){
     routes.push(
-    { path: '/suivi', name: 'Suivi', component: Suivi },
     { path: '/rdi/production', name: 'Production Rdi', component: productionRdi },
-    { path: '/productionRdi/add', name: 'Ajouter Production Rdi', component: addproductionRdi },
-    { path: '/productionRdi/edit', name: 'Modifier Production Rdi', component: updateproductionRdi },
     { path: '/reunion', name: 'Réunion Rdi', component: reunionRdi },
-    { path: '/reunionRdi/add', name: 'Ajouter Réunion Rdi', component: addreunionRdi },
-    { path: '/reunionRdi/edit', name: 'Modifier Réunion Rdi', component: updateReunionRdi },)
+    { path: '/revue', name: 'Dashboard', component: revue },
+    );
   }
   //all except admin and dsi
   if(!hasRole(user,userRoles.USER_ADMIN) && !hasRole(user,userRoles.DSI)){
@@ -63,6 +65,10 @@ export const getRoutes = (user) => {
   { path: '/notifications', name: 'Notifications', component: showNotifications },
   { path: '/notifications/details', name: 'détails de la notification', component: notificationDetails },
   { path: '/followups', name: 'Notification de Suivi', component: showFollowups },
+  { path: '/productionRdi/add', name: 'Ajouter Production Rdi', component: addproductionRdi },
+  { path: '/productionRdi/edit', name: 'Modifier Production Rdi', component: updateproductionRdi },
+  { path: '/reunionRdi/add', name: 'Ajouter Réunion Rdi', component: addreunionRdi },
+  { path: '/reunionRdi/edit', name: 'Modifier Réunion Rdi', component: updateReunionRdi },
   );
   }
 

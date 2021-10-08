@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import CloseIcon from "@material-ui/icons/Close";
 import {
   CCard,
   CCardBody,
   CCardTitle,
   CCol,
+  CSelect,
   CRow,
   CFormGroup,
   CInputCheckbox,
@@ -28,9 +29,18 @@ import { Formik } from "formik";
 import SuccessErrorModal from "../../../components/custom/SuccessErrorModal";
 
 import { LoaderSmall } from "../../../../views/components/custom/Loaders";
-import { trackPromise} from 'react-promise-tracker';
+import { trackPromise } from 'react-promise-tracker';
+
+import { UserContext } from "../../../../utils/UserContext";
+import { userRoles } from "../../../../enums/roles.enum";
+import { hasRole, getUserIds } from "../../../../utils/user";
+import { useSelector } from 'react-redux';
+import { selectGroupRdi } from '../../../../features/groupSlice';
 
 const ShowProduction = () => {
+  const [user,] = useContext(UserContext);
+  const groupRDI = useSelector(selectGroupRdi);
+
   const history = useHistory();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchInput, setSearchInput] = useState("");
@@ -38,6 +48,7 @@ const ShowProduction = () => {
   const [production, setProduction] = useState(null);
   const [rdis, setRdis] = useState([]);
   const [radiochecked, setRadiochecked] = useState(true);
+  const [radiocheckedCree, setRadiocheckedCree] = useState(true);
   const [filterModal, setFilterModal] = useState({ show: false });
   const [refId, setRefId] = useState(null);
   const [deleteRerender, setdeleteRerender] = useState(false);
@@ -46,8 +57,21 @@ const ShowProduction = () => {
     message: "",
     type: "success",
   });
+  const [userIdsFilter, setUserIdsFilter] = useState([]);
+  const [userIds, setUserIds] = useState(hasRole(user, userRoles.DSI) ? [] : getUserIds(groupRDI.users))
+  const [creatorId,setCreatorId] = useState("");
 
-  
+  useEffect ( () => {
+    const fetchUsers = async () => {
+      const [res, error] = await queryApi("user/users", null, "GET");
+      if(res) {
+        setUserIds(res);
+      }
+    }
+    if(hasRole(user,userRoles.DSI)){
+      fetchUsers();
+    }
+  },[])
 
   function HandlerefSelection() {
     const onClose = () => {
@@ -55,12 +79,13 @@ const ShowProduction = () => {
     };
     const setref = (ref) => {
       setRefId(ref);
+      setCurrentPage(1);
     }
 
     setFilterModal({
       show: true,
       onClose,
-      setref,
+      setref
     })
   }
 
@@ -84,10 +109,6 @@ const ShowProduction = () => {
     setCurrentPage(1);
   }
 
-  /*function handleSelect(changes) {
-    console.log(changes);
-    
-  }*/
   useEffect(() => {
     setCurrentPage(1);
   }, [])
@@ -95,6 +116,19 @@ const ShowProduction = () => {
   const routeChange = () => {
     let path = '/productionRdi/add';
     history.push(path);
+  }
+
+  function handleCreeCheckbox(e) {
+    let users = e.target.value;
+    setCurrentPage(1);
+    if (users == "") {
+      setUserIdsFilter([])
+      setRadiocheckedCree(true);
+    }
+    else {
+      setUserIdsFilter(users.split(","));
+      setRadiocheckedCree(false);
+    }
   }
 
   useEffect(() => {
@@ -105,6 +139,9 @@ const ShowProduction = () => {
           limit: 6,
         },
         query: {
+          id_ens_creator: hasRole(user,userRoles.DSI)? creatorId : user?.id? user.id : "",
+          userIds: userIdsFilter,
+          refproduction_id: refId?.id? refId.id : ""
         },
       };
       if (date !== null) {
@@ -119,10 +156,9 @@ const ShowProduction = () => {
       if (production !== null) {
         body["query"] = { ...body["query"], production: production };
       }
-      if (refId !== null) {
+      /*if (refId !== null) {
         body["query"] = { ...body["query"], refproduction_id: refId?.id };
-      }
-
+      }*/
       const [res, error] = await queryApi("rdi/search", body, "POST");
       if (res) {
         setRdis(res.rdis);
@@ -135,21 +171,27 @@ const ShowProduction = () => {
       trackPromise(fetchRdis());
     }
 
-  }, [currentPage, searchInput, date, production, refId,deleteRerender])
+  }, [currentPage, searchInput, date, production, refId, deleteRerender, userIdsFilter,creatorId])
+
+
+  const handleEnseignantSelectChange = (e) => {
+    setCreatorId(e.target.value);
+    setCurrentPage(1);
+  }
 
 
 
 
   return (
     <>
+      <ModalFilterProduction {...filterModal} refId={refId}/>
       <SuccessErrorModal
         onClose={() => setModal({ ...modal, show: false })}
         show={modal.show}
         type={modal.type}
         message={modal.message}
       />
-      <ModalFilterProduction {...filterModal} />
-      <CRow>
+      <CRow style={{"position" : "relative","zIndex": "1"}}>
         <CCol lg="3">
           <CCard className="border-0 shadow-sm">
             <CCardBody>
@@ -157,8 +199,61 @@ const ShowProduction = () => {
                 className="mb-4"
                 style={{ "fontWeight": "550", "fontSize": "0.9rem" }}
               >
-                Filter
+                Filtre
               </CCardTitle>
+              <div className="mt-4 pt-4">
+                <h5 className="font-size-14 mb-3">Crée par:</h5>
+                {hasRole(user, userRoles.DSI) ? <>
+                  <CFormGroup>
+                    <CSelect
+                      custom
+                      name="creator"
+                      id="select"
+                      value={creatorId}
+                      onChange={e => handleEnseignantSelectChange(e)}
+                    >
+                      <option value="">Tout</option>
+                      {userIds?.map((user,index) => {
+                        return <option key = {index} value ={user.id}>{user.fullName}</option>
+                      })}
+                    </CSelect>
+                  </CFormGroup>
+                </>
+                  :
+                  <>
+                    <CFormGroup variant="checkbox" className="checkbox">
+                      <CInputRadio
+                        id="checkbox100"
+                        name="userIdsFilter"
+                        value={[]}
+                        onChange={(e) => handleCreeCheckbox(e)}
+                        checked={radiocheckedCree}
+                      />
+                      <CLabel
+                        variant="checkbox"
+                        className="form-check-label mt-1"
+                        htmlFor="checkbox100"
+                      >
+                        Moi
+                      </CLabel>
+                    </CFormGroup>
+                    <CFormGroup variant="checkbox" className="checkbox">
+                      <CInputRadio
+                        id="checkbox200"
+                        name="userIdsFilter"
+                        value={userIds}
+                        onChange={(e) => handleCreeCheckbox(e)}
+                      />
+                      <CLabel
+                        variant="checkbox"
+                        className="form-check-label mt-1"
+                        htmlFor="checkbox200"
+                      >
+                        Groupe RDI
+                      </CLabel>
+                    </CFormGroup>
+                  </>}
+              </div>
               <div className="mt-4 pt-4">
                 <h5 className="font-size-14 mb-3">Production</h5>
                 <CFormGroup variant="checkbox" className="checkbox">
@@ -241,18 +336,18 @@ const ShowProduction = () => {
 
               <div className="mt-4 pt-4">
                 <h5 className="font-size-14 mb-3">Réf Production</h5>
-                <div style={{display:"inline-block"}}>
-                {refId ? <CButton className="addbutton" onClick={() => setRefId(null)}>
-                {refId.value}
-                  <CloseIcon/>
-                </CButton> :
-                <CButton className="addbutton" onClick={HandlerefSelection}>
-                Sélectionner
-              </CButton>}
+                <div style={{ display: "inline-block" }}>
+                  {refId ? <CButton className="addbutton" onClick={() => setRefId(null)}>
+                    {refId.value}
+                    <CloseIcon />
+                  </CButton> :
+                    <CButton className="addbutton" onClick={HandlerefSelection}>
+                      Sélectionner
+                    </CButton>}
                 </div>
-                <br/>
-                
-                
+                <br />
+
+
               </div>
               <div className="mt-4 pt-4">
                 <CLabel variant="checkbox" className="mt-1" htmlFor="range2">
@@ -274,9 +369,11 @@ const ShowProduction = () => {
           <CRow>
             <CCol className="mt-2">
               <h5 className="d-inline mr-2">Productions </h5>
+              {!hasRole(user, userRoles.DSI) &&
               <CButton className="addbutton" onClick={routeChange}>
                 <i className="fa fa-plus"></i>
               </CButton>
+              }
             </CCol>
             <CCol lg="6" sm="6" md="6" xs="6" className="mr-4 mt-2">
               <CInputGroup >
@@ -301,10 +398,10 @@ const ShowProduction = () => {
           <CRow className="d-flex justify-content-center">
             {rdis?.map((rdi) => (
               <CCol key={rdi.id} sm="12" xl="4" xs="12" md="6" >
-                <CustomCard key={rdi.id} className="profile-card" type="production" rdi={rdi}  page= {{"totalpages": totalpages,"currentPage": currentPage, "count": rdis.length}}
-                setdeleteRerender={setdeleteRerender}
-                setCurrentPage={setCurrentPage}
-                setModal={setModal}>
+                <CustomCard key={rdi.id} className="profile-card" type="production" rdi={rdi} page={{ "totalpages": totalpages, "currentPage": currentPage, "count": rdis.length }}
+                  setdeleteRerender={setdeleteRerender}
+                  setCurrentPage={setCurrentPage}
+                  setModal={setModal}>
                 </CustomCard>
               </CCol>
             ))}
@@ -315,7 +412,7 @@ const ShowProduction = () => {
                 Pas d'rdi trouvés.
               </CAlert>
             </CCol>
-            <LoaderSmall/>
+              <LoaderSmall />
             </>
           ) :
             <CRow>
@@ -332,6 +429,8 @@ const ShowProduction = () => {
             </CRow>}
         </CCol>
       </CRow>
+
+      
     </>
   );
 };

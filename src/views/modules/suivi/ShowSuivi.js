@@ -82,18 +82,24 @@ const Line = (labels,event) => {
   return line;
 }
 
-const Bar = (labels,event) => {
+const Bar = (labels,events) => {
+  let event = {};
+  if(labels.includes("Lundi")){
+    event = events[1];
+  }else {
+    event = events[0];
+  }
   const bar = {
     labels: labels,
     datasets: [
       {
-        label: event[0]?.label,
+        label: event?.label,
         backgroundColor: "rgba(255,99,132,0.2)",
         borderColor: "rgba(255,99,132,1)",
         borderWidth: 1,
         hoverBackgroundColor: "rgba(255,99,132,0.4)",
         hoverBorderColor: "rgba(255,99,132,1)",
-        data: event[0]?.data_points,
+        data: event?.data_points,
       },
     ],
   };
@@ -102,10 +108,10 @@ const Bar = (labels,event) => {
 
 const Doughnut = (event) => {
   const doughnut = {
-  labels: ["Red", "Green", "Yellow"],
+  labels: ["Rdi", "Reunion", "Encadrement", "Formation", "Service"],
   datasets: [
     {
-      data: [300, 50, 100],
+      data: [event?.rdi, event?.reunion, event?.encadrement, event?.formation, event?.service],
       backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
       hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
     },
@@ -118,12 +124,12 @@ const Polar = (event) => {
   const polar = {
     datasets: [
     {
-      data: [11, 16, 7, 3, 14],
+      data: [event?.rdi, event?.reunion, event?.encadrement, event?.formation, event?.service],
       backgroundColor: ["#FF6384", "#4BC0C0", "#FFCE56", "#E7E9ED", "#36A2EB"],
       label: "My dataset", // for legend
     },
     ],
-    labels: ["Red", "Green", "Yellow", "Grey", "Blue"],
+    labels: ["Rdi", "Reunion", "Encadrement", "Formation", "Service"],
   }
   return polar;
 };
@@ -208,7 +214,7 @@ const ShowSuivi = () => {
 
   const LabelUpdate = () => {
       if(periode == "YEAR"){
-        const labels= ["January", "February", "March", "April", "May", "June", "July", "bnlabla"]; 
+        const labels= ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]; 
         setLabels(labels);
       }
       if(periode == "MONTH"){
@@ -226,11 +232,12 @@ const ShowSuivi = () => {
     const fetchPerformances = async () => {
       const body = {
         "periode": periode,
-        "id_ens" : "60cca063b036b51e8d33013a"
-        //"id_ens": enseignant.id
+        //"id_ens" : "60cca063b036b51e8d33013a"
+        "id_ens": enseignant.id
       }
       const [res, error] = await queryApi("performance/summary", body, "POST");
       if (res) {
+        console.log(res)
           setKeys(res.keys);
           setEnsRecordsCounted(res.ensRecordsCounted);
           setEvent(res.keys.rdi);
@@ -240,7 +247,7 @@ const ShowSuivi = () => {
       LabelUpdate();
       fetchPerformances();
     }
-
+ 
   }, [enseignant, periode, date])
 
   useEffect(()=>{
@@ -321,41 +328,41 @@ const ShowSuivi = () => {
               <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0  border-top li-backg" onClick={e => {setChart("rdi");setEvent(keys.rdi)}}>
                 <CCallout color="danger d-inline-block mt-0">
                   <h6 className="mb-1">Production RDI</h6>
-                  <strong className="h4 mb-0">{ensRecordsCounted?.rdi}</strong>
+                  <strong className="h4 mb-0">{ensRecordsCounted?.rdi? ensRecordsCounted?.rdi : "0"}</strong>
                 </CCallout>
 
               </li>
               <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => {setChart("reunion");setEvent(keys.reunion)}}>
                 <CCallout color="danger d-inline-block mt-0">
                   <h6 className="mb-1">Réunions RDI</h6>
-                  <strong className="h4 mb-0">{ensRecordsCounted?.reunion}</strong>
+                  <strong className="h4 mb-0">{ensRecordsCounted?.reunion_rdi? ensRecordsCounted?.reunion_rdi : "0"}</strong>
                 </CCallout>
               </li>
               <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => {setChart("encadrement");setEvent(keys.encadrement)}}>
                 <CCallout color="danger d-inline-block mt-0">
                   <h6 className="mb-1">Encadrements</h6>
-                  <strong className="h4 mb-0">{ensRecordsCounted?.encadrement}</strong>
+                  <strong className="h4 mb-0">{ensRecordsCounted?.encadrement? ensRecordsCounted?.encadrement : "0"}</strong>
                 </CCallout>
               </li>
 
               <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => {setChart("formation");setEvent(keys.formation)}}>
                 <CCallout color="danger d-inline-block mt-0">
                   <h6 className="mb-1">Formations</h6>
-                  <strong className="h4 mb-0">{ensRecordsCounted?.formation}</strong>
+                  <strong className="h4 mb-0">{ensRecordsCounted?.formation? ensRecordsCounted?.formation: "0"}</strong>
                 </CCallout>
               </li>
 
               <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => {setChart("service");setEvent(keys.service)}}>
                 <CCallout color="danger d-inline-block mt-0">
                   <h6 className="mb-1">Services</h6>
-                  <strong className="h4 mb-0">{ensRecordsCounted?.service}</strong>
+                  <strong className="h4 mb-0">{ensRecordsCounted?.service? ensRecordsCounted?.service : "0"}</strong>
                 </CCallout>
               </li>
 
-              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => {setChart("interventions");setEvent(keys.interventions)}}>
+              <li className="li-suivi list-group-item col-lg-2 col-md-6 col-12 rounded-0 border-top" onClick={e => {setChart("interventions");setEvent(ensRecordsCounted.intervention)}}>
                 <CCallout color="danger d-inline-block mt-0">
                   <h6 className="mb-1">Interventions</h6>
-                  <strong className="h4 mb-0">{ensRecordsCounted?.interventions}</strong>
+                  <strong className="h4 mb-0">{ensRecordsCounted?.interventions? ensRecordsCounted?.interventions : "0"}</strong>
                 </CCallout>
               </li>
             </ul>
@@ -418,7 +425,7 @@ const ShowSuivi = () => {
                         <CChartBar
                           datasets={bar.datasets}
                           options={options}
-                          labels="months"
+                          labels={labels}
                           className="chart-card"
                         />
                       </div>
