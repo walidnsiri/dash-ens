@@ -144,7 +144,7 @@ const ShowRevue = () => {
   return (
     <>
      <div style={{ width: '100%', height: '100%' }}>
-     <Confetti/>
+    
      <Parallax ref={parallax} pages={2} style={{height:"100%",width:'100%',position:'relative'}}>
         <ParallaxLayer offset={1} speed={1}  />
 
